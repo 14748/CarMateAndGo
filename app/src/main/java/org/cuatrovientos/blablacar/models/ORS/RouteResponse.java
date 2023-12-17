@@ -2,20 +2,13 @@ package org.cuatrovientos.blablacar.models.ORS;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.cuatrovientos.blablacar.models.ORS.Feature;
-
 import java.util.List;
 
 public class RouteResponse {
+    @SerializedName("routes")
+    private List<Route> routes;
 
-    @SerializedName("features")
-    private List<Feature> features;
-
-    public RouteResponse(List<Feature> features) {
-        this.features = features;
-    }
-
-    public List<Feature> getFeatures() {
-        return features;
+    public List<Route> getRoutes() {
+        return routes;
     }
 }

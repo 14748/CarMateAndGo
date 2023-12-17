@@ -22,11 +22,15 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
+import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -51,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         map.setMapStyle(new MapStyleOptions(styleJson));
 
-        LatLng cuatrovientos = new LatLng(42.8243912, -1.6609128);
+        LatLng cuatrovientos = new LatLng(42.824851, -1.660318);
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(cuatrovientos);
@@ -74,19 +78,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         createRoute();
     }
-
     public void createRoute() {
         CompletableFuture.supplyAsync(() -> {
             try {
                 Retrofit retrofit = getRetrofit();
                 ApiService service = retrofit.create(ApiService.class);
-                Response<RouteResponse> response = service.getRoute(
+
+                String rawJson = "{" + "\"coordinates\": [" + "[-1.633844,42.833349]," + "[-1.660318,42.824851]" + "]," + "\"alternative_routes\": {" + "\"target_count\": 3," + "\"weight_factor\": 1.4," + "\"share_factor\": 0.6" + "}" + "}";
+
+                RequestBody body = RequestBody.create(
+                        MediaType.parse("application/json; charset=utf-8"),
+                        rawJson
+                );
+
+                Response<RouteResponse> response = service.createRoute(
                         "5b3ce3597851110001cf6248e44784ffb81c49abb564cc056c247289",
-                        "-1.610295,42.830287",
-                        "-1.660214,42.824893").execute();
+                        body
+                ).execute();
 
                 return response;
             } catch (Exception e) {
+                e.printStackTrace();
                 return null;
             }
         }).thenAccept(response -> {
@@ -98,21 +110,84 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    private void drawRoute(Response<RouteResponse> response){
-        List<List<Double>> routeCoordinates = response.body().getFeatures().get(0).getGeometry().getCoordinates();
-
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(10);
-        polylineOptions.color(Color.RED);
-
-        for (List<Double> coordinatePair : routeCoordinates) {
-            LatLng point = new LatLng(coordinatePair.get(1), coordinatePair.get(0));
-            polylineOptions.add(point);
+    private void drawRoute(Response<RouteResponse> response) {
+        if (response == null || response.body() == null || response.body().getRoutes() == null) {
+            return;
         }
 
+        List<Route> routes = response.body().getRoutes();
+
+        for (int i = 0; i < routes.size(); i++) {
+            Route route = routes.get(i);
+
+            String encodedPolyline = route.getGeometry();
+            List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);
+
+            if (routeCoordinates.isEmpty()) {
+                continue;
+            }
+
+            int index = routes.indexOf(route);
+            int routeColor = index != 0 ? Color.GRAY : Color.WHITE;
+            int borderColor = Color.WHITE;
+
+            addPolylineToMap(routeCoordinates, routeColor, borderColor, index);
+        }
+    }
+
+    private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
+        // Border Polyline
+        PolylineOptions borderPolylineOptions = new PolylineOptions();
+        borderPolylineOptions.width(40); // Border width
+        borderPolylineOptions.color(borderColor);
+        borderPolylineOptions.addAll(routeCoordinates);
+        borderPolylineOptions.zIndex(index == 0 ? 1 : 0);
+
+        // Actual Route Polyline
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.width(30);
+        polylineOptions.color(routeColor);
+        polylineOptions.addAll(routeCoordinates);
+        polylineOptions.zIndex(index == 0 ? 1 : 0);
+
         runOnUiThread(() -> {
-            map.addPolyline(polylineOptions);
+            if (map != null) {
+                map.addPolyline(borderPolylineOptions);
+                map.addPolyline(polylineOptions);
+            }
         });
+    }
+
+    public List<LatLng> decodePolyline(String encoded) {
+        List<LatLng> poly = new ArrayList<>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng p = new LatLng(((double) lat / 1E5), ((double) lng / 1E5));
+            poly.add(p);
+        }
+
+        return poly;
     }
     private Retrofit getRetrofit() {
         return new Retrofit.Builder()
