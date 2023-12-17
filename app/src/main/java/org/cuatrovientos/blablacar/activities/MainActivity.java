@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private  GoogleMap map;
 
-    private String styleJson = "[" + "{" + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#212121\"" + "}" + "]" + "}," + "{" + "\"elementType\": \"labels.icon\"," + "\"stylers\": [" + "{" + "\"visibility\": \"off\"" + "}" + "]" + "}," + "{" + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#757575\"" + "}" + "]" + "}," + "{" + "\"elementType\": \"labels.text.stroke\"," + "\"stylers\": [" + "{" + "\"color\": \"#212121\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"administrative\"," + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#757575\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"administrative.country\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#9e9e9e\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"administrative.land_parcel\"," + "\"stylers\": [" + "{" + "\"visibility\": \"off\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"administrative.locality\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#bdbdbd\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"poi\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#757575\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"poi.park\"," + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#181818\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"poi.park\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#616161\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"poi.park\"," + "\"elementType\": \"labels.text.stroke\"," + "\"stylers\": [" + "{" + "\"color\": \"#1b1b1b\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"road\"," + "\"elementType\": \"geometry.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#2c2c2c\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"road\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#8a8a8a\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"road.arterial\"," + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#373737\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"road.highway\"," + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#3c3c3c\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"road.highway.controlled_access\"," + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#4e4e4e\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"road.local\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#616161\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"transit\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#757575\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"water\"," + "\"elementType\": \"geometry\"," + "\"stylers\": [" + "{" + "\"color\": \"#000000\"" + "}" + "]" + "}," + "{" + "\"featureType\": \"water\"," + "\"elementType\": \"labels.text.fill\"," + "\"stylers\": [" + "{" + "\"color\": \"#3d3d3d\"" + "}" + "]" + "}" + "]";
+    private String styleJson = "[{\"elementType\": \"labels\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative\",\"elementType\": \"geometry\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.land_parcel\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.neighborhood\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"poi\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"road\",\"elementType\": \"labels.icon\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"transit\",\"stylers\": [{\"visibility\": \"off\"}]}]";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         markerOptions.position(cuatrovientos);
         markerOptions.title("Instituto CuatroVientos");
 
-        Drawable myDrawable = getResources().getDrawable(R.drawable.markerp);
-        float scaleWidth = myDrawable.getIntrinsicWidth() * 0.2f;
-        float scaleHeight = myDrawable.getIntrinsicHeight() * 0.2f;
+        Drawable myDrawable = getResources().getDrawable(R.drawable.markerred);
+        float scaleWidth = myDrawable.getIntrinsicWidth() * 0.15f;
+        float scaleHeight = myDrawable.getIntrinsicHeight() * 0.15f;
         Bitmap myLogo = Bitmap.createBitmap((int) scaleWidth, (int) scaleHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(myLogo);
         myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(myLogo);
 
-        markerOptions.icon(markerIcon);
+        markerOptions.icon(markerIcon).anchor(0.5f, 1f);
         map.addMarker(markerOptions);
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(cuatrovientos, 15.0f));
@@ -111,6 +111,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void drawRoute(Response<RouteResponse> response) {
+        runOnUiThread(() -> {
+            MarkerOptions markerOptions = new MarkerOptions();
+            LatLng userPosition = new LatLng(42.833349,-1.633844);
+            markerOptions.position(userPosition);
+            markerOptions.title("Punto partida");
+            Drawable myDrawable = getResources().getDrawable(R.drawable.user);
+            float scaleWidth = myDrawable.getIntrinsicWidth() * 0.15f;
+            float scaleHeight = myDrawable.getIntrinsicHeight() * 0.15f;
+            Bitmap myLogo = Bitmap.createBitmap((int) scaleWidth, (int) scaleHeight, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(myLogo);
+            myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            myDrawable.draw(canvas);
+
+            BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(myLogo);
+
+            markerOptions.icon(markerIcon).anchor(0.5f, 0.5f);
+
+            map.addMarker(markerOptions);
+        });
         if (response == null || response.body() == null || response.body().getRoutes() == null) {
             return;
         }
@@ -127,9 +146,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 continue;
             }
 
+            int mainBlue = Color.parseColor("#0F53FF");
+            int mainBlueBorder = Color.parseColor("#0F26F5");
+            int subtleBlue = Color.parseColor("#BCCEFB");
+            int subtleBlueBorder = Color.parseColor("#6A83D7");
             int index = routes.indexOf(route);
-            int routeColor = index != 0 ? Color.GRAY : Color.WHITE;
-            int borderColor = Color.WHITE;
+            int routeColor = index != 0 ?  subtleBlue : mainBlue;
+            int borderColor = index != 0 ?  subtleBlueBorder : mainBlueBorder;
 
             addPolylineToMap(routeCoordinates, routeColor, borderColor, index);
         }
@@ -138,14 +161,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
         // Border Polyline
         PolylineOptions borderPolylineOptions = new PolylineOptions();
-        borderPolylineOptions.width(40); // Border width
+        borderPolylineOptions.width(30); // Border width
         borderPolylineOptions.color(borderColor);
         borderPolylineOptions.addAll(routeCoordinates);
         borderPolylineOptions.zIndex(index == 0 ? 1 : 0);
 
         // Actual Route Polyline
         PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(30);
+        polylineOptions.width(25);
         polylineOptions.color(routeColor);
         polylineOptions.addAll(routeCoordinates);
         polylineOptions.zIndex(index == 0 ? 1 : 0);
