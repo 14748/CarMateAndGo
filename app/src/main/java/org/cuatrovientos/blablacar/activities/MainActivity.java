@@ -53,29 +53,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
 
-        map.setMapStyle(new MapStyleOptions(styleJson));
+        //map.setMapStyle(new MapStyleOptions(styleJson));
 
         LatLng cuatrovientos = new LatLng(42.824851, -1.660318);
 
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(cuatrovientos);
-        markerOptions.title("Instituto CuatroVientos");
-
-        Drawable myDrawable = getResources().getDrawable(R.drawable.markerred);
-        float scaleWidth = myDrawable.getIntrinsicWidth() * 0.15f;
-        float scaleHeight = myDrawable.getIntrinsicHeight() * 0.15f;
-        Bitmap myLogo = Bitmap.createBitmap((int) scaleWidth, (int) scaleHeight, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(myLogo);
-        myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        myDrawable.draw(canvas);
-
-        BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(myLogo);
-
-        markerOptions.icon(markerIcon).anchor(0.5f, 1f);
-        map.addMarker(markerOptions);
-
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(cuatrovientos, 15.0f));
-
+        map.addMarker(new MarkerOptions().position(cuatrovientos).title("Marker in Sydney"));
         createRoute();
     }
     public void createRoute() {
@@ -116,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             LatLng userPosition = new LatLng(42.833349,-1.633844);
             markerOptions.position(userPosition);
             markerOptions.title("Punto partida");
-            Drawable myDrawable = getResources().getDrawable(R.drawable.user);
-            float scaleWidth = myDrawable.getIntrinsicWidth() * 0.15f;
-            float scaleHeight = myDrawable.getIntrinsicHeight() * 0.15f;
+            Drawable myDrawable = getResources().getDrawable(R.drawable.person);
+            float scaleWidth = myDrawable.getIntrinsicWidth() * 0.2f;
+            float scaleHeight = myDrawable.getIntrinsicHeight() * 0.2f;
             Bitmap myLogo = Bitmap.createBitmap((int) scaleWidth, (int) scaleHeight, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(myLogo);
             myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -129,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.icon(markerIcon).anchor(0.5f, 0.5f);
 
             map.addMarker(markerOptions);
+
         });
         if (response == null || response.body() == null || response.body().getRoutes() == null) {
             return;
