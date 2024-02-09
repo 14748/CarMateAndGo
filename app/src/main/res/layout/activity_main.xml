@@ -5,12 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
+
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_width="416dp"
+        android:layout_height="647dp"
+        tools:layout_editor_absoluteX="-5dp"
+        tools:layout_editor_absoluteY="84dp" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="418dp"
+        android:layout_height="646dp"
+        tools:layout_editor_absoluteX="-7dp"
+        tools:layout_editor_absoluteY="85dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="160dp"
+        tools:layout_editor_absoluteY="16dp" />
+    A
 </androidx.constraintlayout.widget.ConstraintLayout>
