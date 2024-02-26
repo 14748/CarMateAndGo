@@ -57,16 +57,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private  GoogleMap map;
     private Button button;
-
-
-
+    private Button btnCreateRoute;
     private String styleJson = "[{\"elementType\": \"labels\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative\",\"elementType\": \"geometry\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.land_parcel\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.neighborhood\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"poi\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"road\",\"elementType\": \"labels.icon\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"transit\",\"stylers\": [{\"visibility\": \"off\"}]}]";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toast.makeText(MainActivity.this, "yo", Toast.LENGTH_LONG).show();
         button = findViewById(R.id.button2);
+        btnCreateRoute = findViewById(R.id.btnCreateScreen);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -80,10 +80,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //PaymentFlow();
                 Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
                 startActivity(intent);
-
             }
         });
 
+        btnCreateRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CreateRoute.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

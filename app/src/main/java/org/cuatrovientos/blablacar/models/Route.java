@@ -2,6 +2,7 @@ package org.cuatrovientos.blablacar.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ public class Route {
     private int seats;
     private boolean isFull;
     private Date date;
+    private Time time;
 
     public Route(int id) {
         this.id = id;
@@ -58,6 +60,7 @@ public class Route {
     public Date getDate() {
         return date;
     }
+    public Time getTime(){ return time; }
 
     public void setRoute(ArrayList<LatLng> route) {
         this.route = route;
@@ -82,4 +85,6 @@ public class Route {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public void setTimef(Time time){ this.time = time; }
 }

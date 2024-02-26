@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <Button
+        android:id="@+id/btnCreateScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Crear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.112"
+        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:layout_width="416dp"
         android:layout_height="647dp"
@@ -25,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
-        tools:layout_editor_absoluteX="160dp"
+        tools:layout_editor_absoluteX="30dp"
         tools:layout_editor_absoluteY="16dp" />
     A
 </androidx.constraintlayout.widget.ConstraintLayout>
