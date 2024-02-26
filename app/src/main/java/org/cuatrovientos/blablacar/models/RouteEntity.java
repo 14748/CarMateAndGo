@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Route {
+public class RouteEntity {
 
     private int id;
     private ArrayList<LatLng> route;
@@ -14,10 +14,10 @@ public class Route {
     private boolean isFull;
     private Date date;
 
-    public Route(int id) {
+    public RouteEntity(int id) {
         this.id = id;
     }
-    public Route(int id, ArrayList<LatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
+    public RouteEntity(int id, ArrayList<LatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
         this.id = id;
         this.route = route;
         this.price = price;

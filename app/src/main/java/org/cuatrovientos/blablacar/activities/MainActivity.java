@@ -39,10 +39,14 @@ import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
 import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
+import org.cuatrovientos.blablacar.models.RouteEntity;
+import org.cuatrovientos.blablacar.models.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,9 +62,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private  GoogleMap map;
     private Button button;
 
+    private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
 
-
-    private String styleJson = "[{\"elementType\": \"labels\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative\",\"elementType\": \"geometry\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.land_parcel\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.neighborhood\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"poi\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"road\",\"elementType\": \"labels.icon\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"transit\",\"stylers\": [{\"visibility\": \"off\"}]}]";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,44 +74,50 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //PaymentFlow();
                 Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
                 startActivity(intent);
-
             }
         });
-
-
     }
-
-
-
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
 
-        //map.setMapStyle(new MapStyleOptions(styleJson));
+        //Eliminar
+        ArrayList<LatLng> route1Points = new ArrayList<>(Arrays.asList(
+                new LatLng(42.833349,-1.633844),
+                new LatLng(42.824851, -1.660318)
+        ));
 
-        LatLng cuatrovientos = new LatLng(42.824851, -1.660318);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(cuatrovientos, 15.0f));
-        map.addMarker(new MarkerOptions().position(cuatrovientos).title("Marker in Sydney"));
-        createRoute();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 15.0f));
+        map.addMarker(new MarkerOptions().position(CUATROVIENTOS).title("Cuatrovientos"));
+        createRoute(route1Points.get(1));
     }
-    public void createRoute() {
+    public void createRoute(LatLng end) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 Retrofit retrofit = getRetrofit();
                 ApiService service = retrofit.create(ApiService.class);
 
-                String rawJson = "{" + "\"coordinates\": [" + "[-1.633844,42.833349]," + "[-1.660318,42.824851]" + "]," + "\"alternative_routes\": {" + "\"target_count\": 3," + "\"weight_factor\": 1.4," + "\"share_factor\": 0.6" + "}" + "}";
+                String rawJson = String.format(
+                        "{" +
+                                "\"coordinates\": [" +
+                                "[%f,%f]," +
+                                "[%f,%f]" +
+                                "]," +
+                                "\"alternative_routes\": {" +
+                                "\"target_count\": 3," +
+                                "\"weight_factor\": 1.4," +
+                                "\"share_factor\": 0.6" +
+                                "}" +
+                                "}",
+                        CUATROVIENTOS.longitude, CUATROVIENTOS.latitude,
+                        end.longitude, end.latitude
+                );
 
                 RequestBody body = RequestBody.create(
                         MediaType.parse("application/json; charset=utf-8"),
@@ -137,9 +146,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void drawRoute(Response<RouteResponse> response) {
         runOnUiThread(() -> {
             MarkerOptions markerOptions = new MarkerOptions();
-            LatLng userPosition = new LatLng(42.833349,-1.633844);
-            markerOptions.position(userPosition);
-            markerOptions.title("Punto partida");
+            markerOptions.position(CUATROVIENTOS);
+
+            //Modificamos el icono para mostrar
             Drawable myDrawable = getResources().getDrawable(R.drawable.person);
             float scaleWidth = myDrawable.getIntrinsicWidth() * 0.2f;
             float scaleHeight = myDrawable.getIntrinsicHeight() * 0.2f;
@@ -147,14 +156,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Canvas canvas = new Canvas(myLogo);
             myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             myDrawable.draw(canvas);
-
             BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(myLogo);
 
             markerOptions.icon(markerIcon).anchor(0.5f, 0.5f);
-
             map.addMarker(markerOptions);
-
         });
+
         if (response == null || response.body() == null || response.body().getRoutes() == null) {
             return;
         }
@@ -186,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
         // Border Polyline
         PolylineOptions borderPolylineOptions = new PolylineOptions();
-        borderPolylineOptions.width(30); // Border width
+        borderPolylineOptions.width(30);
         borderPolylineOptions.color(borderColor);
         borderPolylineOptions.addAll(routeCoordinates);
         borderPolylineOptions.zIndex(index == 0 ? 1 : 0);
@@ -234,17 +241,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             LatLng p = new LatLng(((double) lat / 1E5), ((double) lng / 1E5));
             poly.add(p);
         }
-
         return poly;
     }
+
     private Retrofit getRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl("https://api.openrouteservice.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
-
-
 }
 
 

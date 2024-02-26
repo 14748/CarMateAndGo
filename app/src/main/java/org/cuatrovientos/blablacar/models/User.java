@@ -13,7 +13,7 @@ public class User {
     private String email;
     private int telephone;
     private String password;
-    private Route routes;
+    private RouteEntity routes;
     private Drawable userIcon;
 
     public User(){} //por si se necesita
@@ -54,7 +54,7 @@ public class User {
         return password;
     }
 
-    public Route getRutes() {
+    public RouteEntity getRutes() {
         return routes;
     }
 
@@ -92,7 +92,7 @@ public class User {
         this.password = password;
     }
 
-    public void setRutes(Route rutes) {
+    public void setRutes(RouteEntity rutes) {
         this.routes = rutes;
     }
 
