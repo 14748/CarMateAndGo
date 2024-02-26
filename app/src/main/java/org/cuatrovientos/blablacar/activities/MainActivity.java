@@ -108,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Retrofit retrofit = getRetrofit();
                 ApiService service = retrofit.create(ApiService.class);
 
-                String rawJson = "{" + "\"coordinates\": [" + "[-1.633844,42.833349]," + "[-1.660318,42.824851]" + "]," + "\"alternative_routes\": {" + "\"target_count\": 3," + "\"weight_factor\": 1.4," + "\"share_factor\": 0.6" + "}" + "}";
+                String rawJson = "{" + "\"coordinates\": [" + "[-1.633844,42.833349]," + "[-1.660318,42.824851]"
+                        + "]," + "\"alternative_routes\": {" + "\"target_count\": 3," + "\"weight_factor\": 1.4,"
+                        + "\"share_factor\": 0.6" + "}" + "}";
 
                 RequestBody body = RequestBody.create(
                         MediaType.parse("application/json; charset=utf-8"),
@@ -133,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+
 
     private void drawRoute(Response<RouteResponse> response) {
         runOnUiThread(() -> {
@@ -183,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+
     private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
         // Border Polyline
         PolylineOptions borderPolylineOptions = new PolylineOptions();
@@ -205,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+
 
     public List<LatLng> decodePolyline(String encoded) {
         List<LatLng> poly = new ArrayList<>();
@@ -237,6 +245,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return poly;
     }
+
+
+
     private Retrofit getRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl("https://api.openrouteservice.org/")
