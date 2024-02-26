@@ -2,7 +2,9 @@ package org.cuatrovientos.blablacar.models;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class User {
 
@@ -13,7 +15,7 @@ public class User {
     private String email;
     private int telephone;
     private String password;
-    private RouteEntity routes;
+    private List<RouteEntity> routes;
     private Drawable userIcon;
 
     public User(){} //por si se necesita
@@ -25,6 +27,7 @@ public class User {
         this.birthDate = birthDate;
         this.email = email;
         this.password = password;
+        this.routes = new ArrayList<>();
     }
 
     /*
@@ -54,7 +57,7 @@ public class User {
         return password;
     }
 
-    public RouteEntity getRutes() {
+    public List<RouteEntity> getRoutes() {
         return routes;
     }
 
@@ -92,8 +95,8 @@ public class User {
         this.password = password;
     }
 
-    public void setRutes(RouteEntity rutes) {
-        this.routes = rutes;
+    public void addRoute(RouteEntity route) {
+        this.routes.add(route);
     }
 
     public void setUserIcon(Drawable userIcon) {

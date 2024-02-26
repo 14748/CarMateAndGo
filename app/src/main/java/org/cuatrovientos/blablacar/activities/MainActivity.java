@@ -1,6 +1,9 @@
 package org.cuatrovientos.blablacar.activities;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -31,16 +34,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.Firebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
 import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
 import org.cuatrovientos.blablacar.models.RouteEntity;
 import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button button;
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
     private Button btnCreateRoute;
-
+    private ArrayList<User> users = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        getUsers();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,19 +105,50 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    public void getUsers() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference("Users");
+
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        User user = userSnapshot.getValue(User.class);
+                        if (user != null && user.getRoutes() != null) {
+                            List<List<LatLng>> routesForDrawing = new ArrayList<>();
+                            for (RouteEntity routeEntity : user.getRoutes()) {
+                                if (routeEntity != null && routeEntity.getRoute() != null) {
+                                    List<LatLng> singleRouteLatLng = Utils.convertCustomLatLngListToLatLngList(routeEntity.getRoute());
+                                    if (singleRouteLatLng != null) {
+                                        routesForDrawing.add(singleRouteLatLng);
+                                    }
+                                }
+                            }
+                            if (!routesForDrawing.isEmpty()) {
+                                drawRoute(routesForDrawing);
+                            }
+                        }
+                        if (user != null) {
+                            users.add(user);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
+            }
+        });
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
 
-        //Eliminar
-        ArrayList<LatLng> route1Points = new ArrayList<>(Arrays.asList(
-                new LatLng(42.833349,-1.633844),
-                new LatLng(42.824851, -1.660318)
-        ));
-
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 15.0f));
         map.addMarker(new MarkerOptions().position(CUATROVIENTOS).title("Cuatrovientos"));
-        createRoute(route1Points.get(1));
     }
     public void createRoute(LatLng end) {
         CompletableFuture.supplyAsync(() -> {
@@ -145,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }).thenAccept(response -> {
             if (response != null && response.isSuccessful() && response.body() != null) {
-                drawRoute(response);
+                drawRoute(converRouteResponseToCustomLatLng(response));
             } else {
                 // Handle failure
             }
@@ -153,11 +197,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    private List<List<LatLng>> converRouteResponseToCustomLatLng(Response<RouteResponse> response) {
+        List<List<LatLng>> allDecodedRoutes = new ArrayList<>();
 
-    private void drawRoute(Response<RouteResponse> response) {
-        runOnUiThread(() -> {
+        if (response == null || response.body() == null || response.body().getRoutes() == null) {
+            return null;
+        }
+
+        List<Route> routes = response.body().getRoutes();
+
+        for (Route route : routes) {
+            String encodedPolyline = route.getGeometry();
+            List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);
+            allDecodedRoutes.add(routeCoordinates);
+        }
+
+        return allDecodedRoutes;
+    }
+
+
+    private void drawRoute(List<List<LatLng>> routes) {
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(CUATROVIENTOS);
+            //TODO: we need starting point variable on Model
+            markerOptions.position(routes.get(0).get(routes.get(0).size() - 1));
 
             //Modificamos el icono para mostrar
             Drawable myDrawable = getResources().getDrawable(R.drawable.person);
@@ -171,33 +233,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             markerOptions.icon(markerIcon).anchor(0.5f, 0.5f);
             map.addMarker(markerOptions);
-        });
 
-        if (response == null || response.body() == null || response.body().getRoutes() == null) {
-            return;
-        }
+        for (List<LatLng> route : routes) {
 
-        List<Route> routes = response.body().getRoutes();
+            for (int i = 0; i < route.size(); i++) {
 
-        for (int i = 0; i < routes.size(); i++) {
-            Route route = routes.get(i);
+                int mainBlue = Color.parseColor("#0F53FF");
+                int mainBlueBorder = Color.parseColor("#0F26F5");
+                int subtleBlue = Color.parseColor("#BCCEFB");
+                int subtleBlueBorder = Color.parseColor("#6A83D7");
+                int index = routes.indexOf(route);
+                int routeColor = index != 0 ? subtleBlue : mainBlue;
+                int borderColor = index != 0 ? subtleBlueBorder : mainBlueBorder;
 
-            String encodedPolyline = route.getGeometry();
-            List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);
-
-            if (routeCoordinates.isEmpty()) {
-                continue;
+                addPolylineToMap(route, routeColor, borderColor, index);
             }
-
-            int mainBlue = Color.parseColor("#0F53FF");
-            int mainBlueBorder = Color.parseColor("#0F26F5");
-            int subtleBlue = Color.parseColor("#BCCEFB");
-            int subtleBlueBorder = Color.parseColor("#6A83D7");
-            int index = routes.indexOf(route);
-            int routeColor = index != 0 ?  subtleBlue : mainBlue;
-            int borderColor = index != 0 ?  subtleBlueBorder : mainBlueBorder;
-
-            addPolylineToMap(routeCoordinates, routeColor, borderColor, index);
         }
     }
 
@@ -218,12 +268,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         polylineOptions.addAll(routeCoordinates);
         polylineOptions.zIndex(index == 0 ? 1 : 0);
 
-        runOnUiThread(() -> {
-            if (map != null) {
-                map.addPolyline(borderPolylineOptions);
-                map.addPolyline(polylineOptions);
-            }
-        });
+        if (map != null) {
+            map.addPolyline(borderPolylineOptions);
+            map.addPolyline(polylineOptions);
+        }
     }
 
 

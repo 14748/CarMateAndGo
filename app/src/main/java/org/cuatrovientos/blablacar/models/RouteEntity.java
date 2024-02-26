@@ -5,22 +5,25 @@ import com.google.android.gms.maps.model.LatLng;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class RouteEntity {
 
     private int id;
-    private ArrayList<LatLng> route;
+    private List<CustomLatLng> route;
     private float price;
-    private ArrayList<User> passengers;
+    private List<User> passengers;
     private int seats;
     private boolean isFull;
     private Date date;
     private Time time;
 
+    public  RouteEntity(){
+    }
     public RouteEntity(int id) {
         this.id = id;
     }
-    public RouteEntity(int id, ArrayList<LatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
+    public RouteEntity(int id, List<CustomLatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
         this.id = id;
         this.route = route;
         this.price = price;
@@ -37,7 +40,7 @@ public class RouteEntity {
         return id;
     }
 
-    public ArrayList<LatLng> getRoute() {
+    public List<CustomLatLng> getRoute() {
         return route;
     }
 
@@ -45,7 +48,7 @@ public class RouteEntity {
         return price;
     }
 
-    public ArrayList<User> getPassengers() {
+    public List<User> getPassengers() {
         return passengers;
     }
 
@@ -62,7 +65,7 @@ public class RouteEntity {
     }
     public Time getTime(){ return time; }
 
-    public void setRoute(ArrayList<LatLng> route) {
+    public void setRoute(List<CustomLatLng> route) {
         this.route = route;
     }
 
