@@ -61,8 +61,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private  GoogleMap map;
     private Button button;
-
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
+    private Button btnCreateRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Toast.makeText(MainActivity.this, "yo", Toast.LENGTH_LONG).show();
         button = findViewById(R.id.button2);
+        btnCreateRoute = findViewById(R.id.btnCreateScreen);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -78,6 +79,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCreateRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CreateRoute.class);
                 startActivity(intent);
             }
         });
@@ -143,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+
+
     private void drawRoute(Response<RouteResponse> response) {
         runOnUiThread(() -> {
             MarkerOptions markerOptions = new MarkerOptions();
@@ -190,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+
     private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
         // Border Polyline
         PolylineOptions borderPolylineOptions = new PolylineOptions();
@@ -212,6 +225,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+
 
     public List<LatLng> decodePolyline(String encoded) {
         List<LatLng> poly = new ArrayList<>();
