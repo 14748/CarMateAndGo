@@ -12,7 +12,7 @@ public class User {
     private Date birthDate;
     private String email;
     private String password;
-    private Rute rutes;
+    private Route routes;
     private Drawable userIcon;
 
     public User(){} //por si se necesita
@@ -54,8 +54,8 @@ public class User {
         return password;
     }
 
-    public Rute getRutes() {
-        return rutes;
+    public Route getRutes() {
+        return routes;
     }
 
     public Drawable getUserIcon() {
@@ -90,8 +90,8 @@ public class User {
         this.password = password;
     }
 
-    public void setRutes(Rute rutes) {
-        this.rutes = rutes;
+    public void setRutes(Route rutes) {
+        this.routes = rutes;
     }
 
     public void setUserIcon(Drawable userIcon) {
