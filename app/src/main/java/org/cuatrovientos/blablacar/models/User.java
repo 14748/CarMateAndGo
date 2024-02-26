@@ -11,13 +11,13 @@ public class User {
     private String lastName;
     private Date birthDate;
     private String email;
+    private int telephone;
     private String password;
     private Route routes;
     private Drawable userIcon;
 
     public User(){} //por si se necesita
 
-    // Constructor sin establecer imagen (y obviamente sin rutas)
     public User(int id, String name, String lastName, Date birthDate, String email, String password) {
         this.id = id;
         this.name = name;
@@ -62,6 +62,8 @@ public class User {
         return userIcon;
     }
 
+    public int getTelephone(){ return telephone;}
+
     /*
     * SETTERS (posible necesidad futura de tener que borrar alguno por seguridad)
     * */
@@ -97,4 +99,5 @@ public class User {
     public void setUserIcon(Drawable userIcon) {
         this.userIcon = userIcon;
     }
+    public void setTelephone(int telephone) { this.telephone = telephone; }
 }
