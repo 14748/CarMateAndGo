@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">CarMate&amp;Go</string>
     <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_search">Search</string>
+    <string name="setCurrentLocation">Posición Actual</string>
+    <string name="hintSearch">Pamplona</string>
     <string name="whiteString" />
 </resources>

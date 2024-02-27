@@ -11,6 +11,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +46,9 @@ import org.cuatrovientos.blablacar.models.Utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -56,12 +61,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button button;
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
     private Button btnCreateRoute;
+
+    private final Executor executor = Executors.newSingleThreadExecutor();
     private ArrayList<User> users = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(MainActivity.this, "yo", Toast.LENGTH_LONG).show();
         button = findViewById(R.id.button2);
         btnCreateRoute = findViewById(R.id.btnCreateScreen);
 
@@ -88,48 +94,51 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void getUsers() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("Users");
+        executor.execute(() -> {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference usersRef = database.getReference("Users");
 
-        usersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        User user = userSnapshot.getValue(User.class);
-                        if (user != null && user.getRoutes() != null) {
-                            List<List<LatLng>> routesForDrawing = new ArrayList<>();
-                            for (RouteEntity routeEntity : user.getRoutes()) {
-                                if (routeEntity != null && routeEntity.getPoints() != null) {
-                                    List<LatLng> singleRouteLatLng = Utils.convertCustomLatLngListToLatLngList(routeEntity.getPoints());
-                                    if (singleRouteLatLng != null) {
-                                        routesForDrawing.add(singleRouteLatLng);
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                            User user = userSnapshot.getValue(User.class);
+                            if (user != null && user.getRoutes() != null) {
+                                List<List<LatLng>> routesForDrawing = new ArrayList<>();
+                                for (RouteEntity routeEntity : user.getRoutes()) {
+                                    if (routeEntity != null && routeEntity.getPoints() != null) {
+                                        List<LatLng> singleRouteLatLng = Utils.convertCustomLatLngListToLatLngList(routeEntity.getPoints());
+                                        if (singleRouteLatLng != null) {
+                                            routesForDrawing.add(singleRouteLatLng);
+                                        }
                                     }
                                 }
+                                if (!routesForDrawing.isEmpty()) {
+                                    runOnUiThread(() -> drawRoute(routesForDrawing));
+                                }
                             }
-                            if (!routesForDrawing.isEmpty()) {
-                                drawRoute(routesForDrawing);
+                            if (user != null) {
+                                users.add(user);
                             }
-                        }
-                        if (user != null) {
-                            users.add(user);
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
+                }
+            });
         });
     }
+
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 15.0f));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 13.5f));
         map.addMarker(new MarkerOptions().position(CUATROVIENTOS).title("Cuatrovientos"));
     }
     public void createRoute(LatLng end) {
@@ -199,62 +208,49 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void drawRoute(List<List<LatLng>> routes) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            //TODO: we need starting point variable on Model
-            markerOptions.position(routes.get(0).get(routes.get(0).size() - 1));
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
 
-            //Modificamos el icono para mostrar
-            Drawable myDrawable = getResources().getDrawable(R.drawable.person);
-            float scaleWidth = myDrawable.getIntrinsicWidth() * 0.2f;
-            float scaleHeight = myDrawable.getIntrinsicHeight() * 0.2f;
-            Bitmap myLogo = Bitmap.createBitmap((int) scaleWidth, (int) scaleHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(myLogo);
-            myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            myDrawable.draw(canvas);
-            BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(myLogo);
-
-            markerOptions.icon(markerIcon).anchor(0.5f, 0.5f);
-            map.addMarker(markerOptions);
-
-        for (List<LatLng> route : routes) {
-
-            for (int i = 0; i < route.size(); i++) {
-
-                int mainBlue = Color.parseColor("#0F53FF");
-                int mainBlueBorder = Color.parseColor("#0F26F5");
-                int subtleBlue = Color.parseColor("#BCCEFB");
-                int subtleBlueBorder = Color.parseColor("#6A83D7");
+        executor.execute(() -> {
+            List<PolylineOptions> polylineOptionsList = new ArrayList<>();
+            for (List<LatLng> route : routes) {
                 int index = routes.indexOf(route);
-                int routeColor = index != 0 ? subtleBlue : mainBlue;
-                int borderColor = index != 0 ? subtleBlueBorder : mainBlueBorder;
-
-                addPolylineToMap(route, routeColor, borderColor, index);
+                PolylineOptions borderPolylineOptions = createPolylineOptions(route, index, true);
+                PolylineOptions polylineOptions = createPolylineOptions(route, index, false);
+                polylineOptionsList.add(borderPolylineOptions);
+                polylineOptionsList.add(polylineOptions);
             }
-        }
+
+            handler.post(() -> {
+                if (map != null) {
+                    for (PolylineOptions options : polylineOptionsList) {
+                        map.addPolyline(options);
+                    }
+                }
+            });
+        });
     }
 
+    private PolylineOptions createPolylineOptions(List<LatLng> routeCoordinates, int index, boolean isBorder) {
+        int mainBlue = Color.parseColor("#0F53FF");
+        int mainBlueBorder = Color.parseColor("#0F26F5");
+        int subtleBlue = Color.parseColor("#BCCEFB");
+        int subtleBlueBorder = Color.parseColor("#6A83D7");
 
+        int routeColor = index != 0 ? subtleBlue : mainBlue;
+        int borderColor = index != 0 ? subtleBlueBorder : mainBlueBorder;
 
-    private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
-        // Border Polyline
-        PolylineOptions borderPolylineOptions = new PolylineOptions();
-        borderPolylineOptions.width(30);
-        borderPolylineOptions.color(borderColor);
-        borderPolylineOptions.addAll(routeCoordinates);
-        borderPolylineOptions.zIndex(index == 0 ? 1 : 0);
-
-        // Actual Route Polyline
         PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(25);
-        polylineOptions.color(routeColor);
         polylineOptions.addAll(routeCoordinates);
         polylineOptions.zIndex(index == 0 ? 1 : 0);
-
-        if (map != null) {
-            map.addPolyline(borderPolylineOptions);
-            map.addPolyline(polylineOptions);
+        if (isBorder) {
+            polylineOptions.width(30).color(borderColor);
+        } else {
+            polylineOptions.width(25).color(routeColor);
         }
+        return polylineOptions;
     }
+
 
 
 
