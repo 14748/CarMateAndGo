@@ -1,7 +1,5 @@
 package org.cuatrovientos.blablacar.models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,7 +8,7 @@ import java.util.List;
 public class RouteEntity {
 
     private int id;
-    private List<CustomLatLng> route;
+    private List<CustomLatLng> points;
     private float price;
     private List<User> passengers;
     private int seats;
@@ -25,7 +23,7 @@ public class RouteEntity {
     }
     public RouteEntity(int id, List<CustomLatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
         this.id = id;
-        this.route = route;
+        this.points = route;
         this.price = price;
         this.passengers = passengers;
         this.isFull = isFull;
@@ -40,8 +38,8 @@ public class RouteEntity {
         return id;
     }
 
-    public List<CustomLatLng> getRoute() {
-        return route;
+    public List<CustomLatLng> getPoints() {
+        return points;
     }
 
     public float getPrice() {
@@ -65,8 +63,8 @@ public class RouteEntity {
     }
     public Time getTime(){ return time; }
 
-    public void setRoute(List<CustomLatLng> route) {
-        this.route = route;
+    public void setPoints(List<CustomLatLng> points) {
+        this.points = points;
     }
 
     public void setPrice(float price) {
