@@ -16,6 +16,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.register.RegisterPassword"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterUser"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterEmail"
+            android:exported="false" />
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.CreateRoute"
             android:exported="false" />
         <activity

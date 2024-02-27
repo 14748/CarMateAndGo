@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">BlaBlaCar</string>
+    <string name="app_name">CarMate&amp;Go</string>
     <string name="title_activity_payment">PaymentActivity</string>
+    <string name="whiteString" />
 </resources>
