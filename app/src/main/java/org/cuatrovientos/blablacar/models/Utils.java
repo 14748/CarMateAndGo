@@ -22,4 +22,14 @@ public class Utils {
         }
         return customLatLngList;
     }
+
+    public static List<List<LatLng>> convertListOfCustomLatLngListToListOfLatLngList(List<List<CustomLatLng>> customLatLngLists) {
+        List<List<LatLng>> latLngLists = new ArrayList<>();
+        for (List<CustomLatLng> customLatLngList : customLatLngLists) {
+            List<LatLng> latLngList = convertCustomLatLngListToLatLngList(customLatLngList);
+            latLngLists.add(latLngList);
+        }
+        return latLngLists;
+    }
+
 }

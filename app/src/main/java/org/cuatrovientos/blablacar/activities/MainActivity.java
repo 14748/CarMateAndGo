@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,10 +39,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
+import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
 import org.cuatrovientos.blablacar.models.ORS.Route;
+import org.cuatrovientos.blablacar.models.ORS.RouteInfo;
 import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
+import org.cuatrovientos.blablacar.models.ORS.Summary;
 import org.cuatrovientos.blablacar.models.RouteEntity;
+import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
@@ -56,24 +65,32 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private  GoogleMap map;
+    private GoogleMap map;
+    private List<Polyline> polylineList = new ArrayList<>();
     private Button button;
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
     private Button btnCreateRoute;
 
     private final Executor executor = Executors.newSingleThreadExecutor();
     private ArrayList<User> users = new ArrayList<>();
+
+    private RecyclerView recyclerView;
+
+    private LinearLayout linearLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button2);
         btnCreateRoute = findViewById(R.id.btnCreateScreen);
+        linearLayout = findViewById(R.id.linearLayout);
+
+        recyclerView = findViewById(R.id.routesRecyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        getUsers();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,8 +156,92 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 13.5f));
         map.addMarker(new MarkerOptions().position(CUATROVIENTOS).title("Cuatrovientos"));
+        /*
+        Intent intent = getIntent();
+
+        if (intent.hasExtra("create_route")) {
+            User user = (User) getIntent().getSerializableExtra("userKey");
+            RouteEntity routes = (RouteEntity) getIntent().getSerializableExtra("routeKey");
+
+            routeCreation(new User(), new RouteEntity(new CustomLatLng(42.824845, -1.623631)));
+        }
+        */
+
+
+
+
+
     }
-    public void createRoute(LatLng end) {
+
+    private void highlightRoute(int selectedRouteIndex) {
+        final int selectedZIndex = 10; // Higher zIndex for selected route
+        final int defaultZIndex = 0; // Default zIndex for unselected routes
+
+        for (int i = 0; i < polylineList.size(); i++) {
+            Polyline polyline = polylineList.get(i);
+            // Assuming each route has a border and main line, adjust the index calculation as necessary
+            int routeIndex = i / 2; // Adjust based on your actual storage logic
+            if (routeIndex == selectedRouteIndex) {
+                // This is the selected route
+                if (i % 2 == 0) { // Assuming even indices are borders
+                    polyline.setColor(Color.parseColor("#0F26F5")); // mainBlueBorder for borders
+                    polyline.setZIndex(selectedZIndex);
+                } else {
+                    polyline.setColor(Color.parseColor("#0F53FF")); // mainBlue for the main line
+                    polyline.setZIndex(selectedZIndex);
+                }
+            } else {
+                // This is not the selected route
+                if (i % 2 == 0) { // Assuming even indices are borders
+                    polyline.setColor(Color.parseColor("#6A83D7")); // subtleBlueBorder for borders
+                    polyline.setZIndex(defaultZIndex);
+                } else {
+                    polyline.setColor(Color.parseColor("#BCCEFB")); // subtleBlue for the main line
+                    polyline.setZIndex(defaultZIndex);
+                }
+            }
+        }
+    }
+
+
+
+    public void routeCreation(User user, RouteEntity routes) {
+        createRoute(routes.getTravelPoint(), new RouteCallback() {
+            @Override
+            public void onRouteReady(RouteInfo routes) {
+                drawRoute(Utils.convertListOfCustomLatLngListToListOfLatLngList(routes.getDecodedRoutes()));
+                List<RouteSelectionInfo> routeSelectionInfos = new ArrayList<>();
+                for (List<String> summary: routes.getSummaries()) {
+                    routeSelectionInfos.add(new RouteSelectionInfo("Ruta numero " + routes.getSummaries().indexOf(summary)+1, summary.get(0), summary.get(1)));
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos, new RecyclerRoutesAdapter.onItemClickListener() {
+                            @Override
+                            public void onItemClickListener(RouteSelectionInfo palabra) {
+                                Toast.makeText(MainActivity.this, routeSelectionInfos.indexOf(palabra) + "click", Toast.LENGTH_LONG).show();
+                                highlightRoute(routeSelectionInfos.indexOf(palabra));
+                            }
+                        }));
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // Handle error here
+            }
+        });
+    }
+
+    public interface RouteCallback {
+        void onRouteReady(RouteInfo route);
+        void onError(Exception e);
+    }
+
+    public void createRoute(CustomLatLng end, RouteCallback callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 Retrofit retrofit = getRetrofit();
@@ -159,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 "}" +
                                 "}",
                         CUATROVIENTOS.longitude, CUATROVIENTOS.latitude,
-                        end.longitude, end.latitude
+                        end.getLongitude(), end.getLatitude()
                 );
 
                 RequestBody body = RequestBody.create(
@@ -172,23 +273,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         body
                 ).execute();
 
-                return response;
+                if (response.isSuccessful() && response.body() != null) {
+                    return response;
+                } else {
+                    callback.onError(new RuntimeException("Response not successful or empty body"));
+                    return null;
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                callback.onError(e);
                 return null;
             }
         }).thenAccept(response -> {
-            if (response != null && response.isSuccessful() && response.body() != null) {
-                drawRoute(converRouteResponseToCustomLatLng(response));
-            } else {
-                // Handle failure
+            if (response != null) {
+                RouteInfo route = converRouteResponseToCustomLatLng(response);
+                callback.onRouteReady(route);
             }
         });
     }
 
-
-    private List<List<LatLng>> converRouteResponseToCustomLatLng(Response<RouteResponse> response) {
-        List<List<LatLng>> allDecodedRoutes = new ArrayList<>();
+    private RouteInfo converRouteResponseToCustomLatLng(Response<RouteResponse> response) {
+        List<List<CustomLatLng>> allDecodedRoutes = new ArrayList<>();
+        List<List<String>> summaries = new ArrayList<>();
+        List<Double> distances = new ArrayList<>(); // List to keep track of distances for comparison
 
         if (response == null || response.body() == null || response.body().getRoutes() == null) {
             return null;
@@ -198,12 +304,62 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         for (Route route : routes) {
             String encodedPolyline = route.getGeometry();
-            List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);
-            allDecodedRoutes.add(routeCoordinates);
+            Summary summary = route.getSummary();
+            if (summary != null) {
+                double distance = summary.getDistance(); // Assuming this gets the distance in km
+
+                boolean isSimilar = false;
+                for (Double d : distances) {
+                    if (Math.abs(d - distance) <= 100) { // Check if the distance is within 100 km of any existing route
+                        isSimilar = true;
+                        break;
+                    }
+                }
+
+                if (!isSimilar) { // Only add the route if it's not similar to any existing route
+                    distances.add(distance); // Add this route's distance for future comparisons
+
+                    List<String> routeSummary = new ArrayList<>();
+
+                    // Ensure the distance is shown up to two decimal places
+                    double distanceKm = distance / 1000.0;
+                    String formattedDistance = String.format("%.2f", distanceKm);
+                    routeSummary.add("Distancia: " + formattedDistance + " km");
+
+                    // Assuming summary.getDuration() returns a double value representing seconds
+                    double totalSecsDouble = summary.getDuration();
+                    int hours = (int) totalSecsDouble / 3600;
+                    int minutes = (int) (totalSecsDouble % 3600) / 60;
+                    int seconds = (int) totalSecsDouble % 60;
+
+                    // Build the duration string based on the values of hours, minutes, and seconds
+                    String formattedDuration;
+                    if (hours > 0) {
+                        formattedDuration = String.format("%d h %02d min %02d sec", hours, minutes, seconds);
+                    } else if (minutes > 0) {
+                        formattedDuration = String.format("%d min %02d sec", minutes, seconds);
+                    } else {
+                        formattedDuration = String.format("%d sec", seconds);
+                    }
+                    routeSummary.add("Duracion: " + formattedDuration);
+                    summaries.add(routeSummary);
+
+                    List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);
+                    List<CustomLatLng> customRouteCoordinates = new ArrayList<>();
+                    for (LatLng latLng : routeCoordinates) {
+                        CustomLatLng customLatLng = new CustomLatLng(latLng.latitude, latLng.longitude);
+                        customRouteCoordinates.add(customLatLng);
+                    }
+                    allDecodedRoutes.add(customRouteCoordinates);
+                }
+
+
+            }
         }
 
-        return allDecodedRoutes;
+        return new RouteInfo(allDecodedRoutes, summaries);
     }
+
 
 
     private void drawRoute(List<List<LatLng>> routes) {
@@ -222,11 +378,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             handler.post(() -> {
                 if (map != null) {
+                    polylineList.clear(); // Clear previous polylines if you're redrawing them
                     for (PolylineOptions options : polylineOptionsList) {
-                        map.addPolyline(options);
+                        Polyline polyline = map.addPolyline(options);
+                        polylineList.add(polyline);
                     }
                 }
             });
+
         });
     }
 
