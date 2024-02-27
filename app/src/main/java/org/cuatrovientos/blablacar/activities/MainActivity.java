@@ -1,5 +1,7 @@
 package org.cuatrovientos.blablacar.activities;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,18 +11,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Header;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,25 +25,29 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.stripe.android.PaymentConfiguration;
-import com.stripe.android.paymentsheet.PaymentSheet;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
 import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.cuatrovientos.blablacar.models.RouteEntity;
+import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -57,69 +58,109 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private  GoogleMap map;
     private Button button;
+    private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
+    private Button btnCreateRoute;
 
-    private Button btnSearch;
-
-
-
-    private String styleJson = "[{\"elementType\": \"labels\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative\",\"elementType\": \"geometry\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.land_parcel\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.neighborhood\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"poi\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"road\",\"elementType\": \"labels.icon\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"transit\",\"stylers\": [{\"visibility\": \"off\"}]}]";
+    private final Executor executor = Executors.newSingleThreadExecutor();
+    private ArrayList<User> users = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(MainActivity.this, "yo", Toast.LENGTH_LONG).show();
         button = findViewById(R.id.button2);
-        btnSearch = findViewById(R.id.searchbutton);
+        btnCreateRoute = findViewById(R.id.btnCreateScreen);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Search.class);
-                startActivity(intent);
-            }
-        });
-
-
-
+        getUsers();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //PaymentFlow();
                 Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
                 startActivity(intent);
-
             }
         });
 
-
+        btnCreateRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CreateRoute.class);
+                startActivity(intent);
+            }
+        });
     }
 
+    public void getUsers() {
+        executor.execute(() -> {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference usersRef = database.getReference("Users");
 
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                            User user = userSnapshot.getValue(User.class);
+                            if (user != null && user.getRoutes() != null) {
+                                List<List<LatLng>> routesForDrawing = new ArrayList<>();
+                                for (RouteEntity routeEntity : user.getRoutes()) {
+                                    if (routeEntity != null && routeEntity.getPoints() != null) {
+                                        List<LatLng> singleRouteLatLng = Utils.convertCustomLatLngListToLatLngList(routeEntity.getPoints());
+                                        if (singleRouteLatLng != null) {
+                                            routesForDrawing.add(singleRouteLatLng);
+                                        }
+                                    }
+                                }
+                                if (!routesForDrawing.isEmpty()) {
+                                    runOnUiThread(() -> drawRoute(routesForDrawing));
+                                }
+                            }
+                            if (user != null) {
+                                users.add(user);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
+                }
+            });
+        });
+    }
 
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
 
-        //map.setMapStyle(new MapStyleOptions(styleJson));
-
-        LatLng cuatrovientos = new LatLng(42.824851, -1.660318);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(cuatrovientos, 15.0f));
-        map.addMarker(new MarkerOptions().position(cuatrovientos).title("Marker in Sydney"));
-        createRoute();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 13.5f));
+        map.addMarker(new MarkerOptions().position(CUATROVIENTOS).title("Cuatrovientos"));
     }
-    public void createRoute() {
+    public void createRoute(LatLng end) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 Retrofit retrofit = getRetrofit();
                 ApiService service = retrofit.create(ApiService.class);
 
-                String rawJson = "{" + "\"coordinates\": [" + "[-1.633844,42.833349]," + "[-1.660318,42.824851]" + "]," + "\"alternative_routes\": {" + "\"target_count\": 3," + "\"weight_factor\": 1.4," + "\"share_factor\": 0.6" + "}" + "}";
+                String rawJson = String.format(
+                        "{" +
+                                "\"coordinates\": [" +
+                                "[%f,%f]," +
+                                "[%f,%f]" +
+                                "]," +
+                                "\"alternative_routes\": {" +
+                                "\"target_count\": 3," +
+                                "\"weight_factor\": 1.4," +
+                                "\"share_factor\": 0.6" +
+                                "}" +
+                                "}",
+                        CUATROVIENTOS.longitude, CUATROVIENTOS.latitude,
+                        end.longitude, end.latitude
+                );
 
                 RequestBody body = RequestBody.create(
                         MediaType.parse("application/json; charset=utf-8"),
@@ -138,84 +179,79 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }).thenAccept(response -> {
             if (response != null && response.isSuccessful() && response.body() != null) {
-                drawRoute(response);
+                drawRoute(converRouteResponseToCustomLatLng(response));
             } else {
                 // Handle failure
             }
         });
     }
 
-    private void drawRoute(Response<RouteResponse> response) {
-        runOnUiThread(() -> {
-            MarkerOptions markerOptions = new MarkerOptions();
-            LatLng userPosition = new LatLng(42.833349,-1.633844);
-            markerOptions.position(userPosition);
-            markerOptions.title("Punto partida");
-            Drawable myDrawable = getResources().getDrawable(R.drawable.person);
-            float scaleWidth = myDrawable.getIntrinsicWidth() * 0.2f;
-            float scaleHeight = myDrawable.getIntrinsicHeight() * 0.2f;
-            Bitmap myLogo = Bitmap.createBitmap((int) scaleWidth, (int) scaleHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(myLogo);
-            myDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            myDrawable.draw(canvas);
 
-            BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(myLogo);
+    private List<List<LatLng>> converRouteResponseToCustomLatLng(Response<RouteResponse> response) {
+        List<List<LatLng>> allDecodedRoutes = new ArrayList<>();
 
-            markerOptions.icon(markerIcon).anchor(0.5f, 0.5f);
-
-            map.addMarker(markerOptions);
-
-        });
         if (response == null || response.body() == null || response.body().getRoutes() == null) {
-            return;
+            return null;
         }
 
         List<Route> routes = response.body().getRoutes();
 
-        for (int i = 0; i < routes.size(); i++) {
-            Route route = routes.get(i);
-
+        for (Route route : routes) {
             String encodedPolyline = route.getGeometry();
             List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);
-
-            if (routeCoordinates.isEmpty()) {
-                continue;
-            }
-
-            int mainBlue = Color.parseColor("#0F53FF");
-            int mainBlueBorder = Color.parseColor("#0F26F5");
-            int subtleBlue = Color.parseColor("#BCCEFB");
-            int subtleBlueBorder = Color.parseColor("#6A83D7");
-            int index = routes.indexOf(route);
-            int routeColor = index != 0 ?  subtleBlue : mainBlue;
-            int borderColor = index != 0 ?  subtleBlueBorder : mainBlueBorder;
-
-            addPolylineToMap(routeCoordinates, routeColor, borderColor, index);
+            allDecodedRoutes.add(routeCoordinates);
         }
+
+        return allDecodedRoutes;
     }
 
-    private void addPolylineToMap(List<LatLng> routeCoordinates, int routeColor, int borderColor, int index) {
-        // Border Polyline
-        PolylineOptions borderPolylineOptions = new PolylineOptions();
-        borderPolylineOptions.width(30); // Border width
-        borderPolylineOptions.color(borderColor);
-        borderPolylineOptions.addAll(routeCoordinates);
-        borderPolylineOptions.zIndex(index == 0 ? 1 : 0);
 
-        // Actual Route Polyline
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(25);
-        polylineOptions.color(routeColor);
-        polylineOptions.addAll(routeCoordinates);
-        polylineOptions.zIndex(index == 0 ? 1 : 0);
+    private void drawRoute(List<List<LatLng>> routes) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
 
-        runOnUiThread(() -> {
-            if (map != null) {
-                map.addPolyline(borderPolylineOptions);
-                map.addPolyline(polylineOptions);
+        executor.execute(() -> {
+            List<PolylineOptions> polylineOptionsList = new ArrayList<>();
+            for (List<LatLng> route : routes) {
+                int index = routes.indexOf(route);
+                PolylineOptions borderPolylineOptions = createPolylineOptions(route, index, true);
+                PolylineOptions polylineOptions = createPolylineOptions(route, index, false);
+                polylineOptionsList.add(borderPolylineOptions);
+                polylineOptionsList.add(polylineOptions);
             }
+
+            handler.post(() -> {
+                if (map != null) {
+                    for (PolylineOptions options : polylineOptionsList) {
+                        map.addPolyline(options);
+                    }
+                }
+            });
         });
     }
+
+    private PolylineOptions createPolylineOptions(List<LatLng> routeCoordinates, int index, boolean isBorder) {
+        int mainBlue = Color.parseColor("#0F53FF");
+        int mainBlueBorder = Color.parseColor("#0F26F5");
+        int subtleBlue = Color.parseColor("#BCCEFB");
+        int subtleBlueBorder = Color.parseColor("#6A83D7");
+
+        int routeColor = index != 0 ? subtleBlue : mainBlue;
+        int borderColor = index != 0 ? subtleBlueBorder : mainBlueBorder;
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.addAll(routeCoordinates);
+        polylineOptions.zIndex(index == 0 ? 1 : 0);
+        if (isBorder) {
+            polylineOptions.width(30).color(borderColor);
+        } else {
+            polylineOptions.width(25).color(routeColor);
+        }
+        return polylineOptions;
+    }
+
+
+
 
     public List<LatLng> decodePolyline(String encoded) {
         List<LatLng> poly = new ArrayList<>();
@@ -245,17 +281,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             LatLng p = new LatLng(((double) lat / 1E5), ((double) lng / 1E5));
             poly.add(p);
         }
-
         return poly;
     }
+
     private Retrofit getRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl("https://api.openrouteservice.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
-
-
 }
 
 
