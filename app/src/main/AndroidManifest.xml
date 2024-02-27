@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +18,11 @@
         android:theme="@style/Theme.BlaBlaCar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.Search"
+            android:exported="false"
+            android:label="@string/title_activity_search"
+            android:theme="@style/Theme.BlaBlaCar" />
         <activity
             android:name=".BalanceActivity"
             android:exported="false" />

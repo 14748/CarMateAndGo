@@ -10,7 +10,9 @@
         android:layout_width="416dp"
         android:layout_height="647dp"
         tools:layout_editor_absoluteX="-5dp"
-        tools:layout_editor_absoluteY="84dp" />
+        tools:layout_editor_absoluteY="84dp" >
+
+    </FrameLayout>
 
     <fragment
         android:id="@+id/map"
@@ -27,5 +29,13 @@
         android:text="Button"
         tools:layout_editor_absoluteX="160dp"
         tools:layout_editor_absoluteY="16dp" />
+
+    <Button
+        android:id="@+id/searchbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="27dp" />
     A
 </androidx.constraintlayout.widget.ConstraintLayout>

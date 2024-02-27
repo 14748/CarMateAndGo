@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private  GoogleMap map;
     private Button button;
 
+    private Button btnSearch;
+
 
 
     private String styleJson = "[{\"elementType\": \"labels\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative\",\"elementType\": \"geometry\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.land_parcel\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"administrative.neighborhood\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"poi\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"road\",\"elementType\": \"labels.icon\",\"stylers\": [{\"visibility\": \"off\"}]},{\"featureType\": \"transit\",\"stylers\": [{\"visibility\": \"off\"}]}]";
@@ -67,9 +69,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Toast.makeText(MainActivity.this, "yo", Toast.LENGTH_LONG).show();
         button = findViewById(R.id.button2);
+        btnSearch = findViewById(R.id.searchbutton);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Search.class);
+                startActivity(intent);
+            }
+        });
 
 
 
