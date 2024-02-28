@@ -8,6 +8,7 @@ import java.util.List;
 public class RouteEntity {
 
     private int id;
+    private CustomLatLng travelPoint;
     private List<CustomLatLng> points;
     private float price;
     private List<User> passengers;
@@ -20,6 +21,10 @@ public class RouteEntity {
     }
     public RouteEntity(int id) {
         this.id = id;
+    }
+
+    public RouteEntity(CustomLatLng travelPoint) {
+        this.travelPoint = travelPoint;
     }
     public RouteEntity(int id, List<CustomLatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
         this.id = id;
@@ -44,6 +49,14 @@ public class RouteEntity {
 
     public float getPrice() {
         return price;
+    }
+
+    public CustomLatLng getTravelPoint() {
+        return travelPoint;
+    }
+
+    public void setTravelPoint(CustomLatLng travelPoint) {
+        this.travelPoint = travelPoint;
     }
 
     public List<User> getPassengers() {

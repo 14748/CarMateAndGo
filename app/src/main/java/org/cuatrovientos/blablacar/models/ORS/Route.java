@@ -9,4 +9,16 @@ public class Route {
     public String getGeometry() {
         return geometry;
     }
+
+    @SerializedName("summary")
+    private Summary summary;
+
+    // Getters and setters
+    public Summary getSummary() {
+        return summary;
+    }
+
+    public void setSummary(Summary summary) {
+        this.summary = summary;
+    }
 }
