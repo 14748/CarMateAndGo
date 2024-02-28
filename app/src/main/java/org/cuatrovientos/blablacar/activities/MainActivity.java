@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
     private Button btnCreateRoute;
 
+    private Button btnTest;
+
     private final Executor executor = Executors.newSingleThreadExecutor();
     private ArrayList<User> users = new ArrayList<>();
 
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button2);
         btnCreateRoute = findViewById(R.id.btnCreateScreen);
+        btnTest = findViewById(R.id.buttontest);
         linearLayout = findViewById(R.id.linearLayout);
 
         recyclerView = findViewById(R.id.routesRecyclerView);
@@ -104,6 +107,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateRoute.class);
+                startActivity(intent);
+            }
+        });
+
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RouteFinderActivity.class);
                 startActivity(intent);
             }
         });

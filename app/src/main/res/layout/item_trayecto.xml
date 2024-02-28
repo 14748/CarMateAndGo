@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/avatarImageView"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_profile_green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/usernameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Username"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+        app:layout_constraintTop_toTopOf="@+id/avatarImageView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/kmTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="Km: 10"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintStart_toStartOf="@+id/usernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/timeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Time: 5 min"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintStart_toStartOf="@+id/kmTextView"
+        app:layout_constraintTop_toBottomOf="@+id/kmTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
