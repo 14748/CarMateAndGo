@@ -16,6 +16,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.register.LogIn"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.MainScreen"
+            android:exported="false" />
+        <activity
             android:name=".activities.register.RegisterPassword"
             android:exported="false" />
         <activity

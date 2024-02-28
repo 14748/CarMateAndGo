@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.activities.register.MainScreen;
 import org.cuatrovientos.blablacar.activities.register.RegisterEmail;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
 import org.cuatrovientos.blablacar.models.ORS.Route;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnCreateRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterEmail.class);
+                Intent intent = new Intent(MainActivity.this, MainScreen.class);
                 startActivity(intent);
             }
         });

@@ -1,6 +1,7 @@
 package org.cuatrovientos.blablacar.models;
 
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Date;
