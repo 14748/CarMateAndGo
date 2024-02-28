@@ -105,7 +105,7 @@
         android:autofillHints=""
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:hint="dd/MM/aaa"
+        android:hint="dd/MM/aaaa"
         android:inputType="datetime|date"
         android:paddingStart="10sp"
         android:paddingEnd="0sp"

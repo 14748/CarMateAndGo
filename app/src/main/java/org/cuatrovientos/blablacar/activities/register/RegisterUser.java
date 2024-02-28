@@ -21,7 +21,6 @@ public class RegisterUser extends AppCompatActivity {
     ImageButton nextPageBtn;
     EditText nombre, apellidos, fecNacimiento;
     String email;
-    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,18 +30,18 @@ public class RegisterUser extends AppCompatActivity {
         nombre = findViewById(R.id.txtNombre);
         apellidos = findViewById(R.id.txtApellidos);
         fecNacimiento = findViewById(R.id.txtFechaNacimiento);
-        bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         email = bundle.getString("email");
 
         nextPageBtn.setOnClickListener(view -> {
             Intent intent = new Intent(RegisterUser.this, RegisterPassword.class);
-            String nombreText = nombre.getText().toString();
-            String apellidosText = apellidos.getText().toString();
-            String fecNacimientoText = fecNacimiento.getText().toString();
-            intent.putExtra("nombre", nombreText);
-            intent.putExtra("apellidos", apellidosText);
+            String nombreStr = nombre.getText().toString();
+            String apellidosStr = apellidos.getText().toString();
+            String fecNacimientoStr = fecNacimiento.getText().toString();
+            intent.putExtra("nombre", nombreStr);
+            intent.putExtra("apellidos", apellidosStr);
             intent.putExtra("email", email);
-            intent.putExtra("fecNacimiento", fecNacimientoText);
+            intent.putExtra("fecNacimiento", fecNacimientoStr);
             startActivity(intent);
                 });
 
@@ -51,7 +50,7 @@ public class RegisterUser extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ((nombre.length() > 3 && apellidos.length() > 2)){
+                if ((nombre.length() > 3 && apellidos.length() > 2 && fecNacimiento.length() == 10)){
                     nextPageBtn.setVisibility(View.VISIBLE);
                 } else {
                     nextPageBtn.setVisibility(View.INVISIBLE);
@@ -66,7 +65,7 @@ public class RegisterUser extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if((nombre.length() > 3 && apellidos.length() > 2)){
+                if((nombre.length() > 3 && apellidos.length() > 2 && fecNacimiento.length() == 10)){
                     nextPageBtn.setVisibility(View.VISIBLE);
                 } else {
                     nextPageBtn.setVisibility(View.INVISIBLE);
@@ -74,6 +73,21 @@ public class RegisterUser extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        fecNacimiento.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if ((nombre.length() > 3 && apellidos.length() > 2 && fecNacimiento.length() == 10)){
+                    nextPageBtn.setVisibility(View.VISIBLE);
+                } else {
+                    nextPageBtn.setVisibility(View.INVISIBLE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) { }
         });
     }
 }

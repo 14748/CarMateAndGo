@@ -1,23 +1,15 @@
-package org.cuatrovientos.blablacar.activities.register;
+package org.cuatrovientos.blablacar.activities.login;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
@@ -34,9 +26,6 @@ public class LogIn extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_log_in);
-
-            // TODO: iniciar la base de datos
-
             edtxtEmail = findViewById(R.id.edTxtEmail);
             edtxtContrasenha = findViewById(R.id.edTxtContrasenha);
             btnIniciarSesion = findViewById(R.id.btnIniciarSesion);

@@ -20,10 +20,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.register.LogIn"
+            android:name=".activities.login.LogIn"
             android:exported="false" />
         <activity
-            android:name=".activities.register.MainScreen"
+            android:name=".activities.login.MainScreen"
             android:exported="false" />
         <activity
             android:name=".activities.register.RegisterPassword"

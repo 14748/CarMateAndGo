@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".activities.register.MainScreen">
+    tools:context=".activities.login.MainScreen">
 
     <ImageView
         android:id="@+id/imageView6"
@@ -94,7 +94,7 @@
         android:id="@+id/txtPresentacion"
         android:layout_width="375dp"
         android:layout_height="188dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="¡Bienvenido a CarMate&amp;Go! La plataforma que te permite compartir viajes de forma eficiente y amigable con el medio ambiente. Encuentra compañeros de viaje para reducir las emisiones de CO2 y contribuye a un mundo más sostenible. "
         android:textAlignment="center"
         android:textColor="@color/gray500"
