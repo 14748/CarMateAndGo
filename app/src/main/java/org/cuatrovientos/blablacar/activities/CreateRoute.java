@@ -47,9 +47,8 @@ public class CreateRoute extends AppCompatActivity {
         date = findViewById(R.id.lblDate);
         createRoute = findViewById(R.id.btnCreateRoute);
 
-
-
-
+        PlaceOrigin = new PlaceOpenStreetMap();
+        PlaceDestination = new PlaceOpenStreetMap();
 
         origin.setOnClickListener(v -> {
             Intent intent = new Intent(CreateRoute.this, Search.class);
@@ -78,9 +77,9 @@ public class CreateRoute extends AppCompatActivity {
 
         createRoute.setOnClickListener(v -> {
             Intent intent = new Intent(CreateRoute.this, MainActivity.class);
-            intent.putExtra("origin", (Serializable) PlaceOrigin);
-            intent.putExtra("destination", (Serializable) PlaceDestination);
+            intent.putExtra("travelPoint", PlaceOrigin);
             intent.putExtra("date", date.getText().toString());
+            setResult(RESULT_OK, intent);
             finish();
         });
 
@@ -105,6 +104,8 @@ public class CreateRoute extends AppCompatActivity {
             if (origin != null) {
                 this.originLat = Double.valueOf(origin.getLat());
                 this.originLon = Double.valueOf(origin.getLon());
+                this.PlaceOrigin.setLat(originLat.toString());
+                this.PlaceOrigin.setLon(originLon.toString());
                 this.origin.setText(origin.getDisplayName());
             } else {
                 // Handle the case where origin is null, log an error, show a message, etc.
@@ -114,6 +115,8 @@ public class CreateRoute extends AppCompatActivity {
             if (destination != null) {
                 this.destinationLat = Double.valueOf(destination.getLat());
                 this.destinationLon = Double.valueOf(destination.getLon());
+                this.PlaceDestination.setLat(destinationLat.toString());
+                this.PlaceDestination.setLon(destinationLat.toString());
                 // Assuming you have a destination TextView, set its text
                 this.destination.setText(destination.getDisplayName());
             } else {

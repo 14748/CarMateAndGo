@@ -2,11 +2,17 @@ package org.cuatrovientos.blablacar.activities;
 
 import static android.content.ContentValues.TAG;
 
+import static java.security.AccessController.getContext;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -37,6 +43,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.checkerframework.checker.units.qual.C;
+import org.checkerframework.checker.units.qual.Time;
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.activities.register.LogIn;
@@ -48,12 +56,15 @@ import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.ORS.RouteInfo;
 import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
 import org.cuatrovientos.blablacar.models.ORS.Summary;
+import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 import org.cuatrovientos.blablacar.models.RouteEntity;
 import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -82,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView recyclerView;
 
     private LinearLayout linearLayout;
+    private ActivityResultLauncher<Intent> createRouteLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnLogIn = findViewById(R.id.bntLogIn);
         btnTest = findViewById(R.id.buttontest);
         linearLayout = findViewById(R.id.linearLayout);
+
+        initCreateRouteLauncher();
 
         recyclerView = findViewById(R.id.routesRecyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
@@ -111,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateRoute.class);
-                startActivity(intent);
+                createRouteLauncher.launch(intent);
             }
         });
 
@@ -130,6 +144,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+    }
+
+    private void initCreateRouteLauncher() {
+        createRouteLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+                        // Handle the received data as before
+                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("travelPoint");
+                        String date = data.getStringExtra("date");
+                        Toast.makeText(MainActivity.this, "heyy", Toast.LENGTH_LONG).show();
+
+                        double originLatitude = Double.parseDouble(origin.getLat());
+                        double originLongitude = Double.parseDouble(origin.getLon());
+
+                        // Assuming User and RouteEntity classes are set up to handle these types correctly
+                        routeCreation(new User(), new RouteEntity(new CustomLatLng(originLatitude, originLongitude)));
+                    }
+                });
     }
 
     public void getUsers() {
@@ -171,31 +205,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         });
     }
-
-
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(CUATROVIENTOS, 13.5f));
         map.addMarker(new MarkerOptions().position(CUATROVIENTOS).title("Cuatrovientos"));
-        /*
-        Intent intent = getIntent();
-
-        if (intent.hasExtra("create_route")) {
-            User user = (User) getIntent().getSerializableExtra("userKey");
-            RouteEntity routes = (RouteEntity) getIntent().getSerializableExtra("routeKey");
-
-            routeCreation(new User(), new RouteEntity(new CustomLatLng(42.824845, -1.623631)));
         }
-        */
-
-
-
-
-
-    }
-
     private void highlightRoute(int selectedRouteIndex) {
         final int selectedZIndex = 10; // Higher zIndex for selected route
         final int defaultZIndex = 0; // Default zIndex for unselected routes
@@ -226,10 +242,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
-
-    public void routeCreation(User user, RouteEntity routes) {
-        createRoute(routes.getTravelPoint(), new RouteCallback() {
+    public void routeCreation(User user, RouteEntity route) {
+        createRoute(route.getTravelPoint(), new RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
                 drawRoute(Utils.convertListOfCustomLatLngListToListOfLatLngList(routes.getDecodedRoutes()));
@@ -241,15 +255,46 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos, new RecyclerRoutesAdapter.onItemClickListener() {
-                            @Override
-                            public void onItemClickListener(RouteSelectionInfo palabra) {
-                                Toast.makeText(MainActivity.this, routeSelectionInfos.indexOf(palabra) + "click", Toast.LENGTH_LONG).show();
-                                highlightRoute(routeSelectionInfos.indexOf(palabra));
-                            }
-                        }));
+                        recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos,
+                                new RecyclerRoutesAdapter.onItemClickListener() {
+                                    @Override
+                                    public void onItemClickListener(RouteSelectionInfo palabra) {
+                                        highlightRoute(routeSelectionInfos.indexOf(palabra));
+                                    }
+                                },
+                                new RecyclerRoutesAdapter.onLinkClickListener() {
+                                    @Override
+                                    public void onLinkClickListener(int position) {
+                                        Toast.makeText(MainActivity.this, "test", Toast.LENGTH_SHORT).show();
+                                        //TODO: post user route to firebase
+                                        List<RouteEntity> userRoutes = new ArrayList<>();
+                                        // Add RouteEntity objects to userRoutes as needed
+
+                                        Drawable userIcon = ContextCompat.getDrawable(MainActivity.this, R.drawable.arrowderecha);;
+                                        User newUser = new User(
+                                                1, // id
+                                                "John", // name
+                                                "Doe", // lastName
+                                                new Date(), // birthDate
+                                                "johndoe@example.com", // email
+                                                1234567890, // telephone
+                                                "securepassword123", // password
+                                                userRoutes, // List of RouteEntity objects
+                                                userIcon // Drawable for user icon
+                                        );
+                                        List<User> users = new ArrayList<>();
+                                        users.add(new User());
+                                        RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
+                                        RouteEntity r = new RouteEntity(0, route.getTravelPoint(), routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, new Date());
+                                        map.clear();
+                                        user.addRoute(r);
+                                        Utils.pushUser(user);
+                                    }
+                                }
+                        ));
                     }
                 });
+
             }
 
             @Override

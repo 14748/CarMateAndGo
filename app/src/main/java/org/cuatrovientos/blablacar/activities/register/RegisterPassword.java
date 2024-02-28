@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.activities.MainActivity;
@@ -32,7 +31,6 @@ public class RegisterPassword extends AppCompatActivity {
     EditText password, passwordRep;
     Bundle bundle;
     String keepNombre, keepApellidos, keepEmail, keepFechaNacimiento;
-    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +44,6 @@ public class RegisterPassword extends AppCompatActivity {
         keepApellidos = bundle.getString("apellidos");
         keepEmail = bundle.getString("email");
         keepFechaNacimiento = bundle.getString("fecNacimiento");
-        db = FirebaseFirestore.getInstance();
 
         password.addTextChangedListener(new TextWatcher() {
             @Override
