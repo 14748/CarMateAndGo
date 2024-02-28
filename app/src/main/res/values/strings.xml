@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">BlaBlaCar</string>
     <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_search">Search</string>
+    <string name="setCurrentLocation">Posición Actual</string>
+    <string name="hintSearch">Pamplona</string>
 </resources>

@@ -1,0 +1,54 @@
+<!-- res/drawable/button_custom.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorButtonPressed" />
+                    <corners android:radius="8dp" />
+                    <stroke android:color="@color/colorButtonBorder" android:width="2dp" />
+                </shape>
+            </item>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorButtonPressed" />
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_focused="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorButtonFocused" />
+                    <corners android:radius="8dp" />
+                    <stroke android:color="@color/colorButtonBorder" android:width="2dp" />
+                </shape>
+            </item>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorButtonFocused" />
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorButtonDefault" />
+                    <corners android:radius="8dp" />
+                    <stroke android:color="@color/colorButtonBorder" android:width="2dp" />
+                </shape>
+            </item>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorButtonDefault" />
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
