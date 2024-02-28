@@ -94,7 +94,6 @@ public class RegisterPassword extends AppCompatActivity {
                     int month = Integer.parseInt(monthFormat.format(fecha));
                     int year = Integer.parseInt(yearFormat.format(fecha));
                     Date fechaFormateada = new Date(year - 1900, month - 1, day);
-
                     Utils.getUsers(new Utils.FirebaseCallback() {
                         @Override
                         public void onCallback(List<User> userList) {
