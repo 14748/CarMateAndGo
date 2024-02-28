@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.register.LogIn">
+    tools:context=".activities.login.LogIn">
 
     <ImageView
         android:id="@+id/imagenHeader"
@@ -14,18 +14,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_background" />
+        app:srcCompat="@drawable/background" />
 
     <TextView
         android:id="@+id/textViewHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Iniciar sesión"
+        android:layout_width="276dp"
+        android:layout_height="65dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:textSize="30sp"
+        android:text="Iniciar sesión"
+        android:textColor="#455A64"
+        android:textSize="40sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

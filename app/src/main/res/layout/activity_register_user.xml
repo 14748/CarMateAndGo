@@ -9,14 +9,15 @@
 
     <ImageView
         android:id="@+id/header_background"
-        android:layout_width="415dp"
-        android:layout_height="71dp"
+        android:layout_width="409dp"
+        android:layout_height="105dp"
+        android:contentDescription="Imagen de cabecera"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_background"
+        app:srcCompat="@drawable/salpicaderocoche"
         tools:ignore="VisualLintBounds" />
 
     <TextView
@@ -104,7 +105,7 @@
         android:autofillHints=""
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:hint="dd/MM/aaa"
+        android:hint="dd/MM/aaaa"
         android:inputType="datetime|date"
         android:paddingStart="10sp"
         android:paddingEnd="0sp"

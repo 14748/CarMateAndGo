@@ -17,19 +17,22 @@ import com.google.android.material.snackbar.Snackbar;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import okhttp3.internal.Util;
 
 public class RegisterPassword extends AppCompatActivity {
 
     ImageButton btnNextPage;
     EditText password, passwordRep;
-    Bundle bundle;
     String keepNombre, keepApellidos, keepEmail, keepFechaNacimiento;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,8 @@ public class RegisterPassword extends AppCompatActivity {
         password = findViewById(R.id.txtPassword);
         passwordRep = findViewById(R.id.txtPasswordRepetida);
         btnNextPage = findViewById(R.id.btnNextPage);
-        bundle = getIntent().getExtras();
+
+        Bundle bundle = getIntent().getExtras();
         keepNombre = bundle.getString("nombre");
         keepApellidos = bundle.getString("apellidos");
         keepEmail = bundle.getString("email");
@@ -65,9 +69,7 @@ public class RegisterPassword extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String rePasswordString = passwordRep.getText().toString();
-
-                if (rePasswordString.length() > 2) {
+                if (passwordRep.getText().toString().length() > 8) {
                     btnNextPage.setVisibility(View.VISIBLE);
                 } else {
                     btnNextPage.setVisibility(View.INVISIBLE);
@@ -80,9 +82,7 @@ public class RegisterPassword extends AppCompatActivity {
         btnNextPage.setOnClickListener(view -> {
             String userPassword = password.getText().toString();
             String userPasswordRepetida = passwordRep.getText().toString();
-
             if (userPassword.equals(userPasswordRepetida)) {
-
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date fecha = dateFormat.parse(keepFechaNacimiento);
@@ -93,25 +93,28 @@ public class RegisterPassword extends AppCompatActivity {
                     int month = Integer.parseInt(monthFormat.format(fecha));
                     int year = Integer.parseInt(yearFormat.format(fecha));
                     Date fechaFormateada = new Date(year - 1900, month - 1, day);
-                    User keepUser = new User(1, keepNombre, keepApellidos, fechaFormateada, keepEmail, userPassword);
-                    //TODO: persistir en BD
-                    //TODO: redirigir a la activity que corresponda
-                    Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
-                    startActivity(intent);
+                    Utils.getUsers(new Utils.FirebaseCallback() {
+                        @Override
+                        public void onCallback(List<User> userList) {
+                            int maxID = -1;
+                            for (User user : userList) {
+                                if (user.getId() > maxID){
+                                    maxID = user.getId();
+                                }
+                            }
+                            User keepUser = new User(maxID, keepNombre, keepApellidos, fechaFormateada, keepEmail, userPassword);
+                            Utils.pushUser(keepUser);
+                            //TODO: redirigir a la activity que corresponda (le paso el ID del user)
+                            Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
+                            intent.putExtra("newUserID", keepUser.getId());
+                            startActivity(intent);
+                        }
+                    });
                 } catch (ParseException e) {
-                    View contentView = findViewById(android.R.id.content);
-                    Snackbar snackbar = Snackbar.make(contentView, "Error en el acceso a la base de datos", Snackbar.LENGTH_SHORT);
-                    snackbar.setTextColor(Color.WHITE);
-                    snackbar.setBackgroundTint(Color.RED);
-                    snackbar.show();
+                    errorMessage("Error en el acceso a la base de datos");
                 }
             } else {
-                btnNextPage.setVisibility(View.INVISIBLE);
-                View contentView = findViewById(android.R.id.content);
-                Snackbar snackbar = Snackbar.make(contentView, "Contraseña no válida", Snackbar.LENGTH_SHORT);
-                snackbar.setTextColor(Color.WHITE);
-                snackbar.setBackgroundTint(Color.RED);
-                snackbar.show();
+                errorMessage("Contraseña no válida");
             }
         });
     }
@@ -137,5 +140,13 @@ public class RegisterPassword extends AppCompatActivity {
             }
         }
         return false;
+    }
+    private void errorMessage(String text) {
+        btnNextPage.setVisibility(View.INVISIBLE);
+        View contentView = findViewById(android.R.id.content);
+        Snackbar snackbar = Snackbar.make(contentView, text, Snackbar.LENGTH_SHORT);
+        snackbar.setTextColor(Color.WHITE);
+        snackbar.setBackgroundTint(Color.RED);
+        snackbar.show();
     }
 }

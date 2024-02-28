@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities.register;
+package org.cuatrovientos.blablacar.activities.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.activities.register.RegisterEmail;
 
 public class MainScreen extends AppCompatActivity {
 

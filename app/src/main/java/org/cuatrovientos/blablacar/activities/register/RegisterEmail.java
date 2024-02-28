@@ -2,6 +2,8 @@ package org.cuatrovientos.blablacar.activities.register;
 
 import static android.content.ContentValues.TAG;
 
+import static org.cuatrovientos.blablacar.models.Utils.pushUser;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,8 +26,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,20 +66,28 @@ public class RegisterEmail extends AppCompatActivity {
 
         nextPageBtn.setOnClickListener(view -> {
             String emailText = email.getText().toString();
-            // TODO: validar si existe ya el email
             if (validateEmail(emailText)) {
-//                boolean validate = true;
-//                for (User user : users) {
-//                    if (user.getEmail().equalsIgnoreCase(emailText)) {
-//                        validate = false;
-//                        break;
-//                    }
-//                }
-//                if (validate){
-                    Intent intent = new Intent(RegisterEmail.this, RegisterUser.class);
-                    intent.putExtra("email", emailText.toLowerCase());
-                    startActivity(intent);
-//                }
+                Utils.getUsers(new Utils.FirebaseCallback() {
+                    @Override
+                    public void onCallback(List<User> userList) {
+                        boolean existeEmail = false;
+                        for (User user : userList) {
+                            if (user.getEmail().equalsIgnoreCase(emailText)){
+                                existeEmail = true;
+                                break;
+                            }
+                        }
+                        if (!existeEmail){
+                            Intent intent = new Intent(RegisterEmail.this, RegisterUser.class);
+                            intent.putExtra("email", emailText.toLowerCase());
+                            startActivity(intent);
+                        }
+                        else {
+                            errorMessage("El Email ya está registrado en la base de datos");
+                            email.setText("");
+                        }
+                    }
+                });
             } else {
                 errorMessage("Email no válido");
             }
