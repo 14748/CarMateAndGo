@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = findViewById(R.id.button2);
-        btnCreateRoute = findViewById(R.id.btnCreateScreen);
+        button = findViewById(R.id.searchbutton);
+        btnCreateRoute = findViewById(R.id.button2);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
+                Intent intent = new Intent(MainActivity.this, CreateRoute.class);
                 startActivity(intent);
             }
         });

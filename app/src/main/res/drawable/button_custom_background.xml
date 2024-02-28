@@ -1,0 +1,63 @@
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado normal -->
+    <item android:state_enabled="true" android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#1da1f2" />
+            <corners
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"
+                android:bottomLeftRadius="5dp"
+                android:bottomRightRadius="5dp" />
+            <!-- Agrega padding para ajustar la esquina inferior -->
+            <padding
+                android:left="0dp"
+                android:top="0dp"
+                android:right="0dp"
+                android:bottom="8dp" />
+            <stroke android:color="#0175BC" android:width="2dp" /> <!-- Borde -->
+        </shape>
+
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <!-- Capa 1: Sombra más distante -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#22000000" />
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+
+            <!-- Capa 2: Sombra más cercana -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#1C000000" />
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+
+            <!-- Puedes agregar más capas según sea necesario para ajustar la sombra -->
+
+        </layer-list>
+
+    </item>
+
+    <!-- Estado presionado -->
+    <item android:state_enabled="true" android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#1da1f2" />
+            <corners android:radius="8dp" />
+            <stroke android:color="#0175BC" android:width="2dp" /> <!-- Borde -->
+        </shape>
+    </item>
+
+    <!-- Estado deshabilitado -->
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#808080" />
+            <corners android:radius="8dp" />
+            <stroke android:color="#0175BC" android:width="2dp" /> <!-- Borde -->
+        </shape>
+    </item>
+
+</selector>

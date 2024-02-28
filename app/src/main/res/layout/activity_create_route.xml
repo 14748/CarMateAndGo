@@ -1,90 +1,93 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.CreateRoute">
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+
+        android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fecha"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintEnd_toStartOf="@+id/etFecha"
-        app:layout_constraintHorizontal_bias="0.555"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.528" />
+        android:text="CarMate&amp;Go"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:textSize="50sp"
+        android:fontFamily="@font/robotoblack"
+        android:textFontWeight="900"
+        android:textColor="#323030"
+        android:gravity="center"
+        android:padding="16dp"
+    />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HOra"
-        app:layout_constraintEnd_toStartOf="@+id/etHora"
-        app:layout_constraintHorizontal_bias="0.514"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="157dp" />
 
-    <EditText
-        android:id="@+id/etAsientosLibres"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/divView"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Asientos libres"
-        app:layout_constraintBottom_toTopOf="@+id/etPrecio"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etPrecio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="84dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Precio por pasajero"
-        app:layout_constraintBottom_toTopOf="@+id/btnAceptarCrearRuta"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_centerInParent="true"
+        android:background="@drawable/card"
+        android:elevation="8dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnAceptarCrearRuta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="128dp"
-        android:text="ACEPTAR"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        <!-- Primer EditText -->
+        <TextView
+            android:id="@+id/lblOrigin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/input_ubi"
+            android:hint="Origen"
+            android:padding="5dp" />
 
-    <EditText
-        android:id="@+id/etHora"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="128dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintBottom_toTopOf="@+id/etAsientosLibres"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        <!-- Segundo EditText -->
+        <TextView
+            android:id="@+id/lblDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/input_ubi"
+            android:hint="Destino"
+            android:padding="5dp" />
 
-    <EditText
-        android:id="@+id/etFecha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/etHora"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Tercer EditText -->
+        <TextView
+            android:id="@+id/lblDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/input_ubi"
+            android:hint="Fecha"
+            android:padding="5dp" />
+
+        <!-- Botón -->
+        <Button
+            android:id="@+id/btnCreateRoute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/button_custom_background"
+            android:fontFamily="@font/robotoblack"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="Crear"
+            android:textColor="#ffffff"
+            android:textFontWeight="900"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
