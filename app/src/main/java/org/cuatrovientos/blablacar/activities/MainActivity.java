@@ -142,10 +142,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         btnProfile.setOnClickListener(view -> {
-            /*
+
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             startActivity(profileIntent);
-             */
+
         });
 
         recyclerView = findViewById(R.id.routesRecyclerView);

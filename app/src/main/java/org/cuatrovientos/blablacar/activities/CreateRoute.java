@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.cuatrovientos.blablacar.R;
@@ -37,6 +38,12 @@ public class CreateRoute extends AppCompatActivity {
 
     int codigoDeSolicitud = 1;
 
+    private ImageButton btnSearch;
+    private ImageButton btnPublish;
+    private ImageButton btnHistory;
+    private ImageButton btnMessages;
+    private ImageButton btnProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +53,12 @@ public class CreateRoute extends AppCompatActivity {
         destination = findViewById(R.id.lblDestination);
         date = findViewById(R.id.lblDate);
         createRoute = findViewById(R.id.btnCreateRoute);
+
+        btnSearch = findViewById(R.id.btnSearch);
+        btnPublish = findViewById(R.id.btnPublish);
+        btnHistory = findViewById(R.id.btnHistory);
+        btnMessages = findViewById(R.id.btnMessages);
+        btnProfile = findViewById(R.id.btnProfile);
 
         PlaceOrigin = new PlaceOpenStreetMap();
         PlaceDestination = new PlaceOpenStreetMap();
@@ -66,7 +79,38 @@ public class CreateRoute extends AppCompatActivity {
             mostrarDatePicker();
         });
 
+        btnSearch.setOnClickListener(view -> {
+            /*
+            Intent searchIntent = new Intent(this, Search.class);
+            startActivity(searchIntent);
+             */
+        });
 
+        btnPublish.setOnClickListener(view -> {
+            Intent publishIntent = new Intent(this, CreateRoute.class);
+            startActivity(publishIntent);
+        });
+
+        btnHistory.setOnClickListener(view -> {
+            /*
+            Intent historyIntent = new Intent(this, HistoryActivity.class);
+            startActivity(historyIntent);
+             */
+        });
+
+        btnMessages.setOnClickListener(view -> {
+            /*
+            Intent messagesIntent = new Intent(this, MessagesActivity.class);
+            startActivity(messagesIntent);
+             */
+        });
+
+        btnProfile.setOnClickListener(view -> {
+
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            startActivity(profileIntent);
+
+        });
 
 
 
