@@ -9,13 +9,13 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="406dp"
-        android:layout_height="371dp"
+        android:layout_width="522dp"
+        android:layout_height="384dp"
         android:contentDescription="CarMate&amp;Go"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_background" />
+        app:srcCompat="@drawable/carfriends" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/redirectLogIn"
@@ -78,7 +78,7 @@
         android:id="@+id/textView"
         android:layout_width="334dp"
         android:layout_height="76dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="308dp"
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="@color/white"
