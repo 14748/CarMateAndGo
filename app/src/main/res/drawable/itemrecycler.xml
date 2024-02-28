@@ -1,0 +1,15 @@
+<!-- res/drawable/item_ruta_selector.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado presionado -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#95EAEAEA" /> <!-- Cambia a tu color deseado -->
+        </shape>
+    </item>
+    <!-- Estado predeterminado -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" /> <!-- Puedes cambiar a otro color o dejarlo transparente -->
+        </shape>
+    </item>
+</selector>

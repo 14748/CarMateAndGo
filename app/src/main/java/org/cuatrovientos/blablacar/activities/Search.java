@@ -5,6 +5,7 @@ import static android.widget.Toast.makeText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +36,7 @@ import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 import org.cuatrovientos.blablacar.services.OpenStreetMap;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,11 +110,27 @@ public class Search extends AppCompatActivity {
         });
 
 
+        String type = getIntent().getStringExtra("type");
+
         // Manejar clic en un elemento del RecyclerView
         adapter.setOnItemClickListener(position -> {
             PlaceOpenStreetMap place = results.get(position);
             makeText(this, "Seleccionado: " + place.getDisplayName(), Toast.LENGTH_SHORT).show();
             makeText(this, "Latitud: " + place.getLat() + ", Longitud: " + place.getLon(), Toast.LENGTH_SHORT).show();
+            if (type != null) {
+                if (type.equals("origin")) {
+                    Intent intent = new Intent();
+                    intent.putExtra("origin", place);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else if (type.equals("destination")) {
+                    Intent intent = new Intent();
+                    intent.putExtra("destination", place);
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                }
+            }
             // Aquí puedes hacer lo que necesites con el lugar seleccionado
         });
 
@@ -206,6 +224,7 @@ public class Search extends AppCompatActivity {
     }
 
     private void obtenerUbicacionActual() {
+        checkLocationPermission();
         try {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
