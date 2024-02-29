@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
@@ -100,6 +101,7 @@ public class RegisterPassword extends AppCompatActivity {
                             User keepUser = new User(maxID, keepNombre, keepApellidos, date, keepEmail, userPassword);
                             Utils.pushUser(keepUser);
                             Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
+                            UserManager.setCurrentUser(keepUser);
                             startActivity(intent);
                         }
                     });

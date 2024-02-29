@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.activities.register.RegisterPassword;
 import org.cuatrovientos.blablacar.models.User;
@@ -52,9 +53,8 @@ public class LogIn extends AppCompatActivity {
                                 if (user.getEmail().equalsIgnoreCase(email)){
                                     emailDontExists = false;
                                     if (user.getPassword().equals(password)){
-                                        //TODO: redirigir a la activity que corresponda
+                                        UserManager.setCurrentUser(user);
                                         Intent intent = new Intent(LogIn.this, MainActivity.class);
-                                        intent.putExtra("userID", user.getId());
                                         startActivity(intent);
                                     }
                                     else {
