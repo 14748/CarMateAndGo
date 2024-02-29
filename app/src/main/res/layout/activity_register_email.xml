@@ -41,7 +41,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:autofillHints=""
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/input"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
