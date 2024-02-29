@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +18,24 @@
         android:theme="@style/Theme.BlaBlaCar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.LogIn"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.MainScreen"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterPassword"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterUser"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterEmail"
+            android:exported="false" />
         <activity
             android:name=".activities.RouteFinderActivity"
             android:exported="false" />

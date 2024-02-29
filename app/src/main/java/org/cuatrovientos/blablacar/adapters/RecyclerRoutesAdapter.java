@@ -22,13 +22,16 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
 
     private List<RouteSelectionInfo> listPalabras;
     private onItemClickListener itemClickListener;
+    private onLinkClickListener linkClickListener;
 
     private int selectedItemPosition = 0;
 
     public RecyclerRoutesAdapter(List<RouteSelectionInfo> listPalabras,
-                                   onItemClickListener itemClickListener) {
+                                   onItemClickListener itemClickListener,
+                                 onLinkClickListener linkClickListener) {
         this.listPalabras = listPalabras;
         this.itemClickListener = itemClickListener;
+        this.linkClickListener = linkClickListener;
     }
 
     @NonNull
@@ -40,13 +43,15 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerRoutesAdapter.RecyclerDataHolder holder, int position) {
-        holder.assignData(listPalabras.get(position), itemClickListener);
+        holder.assignData(listPalabras.get(position), itemClickListener, linkClickListener);
 
         if(selectedItemPosition == holder.getBindingAdapterPosition()) {
             // This is the selected item
+            holder.viewLink.setVisibility(View.VISIBLE);
             holder.itemView.setBackgroundResource(R.drawable.item_border_selected); // Use the border drawable for selected item
         } else {
             // This is not the selected item
+            holder.viewLink.setVisibility(View.GONE);
             holder.itemView.setBackgroundResource(R.drawable.item_border); // Remove background or set default
         }
 
@@ -80,24 +85,45 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
         TextView title;
         TextView kms;
         TextView time;
+        TextView viewLink;
 
         public RecyclerDataHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textViewTitle);
             kms = itemView.findViewById(R.id.textViewKilometers);
             time = itemView.findViewById(R.id.textViewTime);
+            viewLink = itemView.findViewById(R.id.textViewLink);
         }
 
-        public void assignData(RouteSelectionInfo palabra, onItemClickListener onItemClickListener) {
+        public void assignData(RouteSelectionInfo palabra, onItemClickListener onItemClickListener, onLinkClickListener onLinkClickListener) {
             title.setText(palabra.getTitle());
             kms.setText(palabra.getKilometers());
             time.setText(palabra.getTime());
 
-            itemView.setOnClickListener(view -> onItemClickListener.onItemClickListener(palabra));
+            itemView.setOnClickListener(view -> {
+                if(itemClickListener != null) {
+                    itemClickListener.onItemClickListener(palabra);
+                }
+            });
+
+            // Set the click listener for the viewLink to handle link clicks
+            viewLink.setOnClickListener(view -> {
+                if(linkClickListener != null) {
+                    // Use getAdapterPosition() to get the current position
+                    int position = getBindingAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        linkClickListener.onLinkClickListener(position);
+                    }
+                }
+            });
         }
     }
 
     public interface onItemClickListener {
         void onItemClickListener(RouteSelectionInfo palabra);
+    }
+
+    public interface onLinkClickListener {
+        void onLinkClickListener(int position);
     }
 }

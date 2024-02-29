@@ -9,13 +9,14 @@ public class RouteEntity {
 
     private int id;
     private CustomLatLng travelPoint;
+    private String duration;
+    private String kms;
     private List<CustomLatLng> points;
     private float price;
     private List<User> passengers;
     private int seats;
     private boolean isFull;
     private Date date;
-    private Time time;
 
     public  RouteEntity(){
     }
@@ -31,6 +32,19 @@ public class RouteEntity {
         this.points = route;
         this.price = price;
         this.passengers = passengers;
+        this.isFull = isFull;
+        this.date = date;
+    }
+
+    public RouteEntity(int id, CustomLatLng travelPoint, String duration, String kms, List<CustomLatLng> points, float price, List<User> passengers, int seats, boolean isFull, Date date) {
+        this.id = id;
+        this.travelPoint = travelPoint;
+        this.duration = duration;
+        this.kms = kms;
+        this.points = points;
+        this.price = price;
+        this.passengers = passengers;
+        this.seats = seats;
         this.isFull = isFull;
         this.date = date;
     }
@@ -71,10 +85,24 @@ public class RouteEntity {
         return isFull;
     }
 
+    public String getDuration() {
+        return duration;
+    }
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getKms() {
+        return kms;
+    }
+
+    public void setKms(String kms) {
+        this.kms = kms;
+    }
+
     public Date getDate() {
         return date;
     }
-    public Time getTime(){ return time; }
 
     public void setPoints(List<CustomLatLng> points) {
         this.points = points;
@@ -100,5 +128,4 @@ public class RouteEntity {
         this.date = date;
     }
 
-    public void setTimef(Time time){ this.time = time; }
 }
