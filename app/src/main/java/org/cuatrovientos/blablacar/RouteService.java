@@ -43,7 +43,7 @@ public class RouteService {
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, RecyclerView recyclerView) {
+    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView) {
         createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
@@ -82,7 +82,7 @@ public class RouteService {
                                         users.add(new User());
                                         RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
                                         //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
-                                        RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, new Date());
+                                        RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
                                         mapHelper.map.clear();
                                         user.addRoute(r);
                                         Utils.pushUser(user);

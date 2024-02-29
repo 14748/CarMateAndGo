@@ -22,6 +22,8 @@ import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,17 +55,22 @@ public class RouteFinderActivity extends AppCompatActivity {
 
                         PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
                         PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
-                        String date = data.getStringExtra("date");
+                        String dateStr = data.getStringExtra("date");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        final Date finalDate;
+                        try {
+                            finalDate = sdf.parse(dateStr);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
 
                         Utils.getUsers(new Utils.FirebaseCallback() {
                             @Override
                             public void onCallback(List<User> userList) {
-                                Date today = Calendar.getInstance().getTime();
-
                                 //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
                                 CustomLatLng latLon = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
 
-                                List<DriverTrips> matchingDriverTrips = findRoutes(userList, today, latLon, 10.0);
+                                List<DriverTrips> matchingDriverTrips = findRoutes(userList, finalDate, latLon, 10.0);
 
                                 recyclerView.setAdapter(new RecyclerTripsAdapter(matchingDriverTrips, new RecyclerTripsAdapter.onItemClickListener() {
                                     @Override

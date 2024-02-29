@@ -60,6 +60,8 @@ import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -209,11 +211,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
                         PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
-                        String date = data.getStringExtra("date");
-
+                        String dateStr = data.getStringExtra("date");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        Date date = new Date();
+                        try {
+                             date = sdf.parse(dateStr);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
                         CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
                         CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-                        routeService.routeCreation(new User(), originLocation, destinationLocation, recyclerView);
+                        routeService.routeCreation(new User(), originLocation, destinationLocation, date, recyclerView);
                     }
                 });
     }
