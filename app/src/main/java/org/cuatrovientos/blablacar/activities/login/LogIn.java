@@ -39,7 +39,6 @@ public class LogIn extends AppCompatActivity {
             btnIniciarSesion.setOnClickListener(v -> {
                 String email = edtxtEmail.getText().toString();
                 String password = edtxtContrasenha.getText().toString();
-
                 if (email.isEmpty() || password.isEmpty()) {
                     showErrors("Los campos no pueden estar vacíos");
                     return;
