@@ -85,5 +85,26 @@ public class Utils {
         }
     }
 
+    public static void getUserById(String userId, FirebaseCallbackUser callback) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference userRef = database.getReference("UsersTest").child(userId);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                callback.onCallback(user); // Pass the single user to the callback
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
+            }
+        });
+    }
+
+    public interface FirebaseCallbackUser {
+        void onCallback(User user);
+    }
 
 }
