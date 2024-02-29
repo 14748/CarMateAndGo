@@ -6,4 +6,13 @@
     <string name="setCurrentLocation">Posición Actual</string>
     <string name="hintSearch">Pamplona</string>
     <string name="whiteString" />
+    <string name="destino">Destino</string>
+    <string name="origen">Origen</string>
+    <string name="titulo"><![CDATA[CARMATE&GO]]></string>
+    <string name="background">background</string>
+    <string name="fecha">Fecha</string>
+    <string name="publicar_viaje">Publicar Viaje</string>
+    <string name="mensaje"><![CDATA[Descubre cuánto ahorras en un viaje con CarMate&Go.]]></string>
+    <string name="buscar_viaje">Buscar Viaje</string>
+    <string name="mensaje_buscar">Miles de viajes a muy buen precio.</string>
 </resources>

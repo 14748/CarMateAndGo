@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
-            android:background="@drawable/rounded_edittext_background"
+            android:background="@drawable/input"
             android:hint="@string/hintSearch"
             android:padding="12dp"
             android:textColor="@color/gray800"

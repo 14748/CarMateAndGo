@@ -41,7 +41,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:autofillHints=""
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/input"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -59,7 +59,7 @@
         tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/btnChangePassword"
         android:layout_width="306dp"
         android:layout_height="83dp"
         android:layout_marginStart="24dp"
@@ -83,9 +83,9 @@
         android:buttonTint="#0436C0"
         android:text="@string/whiteString"
         android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintBottom_toBottomOf="@+id/btnChangePassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/btnChangePassword" />
 
     <TextView
         android:id="@+id/textView5"
@@ -100,7 +100,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/btnChangePassword"
         tools:ignore="VisualLintLongText" />
 
     <ImageButton

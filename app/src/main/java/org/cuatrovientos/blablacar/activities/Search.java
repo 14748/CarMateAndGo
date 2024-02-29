@@ -54,6 +54,7 @@ public class Search extends AppCompatActivity {
     LinearLayout setCurrentLocation;
     RouteAdapter adapter;
     private TextView errorTextView;
+    String type;
     ArrayList<PlaceOpenStreetMap> results = new ArrayList<>();
 
     RecyclerView searchResults;
@@ -109,12 +110,12 @@ public class Search extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d(TAG, "afterTextChanged: "+s.toString());
-                handler.postDelayed(searchRunnable, 1250);
+                handler.postDelayed(searchRunnable, 250);
             }
         });
 
 
-        String type = getIntent().getStringExtra("type");
+        type = getIntent().getStringExtra("type");
 
         // Manejar clic en un elemento del RecyclerView
         adapter.setOnItemClickListener(position -> {
@@ -123,12 +124,23 @@ public class Search extends AppCompatActivity {
             makeText(this, "Latitud: " + place.getLat() + ", Longitud: " + place.getLon(), Toast.LENGTH_SHORT).show();
             if (type != null) {
                 if (type.equals("origin")) {
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(this, CreateRoute.class);
                     intent.putExtra("origin", place);
                     setResult(RESULT_OK, intent);
                     finish();
                 } else if (type.equals("destination")) {
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(this, CreateRoute.class);
+                    intent.putExtra("destination", place);
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                } else if (type.equals("origin-search")) {
+                    Intent intent = new Intent(this, SearchRoutes.class);
+                    intent.putExtra("origin", place);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else if (type.equals("destination-search")) {
+                    Intent intent = new Intent(this, SearchRoutes.class);
                     intent.putExtra("destination", place);
                     setResult(RESULT_OK, intent);
                     finish();
@@ -246,6 +258,25 @@ public class Search extends AppCompatActivity {
                     double longitud = location.getLongitude();
 
                     Log.d("Ubicacion", "Latitud: " + latitud + ", Longitud: " + longitud);
+                    buscarLugares(latitud + " " + longitud);
+                    //PlaceOpenStreetMap place = results.get(0);
+                    //if (type != null) {
+                    //    if (type.equals("origin")) {
+                    //        Intent intent = new Intent();
+                    //        intent.putExtra("origin", place);
+                    //        setResult(RESULT_OK, intent);
+                    //        finish();
+                    //    } else if (type.equals("destination")) {
+                    //        Intent intent = new Intent();
+                    //        intent.putExtra("destination", place);
+                    //        setResult(RESULT_OK, intent);
+                    //        finish();
+//
+                    //    }
+                    //}
+
+
+
 
                     // Aquí puedes hacer lo que necesites con la ubicación
                 }

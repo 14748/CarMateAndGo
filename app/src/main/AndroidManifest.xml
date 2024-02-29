@@ -7,62 +7,60 @@ xmlns:tools="http://schemas.android.com/tools">
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-<application
-    android:allowBackup="true"
-    android:dataExtractionRules="@xml/data_extraction_rules"
-    android:fullBackupContent="@xml/backup_rules"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:roundIcon="@mipmap/ic_launcher_round"
-    android:supportsRtl="true"
-    android:theme="@style/Theme.BlaBlaCar"
-    android:usesCleartextTraffic="true"
-    tools:targetApi="31">
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BlaBlaCar"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".activities.SearchRoutes"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.LogIn"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.MainScreen"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterPassword"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterUser"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.RegisterEmail"
+            android:exported="false" />
+        <activity
+            android:name=".activities.RouteFinderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CreateRoute"
+            android:exported="false" />
+        <activity
+            android:name=".BalanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Search"
+            android:exported="false" />
 
-    <!-- Remove the intent-filter from MainActivity -->
-    <activity
-        android:name=".activities.MainActivity"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-
-    <!-- Add intent-filter to MainScreen activity -->
-    <activity
-        android:name=".activities.login.MainScreen"
-        android:exported="false"/>
-
-    <!-- Update other activities as needed -->
-    <activity
-        android:name=".activities.ProfileActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activities.login.LogIn"
-        android:exported="false" />
-    <activity
-        android:name=".activities.register.RegisterPassword"
-        android:exported="false" />
-    <activity
-        android:name=".activities.register.RegisterUser"
-        android:exported="false" />
-    <activity
-        android:name=".activities.register.RegisterEmail"
-        android:exported="false" />
-    <activity
-        android:name=".activities.RouteFinderActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activities.CreateRoute"
-        android:exported="false" />
-    <activity
-        android:name=".BalanceActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activities.Search"
-        android:exported="false" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     <meta-data
         android:name="com.google.android.geo.API_KEY"

@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +46,7 @@ import org.checkerframework.checker.units.qual.Time;
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.RouteService;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
@@ -192,6 +194,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+
+        if (UserManager.getCurrentUser() == null){
+            View contentView = findViewById(android.R.id.content);
+            Snackbar snackbar = Snackbar.make(contentView, "NO ESTÁ LOGGEADO", Snackbar.LENGTH_SHORT);
+            snackbar.setTextColor(Color.WHITE);
+            snackbar.setBackgroundTint(Color.RED);
+            snackbar.show();
+        }
     }
 
     @Override
@@ -229,13 +239,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
     }
-
-
-
-
-
-
-
-
-
 }
