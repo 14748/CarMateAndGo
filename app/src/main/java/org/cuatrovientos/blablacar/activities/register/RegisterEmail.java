@@ -81,8 +81,7 @@ public class RegisterEmail extends AppCompatActivity {
                             Intent intent = new Intent(RegisterEmail.this, RegisterUser.class);
                             intent.putExtra("email", emailText.toLowerCase());
                             startActivity(intent);
-                        }
-                        else {
+                        } else {
                             errorMessage("El Email ya está registrado en la base de datos");
                             email.setText("");
                         }
