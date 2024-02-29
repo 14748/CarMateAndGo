@@ -35,7 +35,7 @@ public class LogIn extends AppCompatActivity {
             edtxtContrasenha = findViewById(R.id.edTxtContrasenha);
             btnIniciarSesion = findViewById(R.id.btnIniciarSesion);
 
-            findViewById(R.id.btnIniciarSesion).setOnClickListener(v -> {
+            btnIniciarSesion.setOnClickListener(v -> {
                 String email = edtxtEmail.getText().toString();
                 String password = edtxtContrasenha.getText().toString();
 
@@ -46,24 +46,30 @@ public class LogIn extends AppCompatActivity {
                 Utils.getUsers(new Utils.FirebaseCallback() {
                     @Override
                     public void onCallback(List<User> userList) {
-                        boolean emailDontExists = true;
-                        for (User user : userList) {
-                            if (user.getEmail().equalsIgnoreCase(email)){
-                                emailDontExists = false;
-                                if (user.getPassword().equals(password)){
-                                    //TODO: redirigir a la activity que corresponda (le paso el ID del user)
-                                    Intent intent = new Intent(LogIn.this, MainActivity.class);
-                                    intent.putExtra("userID", user.getId());
-                                    startActivity(intent);
-                                }
-                                else {
-                                    showErrors("La contraseña no es correcta");
-                                    break;
+                        try {
+                            boolean emailDontExists = true;
+                            for (User user : userList) {
+                                if (user.getEmail().equalsIgnoreCase(email)){
+                                    emailDontExists = false;
+                                    if (user.getPassword().equals(password)){
+                                        //TODO: redirigir a la activity que corresponda
+                                        Intent intent = new Intent(LogIn.this, MainActivity.class);
+                                        intent.putExtra("userID", user.getId());
+                                        startActivity(intent);
+                                    }
+                                    else {
+                                        showErrors("La contraseña no es correcta");
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if (emailDontExists){
-                            showErrors("No existe ningún usuario con el email " + email);
+                            if (emailDontExists){
+                                showErrors("No existe ningún usuario con el email " + email);
+                            }
+                        } catch (Exception e){
+                            showErrors("El usuario " + email + " no existe");
+                            edtxtEmail.setText("");
+                            edtxtContrasenha.setText("");
                         }
                     }
                 });
