@@ -35,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnPublish.setOnClickListener(view -> {
             Intent publishIntent = new Intent(this, CreateRoute.class);
             startActivity(publishIntent);
+            finish();
         });
 
         btnHistory.setOnClickListener(view -> {
@@ -55,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             startActivity(profileIntent);
-
+            finish();
         });
     }
 }

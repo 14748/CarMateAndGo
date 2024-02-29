@@ -165,7 +165,7 @@ public class CreateRoute extends AppCompatActivity {
                 this.destinationLat = Double.valueOf(destination.getLat());
                 this.destinationLon = Double.valueOf(destination.getLon());
                 this.PlaceDestination.setLat(destinationLat.toString());
-                this.PlaceDestination.setLon(destinationLat.toString());
+                this.PlaceDestination.setLon(destinationLon.toString());
                 // Assuming you have a destination TextView, set its text
                 this.destination.setText(destination.getDisplayName());
             } else {
