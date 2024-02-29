@@ -87,14 +87,14 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/imageView7"
+                                android:id="@+id/avatarImageView"
                                 android:layout_width="91dp"
                                 android:layout_height="42dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/ic_profile" />
 
                             <TextView
-                                android:id="@+id/textView15"
+                                android:id="@+id/usernameTextView"
                                 android:layout_width="91dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -117,11 +117,11 @@
                                     android:id="@+id/imageView9"
                                     android:layout_width="16dp"
                                     android:layout_height="18dp"
-                                    android:src="@tools:sample/avatars"
+
                                     app:srcCompat="@drawable/star" />
 
                                 <TextView
-                                    android:id="@+id/textView18"
+                                    android:id="@+id/kmTextView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Estrellas" />
@@ -160,7 +160,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textView17"
+                        android:id="@+id/timeTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -172,10 +172,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <!-- Contenido de la tarjeta -->
-
-
-    <!-- Otros elementos pueden ser añadidos aquí -->
 
     </LinearLayout>
