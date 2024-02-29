@@ -1,9 +1,13 @@
 package org.cuatrovientos.blablacar.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -12,6 +16,7 @@ import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.adapters.RecyclerTripsAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.DriverTrips;
+import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 import org.cuatrovientos.blablacar.models.RouteEntity;
 import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
@@ -25,7 +30,7 @@ import java.util.List;
 public class RouteFinderActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-
+    private ActivityResultLauncher<Intent> createRouteLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,28 +39,42 @@ public class RouteFinderActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewTrayectos);
         recyclerView.setLayoutManager(new GridLayoutManager(RouteFinderActivity.this, 1));
 
-        Utils.getUsers(new Utils.FirebaseCallback() {
-            @Override
-            public void onCallback(List<User> userList) {
-                // Get today's date
-                Date today = Calendar.getInstance().getTime();
+        initCreateRouteLauncher();
 
-                // Create a CustomLatLng instance with the specified latitude and longitude
-                CustomLatLng latLon = new CustomLatLng(42.824851, -1.660318);
 
-                // Call findRoutes with the specified parameters
-                List<DriverTrips> matchingDriverTrips = findRoutes(userList, today, latLon, 10.0); // radius is 10km
+    }
 
-                // Assuming you have a way to set or update your RecyclerView adapter with the new data
-                recyclerView.setAdapter(new RecyclerTripsAdapter(matchingDriverTrips, new RecyclerTripsAdapter.onItemClickListener() {
-                    @Override
-                    public void onItemClickListener(DriverTrips palabra) {
-                        Toast.makeText(RouteFinderActivity.this, "Selected Trip: " + matchingDriverTrips.indexOf(palabra), Toast.LENGTH_LONG).show();
+    private void initCreateRouteLauncher() {
+        createRouteLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+
+                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
+                        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
+                        String date = data.getStringExtra("date");
+
+                        Utils.getUsers(new Utils.FirebaseCallback() {
+                            @Override
+                            public void onCallback(List<User> userList) {
+                                Date today = Calendar.getInstance().getTime();
+
+                                //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
+                                CustomLatLng latLon = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+
+                                List<DriverTrips> matchingDriverTrips = findRoutes(userList, today, latLon, 10.0);
+
+                                recyclerView.setAdapter(new RecyclerTripsAdapter(matchingDriverTrips, new RecyclerTripsAdapter.onItemClickListener() {
+                                    @Override
+                                    public void onItemClickListener(DriverTrips palabra) {
+                                        Toast.makeText(RouteFinderActivity.this, "Selected Trip: " + matchingDriverTrips.indexOf(palabra), Toast.LENGTH_LONG).show();
+                                    }
+                                }));
+                            }
+                        });
                     }
-                }));
-            }
-        });
-
+                });
     }
 
     public List<DriverTrips> findRoutes(List<User> users, Date selectedDate, CustomLatLng latLon, double radiusKm) {

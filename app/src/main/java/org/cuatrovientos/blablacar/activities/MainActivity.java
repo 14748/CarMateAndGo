@@ -207,13 +207,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         map.clear();
                         Intent data = result.getData();
 
-                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("travelPoint");
+                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
+                        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
                         String date = data.getStringExtra("date");
 
-                        double originLatitude = Double.parseDouble(origin.getLat());
-                        double originLongitude = Double.parseDouble(origin.getLon());
-
-                        routeService.routeCreation(new User(), new RouteEntity(new CustomLatLng(originLatitude, originLongitude)), recyclerView);
+                        CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+                        CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
+                        routeService.routeCreation(new User(), originLocation, destinationLocation, recyclerView);
                     }
                 });
     }
