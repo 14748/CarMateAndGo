@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
@@ -34,6 +35,7 @@ public class RegisterPassword extends AppCompatActivity {
     ImageButton btnNextPage;
     EditText password, passwordRep;
     String keepNombre, keepApellidos, keepEmail, keepFechaNacimiento;
+    Date date = new Date();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,7 @@ public class RegisterPassword extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (passwordRep.getText().toString().length() > 8) {
+                if (passwordRep.getText().toString().length() > 8 && validatePassword(passwordRep.getText().toString())) {
                     btnNextPage.setVisibility(View.VISIBLE);
                 } else {
                     btnNextPage.setVisibility(View.INVISIBLE);
@@ -85,14 +87,7 @@ public class RegisterPassword extends AppCompatActivity {
             if (userPassword.equals(userPasswordRepetida)) {
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 try {
-                    Date fecha = dateFormat.parse(keepFechaNacimiento);
-                    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-                    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-                    int day = Integer.parseInt(dayFormat.format(fecha));
-                    int month = Integer.parseInt(monthFormat.format(fecha));
-                    int year = Integer.parseInt(yearFormat.format(fecha));
-                    Date fechaFormateada = new Date(year - 1900, month - 1, day);
+                    date = dateFormat.parse(keepFechaNacimiento);
                     Utils.getUsers(new Utils.FirebaseCallback() {
                         @Override
                         public void onCallback(List<User> userList) {
@@ -100,13 +95,13 @@ public class RegisterPassword extends AppCompatActivity {
                             for (User user : userList) {
                                 if (user.getId() > maxID){
                                     maxID = user.getId();
+                                    errorMessage(String.valueOf(user.getBirthDate().getYear()));
                                 }
                             }
-                            User keepUser = new User(maxID, keepNombre, keepApellidos, fechaFormateada, keepEmail, userPassword);
+                            User keepUser = new User(maxID, keepNombre, keepApellidos, date, keepEmail, userPassword);
                             Utils.pushUser(keepUser);
-                            //TODO: redirigir a la activity que corresponda (le paso el ID del user)
                             Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
-                            intent.putExtra("newUserID", keepUser.getId());
+                            UserManager.setCurrentUser(keepUser);
                             startActivity(intent);
                         }
                     });

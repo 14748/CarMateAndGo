@@ -43,8 +43,8 @@ public class RouteService {
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(User user, RouteEntity route, RecyclerView recyclerView) {
-        createRoute(route.getTravelPoint(), new RouteService.RouteCallback() {
+    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView) {
+        createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
 
@@ -81,7 +81,8 @@ public class RouteService {
                                         List<User> users = new ArrayList<>();
                                         users.add(new User());
                                         RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                        RouteEntity r = new RouteEntity(0, route.getTravelPoint(), routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, new Date());
+                                        //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
+                                        RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
                                         mapHelper.map.clear();
                                         user.addRoute(r);
                                         Utils.pushUser(user);
@@ -98,7 +99,7 @@ public class RouteService {
         });
     }
 
-    public void createRoute(CustomLatLng end, RouteService.RouteCallback callback) {
+    public void createRoute(CustomLatLng start, CustomLatLng end, RouteService.RouteCallback callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 Retrofit retrofit = getRetrofit();
@@ -116,7 +117,7 @@ public class RouteService {
                                 "\"share_factor\": 0.6" +
                                 "}" +
                                 "}",
-                        mapHelper.CUATROVIENTOS.longitude, mapHelper.CUATROVIENTOS.latitude,
+                        start.getLongitude(), start.getLatitude(),
                         end.getLongitude(), end.getLatitude()
                 );
 

@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +46,7 @@ import org.checkerframework.checker.units.qual.Time;
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.RouteService;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
@@ -60,6 +62,8 @@ import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +74,7 @@ import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.internal.Util;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -187,6 +192,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+
+        if (UserManager.getCurrentUser() == null){
+            View contentView = findViewById(android.R.id.content);
+            Snackbar snackbar = Snackbar.make(contentView, "NO ESTÁ LOGGEADO", Snackbar.LENGTH_SHORT);
+            snackbar.setTextColor(Color.WHITE);
+            snackbar.setBackgroundTint(Color.RED);
+            snackbar.show();
+        }
     }
 
     @Override
@@ -207,23 +220,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         map.clear();
                         Intent data = result.getData();
 
-                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("travelPoint");
-                        String date = data.getStringExtra("date");
-
-                        double originLatitude = Double.parseDouble(origin.getLat());
-                        double originLongitude = Double.parseDouble(origin.getLon());
-
-                        routeService.routeCreation(new User(), new RouteEntity(new CustomLatLng(originLatitude, originLongitude)), recyclerView);
+                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
+                        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
+                        String dateStr = data.getStringExtra("date");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        Date date = new Date();
+                        try {
+                             date = sdf.parse(dateStr);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+                        CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
+                        routeService.routeCreation(new User(), originLocation, destinationLocation, date, recyclerView);
                     }
                 });
     }
-
-
-
-
-
-
-
-
-
 }

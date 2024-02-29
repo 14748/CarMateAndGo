@@ -164,7 +164,8 @@ public class CreateRoute extends AppCompatActivity {
 
         createRoute.setOnClickListener(v -> {
             Intent intent = new Intent(CreateRoute.this, MainActivity.class);
-            intent.putExtra("travelPoint", PlaceOrigin);
+            intent.putExtra("origin", PlaceOrigin);
+            intent.putExtra("destination", PlaceDestination);
             intent.putExtra("date", date.getText().toString());
             setResult(RESULT_OK, intent);
             finish();
