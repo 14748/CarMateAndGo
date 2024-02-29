@@ -18,6 +18,8 @@
 
 
         <EditText
+            android:drawableStart="@drawable/pointer"
+            android:elegantTextHeight="true"
             android:id="@+id/searchbutton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -32,11 +34,11 @@
 
         <LinearLayout
             android:id="@+id/btnSetCurrentLocation"
-            android:layout_width="44dp"
-            android:layout_height="46dp"
+            android:layout_width="53dp"
+            android:layout_height="57dp"
+            android:layout_marginLeft="3dp"
             android:background="@drawable/btn_green_background"
             android:gravity="center"
-            android:layout_marginLeft="3dp"
 
             android:text="Set Current Location"
             android:textColor="#ffffff"
@@ -73,7 +75,18 @@
             style="@drawable/recycler"
             android:id="@+id/searchResults"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/errorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text=""
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_marginTop="8dp"/>
+
 
 
     </LinearLayout>

@@ -63,6 +63,10 @@ public class CreateRoute extends AppCompatActivity {
             startActivityForResult(intent, codigoDeSolicitud);
         });
 
+
+        destination.setText("Cuatrovientos");
+
+
         date.setOnClickListener(v -> {
             mostrarDatePicker();
         });
@@ -128,7 +132,7 @@ public class CreateRoute extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,R.style.DatePickerTheme, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 String fechaSeleccionada = dayOfMonth + "/" + (month + 1) + "/" + year;

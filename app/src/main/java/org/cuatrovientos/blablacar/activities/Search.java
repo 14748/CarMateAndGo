@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.Manifest;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -51,6 +53,7 @@ public class Search extends AppCompatActivity {
     EditText search;
     LinearLayout setCurrentLocation;
     RouteAdapter adapter;
+    private TextView errorTextView;
     ArrayList<PlaceOpenStreetMap> results = new ArrayList<>();
 
     RecyclerView searchResults;
@@ -64,6 +67,7 @@ public class Search extends AppCompatActivity {
         search = findViewById(R.id.searchbutton);
         setCurrentLocation = findViewById(R.id.btnSetCurrentLocation);
         searchResults = findViewById(R.id.searchResults);
+        errorTextView = findViewById(R.id.errorTextView);
 
 
 
@@ -167,12 +171,18 @@ public class Search extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<PlaceOpenStreetMap> routes = response.body();
                     if (routes != null && !routes.isEmpty()) {
+                        searchResults.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onResponse() returned: " + routes.toString());
                         results.clear();
                         results.addAll(routes);
                         adapter.notifyDataSetChanged();
+                        // Hide the error message if locations are found
+                        errorTextView.setVisibility(View.GONE);
                     } else {
                         Log.e(TAG, "Respuesta vacía o no contiene un array de lugares");
+                        errorTextView.setText("No se encontraron ubicaciones");
+                        searchResults.setVisibility(View.GONE);
+                        errorTextView.setVisibility(View.VISIBLE);
                     }
                 } else {
                     try {

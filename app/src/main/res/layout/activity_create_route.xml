@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
+    android:background="@drawable/rounded_edittext_background"
     android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background"
+        android:layout_centerInParent="true"
+        android:contentDescription="background"
+        android:scaleType="centerCrop"
+        android:src="@drawable/santorini" />
 
-        android:scaleType="centerCrop" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CarMate&amp;Go"
+        android:text="CARMATE&amp;GO"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:textSize="50sp"
+        android:textSize="25sp"
         android:fontFamily="@font/robotoblack"
         android:textFontWeight="900"
-        android:textColor="#323030"
+        android:elegantTextHeight="true"
+        android:textAlignment="center"
+        android:textColor="#6E6F70"
         android:gravity="center"
-        android:padding="16dp"
-    />
-
+        android:padding="16dp" />
 
     <LinearLayout
         android:id="@+id/divView"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_centerInParent="true"
-        android:background="@drawable/card"
+
         android:elevation="8dp"
         android:orientation="vertical">
 
@@ -40,13 +43,13 @@
             android:id="@+id/lblOrigin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/input_ubi"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:background="@drawable/input"
+            android:elegantTextHeight="true"
+            android:drawableStart="@drawable/pointer"
             android:hint="Origen"
-            android:padding="5dp" />
+            android:padding="10dp" />
 
         <!-- Segundo EditText -->
         <TextView
@@ -54,9 +57,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/input_ubi"
+            android:background="@drawable/input"
+            android:drawableStart="@drawable/pointer"
+            android:elegantTextHeight="true"
+            android:textSize="20dp"
             android:hint="Destino"
-            android:padding="5dp" />
+            android:padding="10dp" />
 
         <!-- Tercer EditText -->
         <TextView
@@ -64,30 +70,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/input_ubi"
+            android:textSize="20dp"
+            android:textStyle="normal"
+            android:elegantTextHeight="true"
+            android:drawableStart="@drawable/date"
+            android:drawablePadding="4dp"
+            android:background="@drawable/input"
             android:hint="Fecha"
-            android:padding="5dp" />
+            android:padding="10dp" />
 
         <!-- Botón -->
         <Button
             android:id="@+id/btnCreateRoute"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_margin="10dp"
             android:background="@drawable/button_custom_background"
             android:fontFamily="@font/robotoblack"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            android:text="Crear"
+            android:padding="10dp"
+            android:text="Publicar Viaje"
             android:textColor="#ffffff"
             android:textFontWeight="900"
             android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descubre cuánto ahorras en un viaje con CarMate&amp;Go."
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/noto"
+            android:textFontWeight="100"
+            android:elegantTextHeight="true"
+            android:textAlignment="center"
+            android:textColor="#6E6F70"
+            android:gravity="center"
+            android:padding="16dp" />
 
     </LinearLayout>
 
 
+
 </RelativeLayout>
+

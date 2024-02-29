@@ -10,4 +10,13 @@
         <item name="android:textSize">16sp</item>
         <item name="android:background">@drawable/button_normal</item>
     </style>
+    <style name="DatePickerTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">#38bdf8</item>
+    </style>
+
+
+
 </resources>
+
+
+

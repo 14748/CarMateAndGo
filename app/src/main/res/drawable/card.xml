@@ -12,7 +12,7 @@
     <!-- Fondo -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#F8F8F8"/> <!-- Color de fondo -->
+            <solid android:color="#F6F6F6"/> <!-- Color de fondo -->
             <corners android:radius="5dp"/> <!-- Radio de esquinas para lograr un diseño redondeado -->
         </shape>
     </item>
