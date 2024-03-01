@@ -94,6 +94,9 @@ public class CreateRoute extends AppCompatActivity {
         destinationLat = 42.824851;
         destinationLon = -1.660318;
 
+        PlaceDestination.setLat(destinationLat.toString());
+        PlaceDestination.setLon(destinationLon.toString());
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String formattedDate = dateFormat.format(dateToday);
@@ -110,6 +113,10 @@ public class CreateRoute extends AppCompatActivity {
             this.originLon = this.destinationLon;
             this.destinationLat = originLat;
             this.destinationLon = originLon;
+
+            PlaceOpenStreetMap temp = PlaceDestination;
+            PlaceDestination = PlaceOrigin;
+            PlaceOrigin = temp;
             origin.setText(destinationText);
             destination.setText(originText);
         });
