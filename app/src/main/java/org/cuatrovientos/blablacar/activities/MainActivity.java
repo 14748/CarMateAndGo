@@ -229,17 +229,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
                         PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
                         String dateStr = data.getStringExtra("date");
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        boolean type = data.getBooleanExtra("type", false);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         Date date = new Date();
                         try {
-                             date = sdf.parse(dateStr);
+                            date = sdf.parse(dateStr);
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
                         Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
                         CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
                         CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-                        routeService.routeCreation(new User(), originLocation, destinationLocation, date, recyclerView);
+                        routeService.routeCreation(localUser, originLocation, destinationLocation, date, recyclerView, type);
                     }
                 });
     }

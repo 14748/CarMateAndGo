@@ -44,7 +44,7 @@ public class RouteService {
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView) {
+    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, Boolean type) {
         createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
@@ -65,28 +65,18 @@ public class RouteService {
                             new RecyclerRoutesAdapter.onLinkClickListener() {
                                 @Override
                                 public void onLinkClickListener(int position) {
-                                    List<RouteEntity> userRoutes = new ArrayList<>();
-                                    Drawable userIcon = ContextCompat.getDrawable(activity, R.drawable.arrowderecha);
-                                    ;
-                                    User newUser = new User(
-                                            1, // id
-                                            "John", // name
-                                            "Doe", // lastName
-                                            new Date(), // birthDate
-                                            "johndoe@example.com", // email
-                                            1234567890, // telephone
-                                            "securepassword123", // password
-                                            userRoutes, // List of RouteEntity objects
-                                            userIcon // Drawable for user icon
-                                    );
                                     List<User> users = new ArrayList<>();
-                                    users.add(new User());
                                     RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                    //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
-                                    RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
+                                    RouteEntity r;
+                                    if (type){
+                                         r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
+                                    }else{
+                                        r = new RouteEntity(0, destination, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
+                                    }
+
                                     mapHelper.map.clear();
                                     user.addRoute(r);
-                                    Utils.pushUser(user);
+                                    Utils.updateUser(user);
                                 }
                             }
                     ));

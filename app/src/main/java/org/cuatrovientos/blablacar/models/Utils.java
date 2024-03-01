@@ -75,7 +75,7 @@ public class Utils {
         DatabaseReference usersRef = database.getReference("UsersTest");
 
         // Generate a new unique key for each new user
-        String userId = usersRef.push().getKey();
+        String userId = String.valueOf(user.getId());
 
         // Use the generated key to create a new entry in your database
         if (userId != null) {
@@ -84,6 +84,23 @@ public class Utils {
                     .addOnFailureListener(e -> Log.d(TAG, "Failed to add user: " + e.getMessage()));
         }
     }
+
+    public static void updateUser(User user) {
+        if (user == null) {
+            Log.d("FirebaseUserManager", "User or User ID is null, cannot update");
+            return;
+        }
+
+        String userId = String.valueOf(user.getId()); // Assuming id is stored as a String in Firebase. Adjust if it's actually an int.
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference("UsersTest");
+
+        usersRef.child(userId).setValue(user)
+                .addOnSuccessListener(aVoid -> Log.d("FirebaseUserManager", "User updated successfully with ID: " + userId))
+                .addOnFailureListener(e -> Log.d("FirebaseUserManager", "Failed to update user with ID: " + userId + "; Error: " + e.getMessage()));
+    }
+
+
 
     public static void getUserById(String userId, FirebaseCallbackUser callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();

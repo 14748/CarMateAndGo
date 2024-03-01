@@ -174,6 +174,7 @@ public class CreateRoute extends AppCompatActivity {
             intent.putExtra("origin", PlaceOrigin);
             intent.putExtra("destination", PlaceDestination);
             intent.putExtra("date", date.getText().toString());
+            intent.putExtra("type", ida);
             setResult(RESULT_OK, intent);
             finish();
         });
