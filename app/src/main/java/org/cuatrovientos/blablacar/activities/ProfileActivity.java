@@ -30,7 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // Si no hay user loggeado te manda a la pantalla de LogIn
-        currentUser = UserManager.getCurrentUser();
+        UserManager.init(getApplicationContext());
+        User currentUser = UserManager.getCurrentUser();
         if (currentUser == null) {
             Intent intent = new Intent(ProfileActivity.this, MainScreen.class);
             startActivity(intent);

@@ -52,6 +52,7 @@ public class LogIn extends AppCompatActivity {
                                 if (user.getEmail().equalsIgnoreCase(email)){
                                     emailDontExists = false;
                                     if (user.getPassword().equals(password)){
+                                        UserManager.init(getApplicationContext());
                                         UserManager.setCurrentUser(user);
                                         Intent intent = new Intent(LogIn.this, MainActivity.class);
                                         startActivity(intent);

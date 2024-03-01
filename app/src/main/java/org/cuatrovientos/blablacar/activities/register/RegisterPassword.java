@@ -101,6 +101,7 @@ public class RegisterPassword extends AppCompatActivity {
                             User keepUser = new User(maxID, keepNombre, keepApellidos, date, keepEmail, userPassword);
                             Utils.pushUser(keepUser);
                             Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
+                            UserManager.init(getApplicationContext());
                             UserManager.setCurrentUser(keepUser);
                             startActivity(intent);
                         }

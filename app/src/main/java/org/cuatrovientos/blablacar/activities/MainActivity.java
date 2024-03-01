@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageButton btnProfile;
 
     private MapHelper mapHelper;
+    private User localUser;
 
     private RouteService routeService;
 
@@ -195,13 +196,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        if (UserManager.getCurrentUser() == null){
+        UserManager.init(getApplicationContext());
+        User currentUser = UserManager.getCurrentUser();
+        if (currentUser == null){
             View contentView = findViewById(android.R.id.content);
             Snackbar snackbar = Snackbar.make(contentView, "NO ESTÁ LOGGEADO", Snackbar.LENGTH_SHORT);
             snackbar.setTextColor(Color.WHITE);
             snackbar.setBackgroundTint(Color.RED);
             snackbar.show();
         }
+        localUser = currentUser;
     }
 
     @Override
