@@ -1,21 +1,37 @@
 package org.cuatrovientos.blablacar.adapters;
 
 import android.media.Image;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.DriverTrips;
 import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdapter.RecyclerDataHolder> {
@@ -41,14 +57,6 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
     @Override
     public void onBindViewHolder(@NonNull RecyclerTripsAdapter.RecyclerDataHolder holder, int position) {
         holder.assignData(listPalabras.get(position), itemClickListener);
-
-        if(selectedItemPosition == holder.getBindingAdapterPosition()) {
-            // This is the selected item
-            holder.itemView.setBackgroundResource(R.drawable.item_border_selected); // Use the border drawable for selected item
-        } else {
-            // This is not the selected item
-            holder.itemView.setBackgroundResource(R.drawable.item_border); // Remove background or set default
-        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,24 +84,74 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
     }
 
     public class RecyclerDataHolder extends RecyclerView.ViewHolder {
-
-        TextView user;
-        TextView kms;
-        TextView time;
-        ImageView image;
+        TextView time1;
+        TextView timeDiff;
+        TextView time2;
+        TextView origin;
+        TextView destination;
+        TextView username;
+        TextView userExtra;
+        TextView rating;
+        TextView tripCost;
+        ImageView userLogo;
 
         public RecyclerDataHolder(@NonNull View itemView) {
             super(itemView);
-            user = itemView.findViewById(R.id.usernameTextView);
-            kms = itemView.findViewById(R.id.kmTextView);
-            time = itemView.findViewById(R.id.timeTextView);
-            image = itemView.findViewById(R.id.avatarImageView);
+            time1 = itemView.findViewById(R.id.start_time);
+            timeDiff = itemView.findViewById(R.id.duration);
+            time2 = itemView.findViewById(R.id.arrival_time);
+            origin = itemView.findViewById(R.id.origin_city);
+            destination = itemView.findViewById(R.id.destination_city);
+            tripCost = itemView.findViewById(R.id.price);
+            userLogo = itemView.findViewById(R.id.driver_image);
+            username = itemView.findViewById(R.id.driver_name);
+            rating = itemView.findViewById(R.id.driver_rating);
+
         }
 
         public void assignData(DriverTrips palabra, onItemClickListener onItemClickListener) {
-            user.setText(palabra.getUser().getName());
-            kms.setText("to implement");
-            time.setText("to implement");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+// Format the start time to a String
+            String startTimeStr = timeFormat.format(palabra.getRoute().getDate());
+            time1.setText(startTimeStr);
+
+// Get the duration as a String
+            String durationStr = palabra.getRoute().getDuration();
+            timeDiff.setText(durationStr);
+
+            try {
+                // Split the duration string into hours and minutes
+                String[] parts = durationStr.split(":");
+                int hours = Integer.parseInt(parts[0]);
+                int minutes = Integer.parseInt(parts[1]);
+
+                // Convert the duration to milliseconds
+                long durationMillis = (hours * 3600 + minutes * 60) * 1000;
+
+                // Add the duration to the start date's time
+                long startTimeMillis = palabra.getRoute().getDate().getTime();
+                long endTimeMillis = startTimeMillis + durationMillis;
+
+                // Create a new Date object for the end time
+                Date endTime = new Date(endTimeMillis);
+
+                // Format the end time to a String
+                String endTimeStr = timeFormat.format(endTime);
+                time2.setText(endTimeStr);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                time2.setText("Error");
+            }
+
+
+            origin.setText(palabra.getRoute().getOriginText());
+            destination.setText(palabra.getRoute().getDestinationText());
+
+            tripCost.setText(String.valueOf(palabra.getRoute().getPrice()) + "€");
+            //uselogo
+            username.setText(palabra.getUser().getName());
+            rating.setText(String.valueOf(palabra.getUser().getRating()));
 
             itemView.setOnClickListener(view -> onItemClickListener.onItemClickListener(palabra));
         }
@@ -102,4 +160,6 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
     public interface onItemClickListener {
         void onItemClickListener(DriverTrips palabra);
     }
+
+
 }

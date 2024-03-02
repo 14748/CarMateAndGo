@@ -43,7 +43,7 @@ public class Utils {
 
     public static void getUsers(FirebaseCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("UsersTest");
+        DatabaseReference usersRef = database.getReference("UsersTest1");
 
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -72,7 +72,7 @@ public class Utils {
 
     public static void pushUser(User user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("UsersTest");
+        DatabaseReference usersRef = database.getReference("UsersTest1");
 
         // Generate a new unique key for each new user
         String userId = String.valueOf(user.getId());
@@ -93,7 +93,7 @@ public class Utils {
 
         String userId = String.valueOf(user.getId()); // Assuming id is stored as a String in Firebase. Adjust if it's actually an int.
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("UsersTest");
+        DatabaseReference usersRef = database.getReference("UsersTest1");
 
         usersRef.child(userId).setValue(user)
                 .addOnSuccessListener(aVoid -> Log.d("FirebaseUserManager", "User updated successfully with ID: " + userId))
@@ -104,7 +104,7 @@ public class Utils {
 
     public static void getUserById(String userId, FirebaseCallbackUser callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("UsersTest").child(userId);
+        DatabaseReference userRef = database.getReference("UsersTest1").child(userId);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

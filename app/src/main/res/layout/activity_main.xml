@@ -54,7 +54,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButtonBar"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
@@ -95,7 +97,6 @@
         android:padding="4dp"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
         
         <LinearLayout

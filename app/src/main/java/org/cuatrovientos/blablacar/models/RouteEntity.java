@@ -1,5 +1,7 @@
 package org.cuatrovientos.blablacar.models;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,8 +9,11 @@ import java.util.List;
 
 public class RouteEntity {
 
-    private int id;
-    private CustomLatLng travelPoint;
+    private String id;
+    private CustomLatLng origin;
+    private CustomLatLng destination;
+    private String originText;
+    private String destinationText;
     private String duration;
     private String kms;
     private List<CustomLatLng> points;
@@ -20,15 +25,12 @@ public class RouteEntity {
 
     public  RouteEntity(){
     }
-    public RouteEntity(int id) {
+    public RouteEntity(String id) {
         this.id = id;
     }
 
-    public RouteEntity(CustomLatLng travelPoint) {
-        this.travelPoint = travelPoint;
-    }
-    public RouteEntity(int id, List<CustomLatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
-        this.id = id;
+    public RouteEntity(List<CustomLatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
+        this.id = FirebaseDatabase.getInstance().getReference().push().getKey();;
         this.points = route;
         this.price = price;
         this.passengers = passengers;
@@ -36,9 +38,8 @@ public class RouteEntity {
         this.date = date;
     }
 
-    public RouteEntity(int id, CustomLatLng travelPoint, String duration, String kms, List<CustomLatLng> points, float price, List<User> passengers, int seats, boolean isFull, Date date) {
-        this.id = id;
-        this.travelPoint = travelPoint;
+    public RouteEntity(String duration, String kms, List<CustomLatLng> points, float price, List<User> passengers, int seats, boolean isFull, Date date, CustomLatLng origin, CustomLatLng destination, String textOrigin, String textDestination) {
+        this.id = FirebaseDatabase.getInstance().getReference().push().getKey();;
         this.duration = duration;
         this.kms = kms;
         this.points = points;
@@ -47,13 +48,57 @@ public class RouteEntity {
         this.seats = seats;
         this.isFull = isFull;
         this.date = date;
+        this.origin = origin;
+        this.destination = destination;
+        this.originText = textOrigin;
+        this.destinationText = textDestination;
     }
 
     /*
     GETTERS AND SETTERS
      */
 
-    public int getId() {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public CustomLatLng getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(CustomLatLng origin) {
+        this.origin = origin;
+    }
+
+    public CustomLatLng getDestination() {
+        return destination;
+    }
+
+    public void setDestination(CustomLatLng destination) {
+        this.destination = destination;
+    }
+
+    public String getOriginText() {
+        return originText;
+    }
+
+    public void setOriginText(String originText) {
+        this.originText = originText;
+    }
+
+    public String getDestinationText() {
+        return destinationText;
+    }
+
+    public void setDestinationText(String destinationText) {
+        this.destinationText = destinationText;
+    }
+
+    public void setPassengers(List<User> passengers) {
+        this.passengers = passengers;
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -63,14 +108,6 @@ public class RouteEntity {
 
     public float getPrice() {
         return price;
-    }
-
-    public CustomLatLng getTravelPoint() {
-        return travelPoint;
-    }
-
-    public void setTravelPoint(CustomLatLng travelPoint) {
-        this.travelPoint = travelPoint;
     }
 
     public List<User> getPassengers() {
@@ -110,10 +147,6 @@ public class RouteEntity {
 
     public void setPrice(float price) {
         this.price = price;
-    }
-
-    public void setPassengers(ArrayList<User> passengers) {
-        this.passengers = passengers;
     }
 
     public void setSeats(int seats) {

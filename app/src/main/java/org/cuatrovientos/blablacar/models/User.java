@@ -3,13 +3,15 @@ package org.cuatrovientos.blablacar.models;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class User {
 
-    private int id;
+    private String id;
     private String name;
     private String lastName;
     private Date birthDate;
@@ -18,21 +20,22 @@ public class User {
     private String password;
     private List<RouteEntity> routes;
     private Drawable userIcon;
-
+    private List<Integer> ratings;
     public User(){this.routes = new ArrayList<>();} //por si se necesita
 
-    public User(int id, String name, String lastName, Date birthDate, String email, String password) {
-        this.id = id;
+    public User(String name, String lastName, Date birthDate, String email, String password) {
+        this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.email = email;
         this.password = password;
         this.routes = new ArrayList<>();
+        this.ratings = new ArrayList<>();
     }
 
-    public User(int id, String name, String lastName, Date birthDate, String email, int telephone, String password, List<RouteEntity> routes, Drawable userIcon) {
-        this.id = id;
+    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, List<RouteEntity> routes, Drawable userIcon, List<Integer> ratings) {
+        this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -41,12 +44,13 @@ public class User {
         this.password = password;
         this.routes = routes;
         this.userIcon = userIcon;
+        this.ratings = ratings;
     }
 
     /*
     * GETTERS
     * */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -84,7 +88,7 @@ public class User {
     * SETTERS (posible necesidad futura de tener que borrar alguno por seguridad)
     * */
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -116,4 +120,17 @@ public class User {
         this.userIcon = userIcon;
     }
     public void setTelephone(int telephone) { this.telephone = telephone; }
+
+    public float getRating(){
+        if (ratings == null || ratings.isEmpty()) {
+            return 0;
+        }
+
+        float sum = 0;
+        for (Integer rating : ratings) {
+            sum += rating;
+        }
+
+        return sum / ratings.size();
+    }
 }

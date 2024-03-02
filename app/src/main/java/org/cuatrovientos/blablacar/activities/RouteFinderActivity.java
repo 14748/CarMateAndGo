@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.cuatrovientos.blablacar.R;
@@ -28,68 +31,101 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RouteFinderActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ActivityResultLauncher<Intent> createRouteLauncher;
+
+    private TextView timeText;
+    private EditText searchBox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_finder);
-
+        timeText = findViewById(R.id.timeText);
+        searchBox = findViewById(R.id.searchBox);
         recyclerView = findViewById(R.id.recyclerViewTrayectos);
         recyclerView.setLayoutManager(new GridLayoutManager(RouteFinderActivity.this, 1));
 
-        initCreateRouteLauncher();
+        //initCreateRouteLauncher();
 
+        Intent data = getIntent();
 
-    }
+        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
+        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
+        String dateStr = data.getStringExtra("date");
+        String textSearchBox = data.getStringExtra("text");
+        boolean type = data.getBooleanExtra("type", false);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
-    private void initCreateRouteLauncher() {
-        createRouteLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Intent data = result.getData();
+        final Date date;
+        try {
+            date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
-                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
-                        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
-                        String dateStr = data.getStringExtra("date");
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        final Date finalDate;
-                        try {
-                            finalDate = sdf.parse(dateStr);
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.setTime(date);
 
-                        Utils.getUsers(new Utils.FirebaseCallback() {
-                            @Override
-                            public void onCallback(List<User> userList) {
-                                //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
-                                CustomLatLng latLon = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+        Calendar today = Calendar.getInstance();
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_YEAR, 1);
+        Calendar endOfWeek = Calendar.getInstance();
+        int dayOfWeek = today.get(Calendar.DAY_OF_WEEK);
+        int daysUntilEndOfWeek = Calendar.SATURDAY - dayOfWeek;
+        endOfWeek.add(Calendar.DAY_OF_YEAR, daysUntilEndOfWeek);
 
-                                List<DriverTrips> matchingDriverTrips = findRoutes(userList, finalDate, latLon, 10.0);
+        String textToShow;
+        if (sdf.format(date).equals(sdf.format(today.getTime()))) {
+            textToShow = "Hoy";
+        } else if (sdf.format(date).equals(sdf.format(tomorrow.getTime()))) {
+            textToShow = "Mañana";
+        } else if (today.before(endOfWeek) && calendarDate.before(endOfWeek)) {
+            textToShow = dayFormat.format(date);
+        } else {
+            textToShow = dateStr;
+        }
 
-                                recyclerView.setAdapter(new RecyclerTripsAdapter(matchingDriverTrips, new RecyclerTripsAdapter.onItemClickListener() {
-                                    @Override
-                                    public void onItemClickListener(DriverTrips palabra) {
-                                        Toast.makeText(RouteFinderActivity.this, "Selected Trip: " + matchingDriverTrips.indexOf(palabra), Toast.LENGTH_LONG).show();
-                                    }
-                                }));
-                            }
-                        });
+        timeText.setText(textToShow);
+        searchBox.setText(textSearchBox);
+
+        Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
+        CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+        CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
+        Utils.getUsers(new Utils.FirebaseCallback() {
+            @Override
+            public void onCallback(List<User> userList) {
+                CustomLatLng latLon = new CustomLatLng();
+                if (type){
+                    latLon = originLocation;
+                }else {
+                    latLon = destinationLocation;
+                }
+
+                List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, latLon, 50.0, type);
+
+                recyclerView.setAdapter(new RecyclerTripsAdapter(matchingDriverTrips, new RecyclerTripsAdapter.onItemClickListener() {
+                    @Override
+                    public void onItemClickListener(DriverTrips palabra) {
+                        Toast.makeText(RouteFinderActivity.this, "Selected Trip: " + matchingDriverTrips.indexOf(palabra), Toast.LENGTH_LONG).show();
                     }
-                });
+                }));
+            }
+        });
+
+
     }
 
-    public List<DriverTrips> findRoutes(List<User> users, Date selectedDate, CustomLatLng latLon, double radiusKm) {
+    public List<DriverTrips> findRoutes(List<User> users, Date selectedDate, CustomLatLng latLon, double radiusKm, boolean type) {
         List<DriverTrips> matchingDriverTrips = new ArrayList<>();
 
         for (User user : users) {
             for (RouteEntity route : user.getRoutes()) {
-                if (isSameDay(route.getDate(), selectedDate) && isWithinRadius(route.getTravelPoint(), latLon, radiusKm)) {
+                if (isSameDay(route.getDate(), selectedDate) && isWithinRadius(type ? route.getOrigin() : route.getDestination(), latLon, radiusKm)) {
                     matchingDriverTrips.add(new DriverTrips(user, route));
                 }
             }

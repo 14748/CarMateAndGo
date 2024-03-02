@@ -131,10 +131,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Utils.pushUser(new User(0, "pepito", "pepita", new Date(), "mail", "pass"));
         btnSearch.setOnClickListener(view -> {
-            /*
-            Intent searchIntent = new Intent(this, Search.class);
+            Intent searchIntent = new Intent(this, SearchRoutes.class);
             startActivity(searchIntent);
-             */
+            finish();
         });
 
         btnPublish.setOnClickListener(view -> {
@@ -229,7 +228,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
                         PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
                         String dateStr = data.getStringExtra("date");
-                        boolean type = data.getBooleanExtra("type", false);
+                        String originText = data.getStringExtra("originText");
+                        String destinationText = data.getStringExtra("destinationText");
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         Date date = new Date();
                         try {
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
                         CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
                         CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-                        routeService.routeCreation(localUser, originLocation, destinationLocation, date, recyclerView, type);
+                        routeService.routeCreation(localUser, originLocation, destinationLocation, date, recyclerView, linearLayout, originText, destinationText);
                     }
                 });
     }

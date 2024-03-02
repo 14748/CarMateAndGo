@@ -80,6 +80,9 @@ public class SearchRoutes extends AppCompatActivity {
         destinationLat = 42.824851;
         destinationLon = -1.660318;
 
+        PlaceDestination.setLat(destinationLat.toString());
+        PlaceDestination.setLon(destinationLon.toString());
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         Date dateToday = new Date();
@@ -101,6 +104,9 @@ public class SearchRoutes extends AppCompatActivity {
             this.originLon = this.destinationLon;
             this.destinationLat = originLat;
             this.destinationLon = originLon;
+            PlaceOpenStreetMap temp = PlaceDestination;
+            PlaceDestination = PlaceOrigin;
+            PlaceOrigin = temp;
             origin.setText(destinationText);
             destination.setText(originText);
         });
@@ -108,16 +114,14 @@ public class SearchRoutes extends AppCompatActivity {
         searchRoutesButton.setOnClickListener(view -> {
 
 
-            Intent searchIntent = new Intent();
+            Intent searchIntent = new Intent(SearchRoutes.this, RouteFinderActivity.class);
             searchIntent.putExtra("origin", PlaceOrigin);
-            searchIntent.putExtra("origin-lat", PlaceDestination.getLat());
-            searchIntent.putExtra("origin-lon", PlaceDestination.getLon());
             searchIntent.putExtra("destination", PlaceDestination);
-            searchIntent.putExtra("destination-lat", PlaceDestination.getLat());
-            searchIntent.putExtra("destination-lon", PlaceDestination.getLon());
-            searchIntent.putExtra("date", (CharSequence) date);
-            searchIntent.putExtra("ida", ida);
+            searchIntent.putExtra("date", date.getText().toString());
+            searchIntent.putExtra("type", ida);
+            searchIntent.putExtra("text", origin.getText().toString() + " -> " + destination.getText().toString());
             setResult(RESULT_OK, searchIntent);
+            startActivity(searchIntent);
             finish();
 
         });

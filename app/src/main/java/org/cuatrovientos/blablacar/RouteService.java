@@ -3,6 +3,8 @@ package org.cuatrovientos.blablacar;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -44,7 +46,7 @@ public class RouteService {
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, Boolean type) {
+    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, LinearLayout linearLayout, String originText, String destinationText) {
         createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
@@ -55,6 +57,7 @@ public class RouteService {
                     routeSelectionInfos.add(new RouteSelectionInfo("Ruta numero " + routes.getSummaries().indexOf(summary)+1, summary.get(0), summary.get(1)));
                 }
                 activity.runOnUiThread(() -> {
+                    linearLayout.setVisibility(View.VISIBLE);
                     recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos,
                             new RecyclerRoutesAdapter.onItemClickListener() {
                                 @Override
@@ -67,16 +70,11 @@ public class RouteService {
                                 public void onLinkClickListener(int position) {
                                     List<User> users = new ArrayList<>();
                                     RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                    RouteEntity r;
-                                    if (type){
-                                         r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
-                                    }else{
-                                        r = new RouteEntity(0, destination, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
-                                    }
-
+                                    RouteEntity r = new RouteEntity(routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date, origin, destination, originText, destinationText);
                                     mapHelper.map.clear();
                                     user.addRoute(r);
                                     Utils.updateUser(user);
+                                    linearLayout.setVisibility(View.GONE);
                                 }
                             }
                     ));
@@ -177,7 +175,7 @@ public class RouteService {
                     // Ensure the distance is shown up to two decimal places
                     double distanceKm = distance / 1000.0;
                     String formattedDistance = String.format("%.2f", distanceKm);
-                    routeSummary.add("Distancia: " + formattedDistance + " km");
+                    routeSummary.add(formattedDistance);
 
                     // Assuming summary.getDuration() returns a double value representing seconds
                     double totalSecsDouble = summary.getDuration();
@@ -188,13 +186,11 @@ public class RouteService {
                     // Build the duration string based on the values of hours, minutes, and seconds
                     String formattedDuration;
                     if (hours > 0) {
-                        formattedDuration = String.format("%d h %02d min %02d sec", hours, minutes, seconds);
-                    } else if (minutes > 0) {
-                        formattedDuration = String.format("%d min %02d sec", minutes, seconds);
+                        formattedDuration = String.format("%02d:%02d", hours, minutes);
                     } else {
-                        formattedDuration = String.format("%d sec", seconds);
+                        formattedDuration = String.format("00:%02d", minutes);
                     }
-                    routeSummary.add("Duracion: " + formattedDuration);
+                    routeSummary.add(formattedDuration);
                     summaries.add(routeSummary);
 
                     List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);

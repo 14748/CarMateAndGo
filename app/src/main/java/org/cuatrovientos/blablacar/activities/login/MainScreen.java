@@ -11,6 +11,7 @@ import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.activities.register.RegisterEmail;
 import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -34,8 +35,15 @@ public class MainScreen extends AppCompatActivity {
                 startActivity(intent);
             });
         }else{
+            Utils.getUserById(String.valueOf(currentUser.getId()), new Utils.FirebaseCallbackUser() {
+                @Override
+                public void onCallback(User user) {
+                    UserManager.setCurrentUser(user);
+                }
+            });
             Intent intent = new Intent(MainScreen.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
 

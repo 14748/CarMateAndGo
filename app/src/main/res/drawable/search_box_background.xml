@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/search_box_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow Layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#10000000"/> <!-- This is a light gray shadow -->
+            <corners android:radius="8dp"/> <!-- Adjust corner radius as needed -->
+        </shape>
+    </item>
+
+    <!-- Background Layer -->
+    <item android:top="1dp" android:right="1dp" android:left="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF"/> <!-- Background color -->
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+</layer-list>

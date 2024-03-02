@@ -91,14 +91,7 @@ public class RegisterPassword extends AppCompatActivity {
                     Utils.getUsers(new Utils.FirebaseCallback() {
                         @Override
                         public void onCallback(List<User> userList) {
-                            int maxID = -1;
-                            for (User user : userList) {
-                                if (user.getId() > maxID){
-                                    maxID = user.getId();
-                                    errorMessage(String.valueOf(user.getBirthDate().getYear()));
-                                }
-                            }
-                            User keepUser = new User(maxID, keepNombre, keepApellidos, date, keepEmail, userPassword);
+                            User keepUser = new User(keepNombre, keepApellidos, date, keepEmail, userPassword);
                             Utils.pushUser(keepUser);
                             Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
                             UserManager.init(getApplicationContext());
