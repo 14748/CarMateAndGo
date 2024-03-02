@@ -82,12 +82,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     private List<Polyline> polylineList = new ArrayList<>();
-    private Button button;
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
-    private Button btnCreateRoute;
-    private Button btnLogIn;
-
-    private Button btnTest;
 
     private final Executor executor = Executors.newSingleThreadExecutor();
     private ArrayList<User> users = new ArrayList<>();
@@ -113,10 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         initCreateRouteLauncher();
         setContentView(R.layout.activity_main);
-        button = findViewById(R.id.button2);
-        btnCreateRoute = findViewById(R.id.btnCreateScreen);
-        btnLogIn = findViewById(R.id.bntLogIn);
-        btnTest = findViewById(R.id.buttontest);
         linearLayout = findViewById(R.id.linearLayout);
         recyclerView = findViewById(R.id.routesRecyclerView);
         btnSearch = findViewById(R.id.btnSearch);
@@ -160,39 +151,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             startActivity(profileIntent);
 
-        });
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnCreateRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CreateRoute.class);
-                createRouteLauncher.launch(intent);
-            }
-        });
-
-        btnLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainScreen.class);
-                startActivity(intent);
-            }
-        });
-
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RouteFinderActivity.class);
-                startActivity(intent);
-            }
         });
 
         UserManager.init(getApplicationContext());
