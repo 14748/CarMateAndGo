@@ -27,6 +27,7 @@
                 android:hint="Pamplona, Navarra -> Zaragoza"
                 android:drawablePadding="8dp"
                 android:layout_marginRight="18dp"
+                android:textSize="12dp"
                 android:layout_marginLeft="18dp"
                 android:padding="12dp"
                 android:drawableTint="@color/colorPrimaryDark" />

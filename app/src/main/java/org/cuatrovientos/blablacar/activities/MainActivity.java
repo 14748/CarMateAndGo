@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnSearch.setOnClickListener(view -> {
             Intent searchIntent = new Intent(this, SearchRoutes.class);
             startActivity(searchIntent);
-            finish();
         });
 
         btnPublish.setOnClickListener(view -> {
             Intent publishIntent = new Intent(this, CreateRoute.class);
-            startActivity(publishIntent);
+            createRouteLauncher.launch(publishIntent);
         });
+
 
         btnHistory.setOnClickListener(view -> {
             /*

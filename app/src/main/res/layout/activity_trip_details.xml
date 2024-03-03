@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Header containing the back arrow -->
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_left_svgrepo_com" /> <!-- Replace with your actual arrow drawable resource -->
+
+        <!-- Add any other header elements here -->
+    </RelativeLayout>
+
+    <ScrollView
+        android:background="#FFFFFF"
+        android:layout_marginTop="18dp"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+    <!-- Date Text -->
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="Sab 02 marzo"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="16dp"/>
+
+    <!-- Timeline Top Dot -->
+    <ImageView
+        android:id="@+id/timeline_top_dot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/timeText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/dot_drawable" />
+
+    <!-- Timeline View -->
+    <View
+        android:id="@+id/timeline"
+        android:layout_width="2dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/timeline_top_dot"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/darker_gray"/>
+
+    <!-- Timeline Bottom Dot -->
+    <ImageView
+        android:id="@+id/timeline_bottom_dot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/timeline"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/dot_drawable" />
+
+    <!-- Start Time -->
+    <TextView
+        android:id="@+id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/timeline_top_dot"
+        android:layout_alignTop="@id/timeline_top_dot"
+        android:layout_marginEnd="16dp"
+        android:text="08:30"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <!-- Navarra Text -->
+    <TextView
+        android:id="@+id/origin_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/timeline_top_dot"
+        android:layout_alignTop="@id/start_time"
+        android:layout_marginStart="16dp"
+        android:text="Navarra"
+        android:textSize="18sp"/>
+
+    <!-- Arrival Time -->
+    <TextView
+        android:id="@+id/arrival_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/timeline_bottom_dot"
+        android:layout_alignBottom="@id/timeline_bottom_dot"
+        android:layout_marginEnd="16dp"
+        android:text="10:30"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <!-- Zaragoza Text -->
+    <TextView
+        android:id="@+id/destination_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/arrival_time"
+        android:layout_alignTop="@id/arrival_time"
+        android:layout_marginStart="16dp"
+        android:text="Zaragoza"
+        android:textSize="18sp"/>
+
+
+    <!-- Rest of the layout for ride-sharing information -->
+    <!-- ... Include the rest of your layout elements here ... -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeline_bottom_dot"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentLeft="true">
+
+        <!-- Separator before "PRECIO POR PASAJERO" -->
+        <View
+            android:id="@+id/separator_before_price"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+        android:background="@drawable/grey_square"
+        android:layout_alignParentTop="true"/>
+
+        <!-- TextView for Price Per Passenger -->
+        <TextView
+            android:id="@+id/text_price_per_passenger"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="18dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separator_before_price"
+            android:layout_alignParentLeft="true"
+            android:text="PRECIO POR PASAJERO"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <!-- TextView for Price -->
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_price_per_passenger"
+            android:layout_alignParentRight="true"
+            android:text="9.99€"
+            android:layout_marginEnd="18dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <!-- Separator after "PRECIO POR PASAJERO" -->
+        <View
+            android:id="@+id/separator_after_price"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+        android:background="@drawable/grey_square"
+        android:layout_below="@id/text_price_per_passenger"/>
+
+        <!-- Profile Image -->
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/separator_after_price"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
+        android:src="@drawable/ic_profile"/>
+
+        <!-- Driver Name and Rating Container -->
+        <LinearLayout
+            android:id="@+id/container_name_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/image_profile"
+            android:layout_alignTop="@id/image_profile"
+            android:orientation="vertical"
+            android:layout_alignParentLeft="true">
+
+            <!-- Driver Name -->
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jorge"
+                android:layout_marginStart="18dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:gravity="left" />
+
+            <!-- Rating -->
+            <TextView
+                android:id="@+id/text_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:text="⭐ 5/5 - 7 opiniones"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/text_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:text="⭐ Nunca cancela un viaje"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+
+            <View
+                android:layout_marginTop="18dp"
+                android:id="@+id/separator_before_question"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/grey_square"
+                android:layout_marginStart="18dp"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:id="@+id/text_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginBottom="14dp"
+                android:text="Haz una pregunta a Jorge"
+                android:textColor="#4EABEE"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+
+            <!-- Separator after "PRECIO POR PASAJERO" -->
+            <View
+                android:id="@+id/separator_after_question"
+                android:layout_width="match_parent"
+                android:layout_marginStart="18dp"
+                android:layout_height="2dp"
+                android:background="@drawable/grey_square"
+                android:layout_below="@id/text_price_per_passenger"/>
+
+            <TextView
+                android:id="@+id/text_smoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:text="⭐ Prohibido fumar"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/text_eating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:text="⭐ Prohibido comer/beber"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/text_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:text="BMW 1 SERIES"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+            <TextView
+                android:id="@+id/text_carColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:text="Azul"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="left" />
+
+            <!-- Separator before RecyclerView -->
+
+
+        </LinearLayout>
+        <View
+            android:id="@+id/separator_before_passengers"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@drawable/grey_square"
+            android:layout_below="@id/container_name_rating"
+            android:layout_marginTop="18dp" />
+
+        <TextView
+            android:id="@+id/text_passengers"
+            android:layout_below="@id/separator_before_passengers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:text="Pasajeros"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="left" />
+
+        <!-- RecyclerView for passengers -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTrayectos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separator_before_passengers"
+            android:layout_marginTop="48dp"
+            tools:listitem="@layout/item_passengers" />
+
+        <!-- Separator after RecyclerView -->
+        <View
+            android:id="@+id/separator_after_passengers"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@drawable/grey_square"
+            android:layout_below="@id/recyclerViewTrayectos"
+            android:layout_marginTop="18dp" />
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>
+</ScrollView>
+
+    <!-- Footer containing the Reservar button -->
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:elevation="4dp">
+
+        <Button
+            android:id="@+id/btnReservar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#4EABEE"
+            android:text="Reservar"
+            android:textColor="#FFFFFF" />
+</RelativeLayout>
+</RelativeLayout>

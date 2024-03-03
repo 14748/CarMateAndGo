@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#EDEDED"/> <!-- This is a light grey color, you can adjust the hex value as needed -->
+
+    <!-- This will give the square rounded corners, adjust radius as needed -->
+
+    <!-- Optional: If you want to add a gradient for a subtle 3D effect -->
+    <gradient
+        android:startColor="#EDEDED"
+    android:endColor="#EDEDED"
+    android:angle="270"/>
+
+    <!-- Optional: If you want to add padding within the square -->
+    <padding
+        android:left="4dp"
+        android:top="4dp"
+        android:right="4dp"
+        android:bottom="4dp"/>
+
+    <!-- Optional: If you want to add a size to the shape -->
+    <size
+        android:width="25dp"
+        android:height="1dp"/> <!-- Height of 1dp is typical for a separator line -->
+</shape>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +19,9 @@ xmlns:tools="http://schemas.android.com/tools">
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.TripDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SearchRoutes"
             android:exported="false" />
         <activity
@@ -29,12 +32,12 @@ xmlns:tools="http://schemas.android.com/tools">
             android:exported="false" />
         <activity
             android:name=".activities.login.MainScreen"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.register.RegisterPassword"
@@ -57,15 +60,13 @@ xmlns:tools="http://schemas.android.com/tools">
         <activity
             android:name=".activities.Search"
             android:exported="false" />
-
         <activity
             android:name=".activities.MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
 
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCNuXS9NtmZ2-8Z7EGH3XPBtr6oWiCW3pU" />
-</application>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCNuXS9NtmZ2-8Z7EGH3XPBtr6oWiCW3pU" />
+    </application>
 
 </manifest>
