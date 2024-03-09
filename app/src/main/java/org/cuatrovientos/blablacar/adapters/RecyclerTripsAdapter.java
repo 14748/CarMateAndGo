@@ -1,5 +1,6 @@
 package org.cuatrovientos.blablacar.adapters;
 
+import android.graphics.Color;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -148,12 +149,20 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
             origin.setText(palabra.getRoute().getOriginText());
             destination.setText(palabra.getRoute().getDestinationText());
 
-            tripCost.setText(String.valueOf(palabra.getRoute().getPrice()) + "€");
+
+
+            if (palabra.getRoute().isFull()){
+                tripCost.setText("Completo");
+                itemView.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            }else{
+                tripCost.setText(String.valueOf(palabra.getRoute().getPrice()) + "€");
+            }
+
             //uselogo
             username.setText(palabra.getUser().getName());
             rating.setText(String.valueOf(palabra.getUser().getRating()));
-
             itemView.setOnClickListener(view -> onItemClickListener.onItemClickListener(palabra));
+
         }
     }
 

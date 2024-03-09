@@ -121,8 +121,12 @@ public class RouteEntity implements Serializable {
     }
 
     public boolean isFull() {
-        return isFull;
+        if (passengers == null) {
+            return false;
+        }
+        return passengers.size() == seats;
     }
+
 
     public String getDuration() {
         return duration;
