@@ -213,6 +213,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                                 users.add(currentUser);
                                 route.setPassengers(users);
                                 Utils.updateUser(driverTrips.getUser());
+                                finish();
                                 break;
                             }
                         }

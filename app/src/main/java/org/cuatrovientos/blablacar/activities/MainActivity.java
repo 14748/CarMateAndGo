@@ -133,10 +133,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         btnHistory.setOnClickListener(view -> {
-            /*
-            Intent historyIntent = new Intent(this, HistoryActivity.class);
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
             startActivity(historyIntent);
-             */
         });
 
         btnMessages.setOnClickListener(view -> {
