@@ -2,12 +2,13 @@ package org.cuatrovientos.blablacar.models;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RouteEntity {
+public class RouteEntity implements Serializable {
 
     private String id;
     private CustomLatLng origin;
@@ -52,6 +53,7 @@ public class RouteEntity {
         this.destination = destination;
         this.originText = textOrigin;
         this.destinationText = textDestination;
+        this.passengers = new ArrayList<>();
     }
 
     /*

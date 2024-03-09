@@ -2,7 +2,9 @@ package org.cuatrovientos.blablacar.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class CustomLatLng {
+import java.io.Serializable;
+
+public class CustomLatLng implements Serializable {
     private double latitude;
     private double longitude;
 

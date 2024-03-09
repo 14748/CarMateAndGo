@@ -112,11 +112,11 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
         public void assignData(DriverTrips palabra, onItemClickListener onItemClickListener) {
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-// Format the start time to a String
+            // Format the start time to a String
             String startTimeStr = timeFormat.format(palabra.getRoute().getDate());
             time1.setText(startTimeStr);
 
-// Get the duration as a String
+            // Get the duration as a String
             String durationStr = palabra.getRoute().getDuration();
             timeDiff.setText(durationStr);
 

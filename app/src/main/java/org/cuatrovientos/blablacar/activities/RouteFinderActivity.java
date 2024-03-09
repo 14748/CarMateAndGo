@@ -112,6 +112,9 @@ public class RouteFinderActivity extends AppCompatActivity {
                     @Override
                     public void onItemClickListener(DriverTrips palabra) {
                         Toast.makeText(RouteFinderActivity.this, "Selected Trip: " + matchingDriverTrips.indexOf(palabra), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(RouteFinderActivity.this, TripDetailsActivity.class);
+                        intent.putExtra("EXTRA_DRIVER_TRIPS", palabra);
+                        startActivity(intent);
                     }
                 }));
             }

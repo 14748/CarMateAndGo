@@ -1,6 +1,8 @@
 package org.cuatrovientos.blablacar.models;
 
-public class DriverTrips {
+import java.io.Serializable;
+
+public class DriverTrips implements Serializable {
     private User user;
     private RouteEntity route;
 

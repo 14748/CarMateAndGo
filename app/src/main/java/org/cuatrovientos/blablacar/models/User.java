@@ -5,11 +5,12 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
 
     private String id;
     private String name;
@@ -132,5 +133,9 @@ public class User {
         }
 
         return sum / ratings.size();
+    }
+
+    public int getTotalRatings(){
+        return ratings != null ? ratings.size() : 0;
     }
 }
