@@ -23,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView email;
     private TextView fechaNacimiento;
     private TextView balance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Si no hay user loggeado te manda a la pantalla de LogIn
         currentUser = UserManager.getCurrentUser();
-        if (currentUser == null){
+        if (currentUser == null) {
             Intent intent = new Intent(ProfileActivity.this, MainScreen.class);
             startActivity(intent);
         }
@@ -41,13 +42,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         btnSearch.setOnClickListener(view -> {
             /*
-            TODO: redirigir a la pantalla de buscar
+             * TODO: redirigir a la pantalla de buscar
              */
         });
 
         btnPublish.setOnClickListener(view -> {
             Intent publishIntent = new Intent(this, CreateRoute.class);
             startActivity(publishIntent);
+            finish();
         });
 
         btnEditPerfil.setOnClickListener(view -> {
@@ -62,7 +64,8 @@ public class ProfileActivity extends AppCompatActivity {
         balance = findViewById(R.id.btnBalance);
         nombre.setText(currentUser.getName() + " " + currentUser.getLastName());
         email.setText(currentUser.getEmail());
-        fechaNacimiento.setText(currentUser.getBirthDate().getDate() + "/" + (currentUser.getBirthDate().getMonth()+1) + "/" + currentUser.getBirthDate().getYear());
+        fechaNacimiento.setText(currentUser.getBirthDate().getDate() + "/" + (currentUser.getBirthDate().getMonth() + 1)
+                + "/" + currentUser.getBirthDate().getYear());
         // TODO: completar cuando esté implementado el balance
         // balance.setText(currentUser.getBalance());
     }

@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        //Utils.pushUser(new User(0, "pepito", "pepita", new Date(), "mail", "pass"));
         btnSearch.setOnClickListener(view -> {
             /*
             Intent searchIntent = new Intent(this, Search.class);
@@ -230,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
+                        Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
                         CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
                         CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
                         routeService.routeCreation(new User(), originLocation, destinationLocation, date, recyclerView);

@@ -2,6 +2,7 @@ package org.cuatrovientos.blablacar;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -53,48 +54,49 @@ public class RouteService {
                 for (List<String> summary: routes.getSummaries()) {
                     routeSelectionInfos.add(new RouteSelectionInfo("Ruta numero " + routes.getSummaries().indexOf(summary)+1, summary.get(0), summary.get(1)));
                 }
-
-
-                        recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos,
-                                new RecyclerRoutesAdapter.onItemClickListener() {
-                                    @Override
-                                    public void onItemClickListener(RouteSelectionInfo palabra) {
-                                        mapHelper.highlightRoute(routeSelectionInfos.indexOf(palabra));
-                                    }
-                                },
-                                new RecyclerRoutesAdapter.onLinkClickListener() {
-                                    @Override
-                                    public void onLinkClickListener(int position) {
-                                        List<RouteEntity> userRoutes = new ArrayList<>();
-                                        Drawable userIcon = ContextCompat.getDrawable(activity, R.drawable.arrowderecha);;
-                                        User newUser = new User(
-                                                1, // id
-                                                "John", // name
-                                                "Doe", // lastName
-                                                new Date(), // birthDate
-                                                "johndoe@example.com", // email
-                                                1234567890, // telephone
-                                                "securepassword123", // password
-                                                userRoutes, // List of RouteEntity objects
-                                                userIcon // Drawable for user icon
-                                        );
-                                        List<User> users = new ArrayList<>();
-                                        users.add(new User());
-                                        RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                        //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
-                                        RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
-                                        mapHelper.map.clear();
-                                        user.addRoute(r);
-                                        Utils.pushUser(user);
-                                    }
+                activity.runOnUiThread(() -> {
+                    recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos,
+                            new RecyclerRoutesAdapter.onItemClickListener() {
+                                @Override
+                                public void onItemClickListener(RouteSelectionInfo palabra) {
+                                    mapHelper.highlightRoute(routeSelectionInfos.indexOf(palabra));
                                 }
-                        ));
+                            },
+                            new RecyclerRoutesAdapter.onLinkClickListener() {
+                                @Override
+                                public void onLinkClickListener(int position) {
+                                    List<RouteEntity> userRoutes = new ArrayList<>();
+                                    Drawable userIcon = ContextCompat.getDrawable(activity, R.drawable.arrowderecha);
+                                    ;
+                                    User newUser = new User(
+                                            1, // id
+                                            "John", // name
+                                            "Doe", // lastName
+                                            new Date(), // birthDate
+                                            "johndoe@example.com", // email
+                                            1234567890, // telephone
+                                            "securepassword123", // password
+                                            userRoutes, // List of RouteEntity objects
+                                            userIcon // Drawable for user icon
+                                    );
+                                    List<User> users = new ArrayList<>();
+                                    users.add(new User());
+                                    RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
+                                    //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
+                                    RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
+                                    mapHelper.map.clear();
+                                    user.addRoute(r);
+                                    Utils.pushUser(user);
+                                }
+                            }
+                    ));
+                });
 
             }
 
             @Override
             public void onError(Exception e) {
-                // Handle error here
+                Log.d("Womp", e.toString());
             }
         });
     }
@@ -125,6 +127,9 @@ public class RouteService {
                         MediaType.parse("application/json; charset=utf-8"),
                         rawJson
                 );
+
+                Log.d("Womp", body.toString());
+                Log.d("Womp", rawJson);
 
                 Response<RouteResponse> response = service.createRoute(
                         "5b3ce3597851110001cf6248e44784ffb81c49abb564cc056c247289",
