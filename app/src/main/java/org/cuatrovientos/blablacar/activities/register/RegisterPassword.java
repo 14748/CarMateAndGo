@@ -95,7 +95,6 @@ public class RegisterPassword extends AppCompatActivity {
                             for (User user : userList) {
                                 if (user.getId() > maxID){
                                     maxID = user.getId();
-                                    errorMessage(String.valueOf(user.getBirthDate().getYear()));
                                 }
                             }
                             User keepUser = new User(maxID, keepNombre, keepApellidos, date, keepEmail, userPassword);
