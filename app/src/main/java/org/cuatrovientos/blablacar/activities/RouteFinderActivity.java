@@ -109,7 +109,7 @@ public class RouteFinderActivity extends AppCompatActivity {
         List<DriverTrips> matchingDriverTrips = new ArrayList<>();
 
         for (User user : users) {
-            for (RouteEntity route : user.getRoutes()) {
+            for (RouteEntity route : user.getCreatedRoutes()) {
                 if (isSameDay(route.getDate(), selectedDate) && isWithinRadius(type ? route.getOrigin() : route.getDestination(), latLon, radiusKm)) {
                     matchingDriverTrips.add(new DriverTrips(user, route));
                 }

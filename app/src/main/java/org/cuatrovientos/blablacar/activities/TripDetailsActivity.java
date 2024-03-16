@@ -185,7 +185,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                 }
 
                 boolean isUserAlreadyInRoute = false;
-                for (RouteEntity route : driverTrips.getUser().getRoutes()) {
+                for (RouteEntity route : driverTrips.getUser().getPassengerRoutes()) {
                     if (route.getPassengers() != null && route.getPassengers().contains(currentUser)) {
                         isUserAlreadyInRoute = true;
                         break;
@@ -195,7 +195,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                 if (!isUserAlreadyInRoute) {
                     boolean hasTripToDestinationToday = false;
                     Calendar today = Calendar.getInstance();
-                    for (RouteEntity route : currentUser.getRoutes()) {
+                    for (RouteEntity route : currentUser.getPassengerRoutes()) {
                         Calendar routeDate = Calendar.getInstance();
                         routeDate.setTime(route.getDate());
 
@@ -209,7 +209,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                     }
 
                     if (!hasTripToDestinationToday) {
-                        for (RouteEntity route : driverTrips.getUser().getRoutes()) {
+                        for (RouteEntity route : driverTrips.getUser().getCreatedRoutes()) {
                             if (route.getId() == driverTrips.getRoute().getId()) {
                                 List<User> users = route.getPassengers();
                                 if (users == null) {

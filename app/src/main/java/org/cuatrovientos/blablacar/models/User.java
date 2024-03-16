@@ -19,10 +19,16 @@ public class User implements Serializable {
     private String email;
     private int telephone;
     private String password;
-    private List<RouteEntity> routes;
+    private List<RouteEntity> createdRoutes;
+    private List<RouteEntity> passengerRoutes;
     private Drawable userIcon;
     private List<Integer> ratings;
-    public User(){this.routes = new ArrayList<>();} //por si se necesita
+
+    private int balance;
+    public User(){
+        this.createdRoutes = new ArrayList<>();
+        this.passengerRoutes = new ArrayList<>();
+    }
 
     public User(String name, String lastName, Date birthDate, String email, String password) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
@@ -31,11 +37,13 @@ public class User implements Serializable {
         this.birthDate = birthDate;
         this.email = email;
         this.password = password;
-        this.routes = new ArrayList<>();
+        this.balance = 0;
+        this.createdRoutes = new ArrayList<>();
+        this.passengerRoutes = new ArrayList<>();
         this.ratings = new ArrayList<>();
     }
 
-    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, List<RouteEntity> routes, Drawable userIcon, List<Integer> ratings) {
+    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Drawable userIcon, List<Integer> ratings) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
@@ -43,7 +51,9 @@ public class User implements Serializable {
         this.email = email;
         this.telephone = telephone;
         this.password = password;
-        this.routes = routes;
+        this.balance = 0;
+        this.createdRoutes = new ArrayList<>();
+        this.passengerRoutes = new ArrayList<>();
         this.userIcon = userIcon;
         this.ratings = ratings;
     }
@@ -71,12 +81,40 @@ public class User implements Serializable {
         return email;
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public List<RouteEntity> getRoutes() {
-        return routes;
+    public List<RouteEntity> getCreatedRoutes() {
+        return createdRoutes;
+    }
+
+    public void setCreatedRoutes(List<RouteEntity> createdRoutes) {
+        this.createdRoutes = createdRoutes;
+    }
+
+    public List<RouteEntity> getPassengerRoutes() {
+        return passengerRoutes;
+    }
+
+    public void setPassengerRoutes(List<RouteEntity> passengerRoutes) {
+        this.passengerRoutes = passengerRoutes;
+    }
+
+    public List<Integer> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Integer> ratings) {
+        this.ratings = ratings;
     }
 
     public Drawable getUserIcon() {
@@ -97,6 +135,14 @@ public class User implements Serializable {
         this.name = name;
     }
 
+    public void addCreatedRoute(RouteEntity route) {
+            this.createdRoutes.add(route);
+    }
+
+    public void addPassengerRoute(RouteEntity route) {
+            this.passengerRoutes.add(route);
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -111,10 +157,6 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void addRoute(RouteEntity route) {
-        this.routes.add(route);
     }
 
     public void setUserIcon(Drawable userIcon) {

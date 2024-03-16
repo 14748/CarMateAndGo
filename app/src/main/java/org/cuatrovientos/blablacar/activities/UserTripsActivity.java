@@ -40,8 +40,8 @@ public class UserTripsActivity extends AppCompatActivity {
             @Override
             public void onCallback(List<User> userList) {
                 for (User user : userList) {
-                    if (user.getRoutes() != null) { // Check if user has routes
-                        for (RouteEntity route : user.getRoutes()) {
+                    if (user.getCreatedRoutes() != null) { // Check if user has routes
+                        for (RouteEntity route : user.getCreatedRoutes()) {
                             if (route.getPassengers() != null) { // Ensure passengers list is not null
                                 for (User passenger : route.getPassengers()) {
                                     if (passenger.getId() != null && passenger.getId().equals(currentUser.getId())) {
