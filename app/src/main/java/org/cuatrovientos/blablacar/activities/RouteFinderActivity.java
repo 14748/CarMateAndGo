@@ -1,11 +1,5 @@
 package org.cuatrovientos.blablacar.activities;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,116 +7,102 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.adapters.RecyclerTripsAdapter;
-import org.cuatrovientos.blablacar.models.CustomLatLng;
-import org.cuatrovientos.blablacar.models.DriverTrips;
-import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
-import org.cuatrovientos.blablacar.models.RouteEntity;
-import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
-import org.cuatrovientos.blablacar.models.User;
-import org.cuatrovientos.blablacar.models.Utils;
-
+import org.cuatrovientos.blablacar.models.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class RouteFinderActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
-    private ActivityResultLauncher<Intent> createRouteLauncher;
-
     private TextView timeText;
     private EditText searchBox;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_finder);
+
+        initViewReferences();
+        processIntentData();
+    }
+
+    private void initViewReferences() {
         timeText = findViewById(R.id.timeText);
         searchBox = findViewById(R.id.searchBox);
         recyclerView = findViewById(R.id.recyclerViewTrayectos);
-        recyclerView.setLayoutManager(new GridLayoutManager(RouteFinderActivity.this, 1));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+    }
 
-        //initCreateRouteLauncher();
-
+    private void processIntentData() {
         Intent data = getIntent();
-
         PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
         PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
         String dateStr = data.getStringExtra("date");
         String textSearchBox = data.getStringExtra("text");
         boolean type = data.getBooleanExtra("type", false);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
-        final Date date;
-        try {
-            date = sdf.parse(dateStr);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(date);
-
-        Calendar today = Calendar.getInstance();
-        Calendar tomorrow = Calendar.getInstance();
-        tomorrow.add(Calendar.DAY_OF_YEAR, 1);
-        Calendar endOfWeek = Calendar.getInstance();
-        int dayOfWeek = today.get(Calendar.DAY_OF_WEEK);
-        int daysUntilEndOfWeek = Calendar.SATURDAY - dayOfWeek;
-        endOfWeek.add(Calendar.DAY_OF_YEAR, daysUntilEndOfWeek);
-
-        String textToShow;
-        if (sdf.format(date).equals(sdf.format(today.getTime()))) {
-            textToShow = "Hoy";
-        } else if (sdf.format(date).equals(sdf.format(tomorrow.getTime()))) {
-            textToShow = "Mañana";
-        } else if (today.before(endOfWeek) && calendarDate.before(endOfWeek)) {
-            textToShow = dayFormat.format(date);
-        } else {
-            textToShow = dateStr;
-        }
-
-        timeText.setText(textToShow);
+        Date date = parseDate(dateStr);
+        updateDateDisplay(date);
         searchBox.setText(textSearchBox);
 
-        Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
         CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
         CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-        Utils.getUsers(new Utils.FirebaseCallback() {
-            @Override
-            public void onCallback(List<User> userList) {
-                CustomLatLng latLon = new CustomLatLng();
-                if (type){
-                    latLon = originLocation;
-                }else {
-                    latLon = destinationLocation;
-                }
 
-                List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, latLon, 50.0, type);
+        fetchAndDisplayRoutes(originLocation, destinationLocation, date, type);
+    }
 
-                recyclerView.setAdapter(new RecyclerTripsAdapter(matchingDriverTrips, new RecyclerTripsAdapter.onItemClickListener() {
-                    @Override
-                    public void onItemClickListener(DriverTrips palabra) {
-                        Toast.makeText(RouteFinderActivity.this, "Selected Trip: " + matchingDriverTrips.indexOf(palabra), Toast.LENGTH_LONG).show();
-                        if (!palabra.getRoute().isFull()){
-                            Intent intent = new Intent(RouteFinderActivity.this, TripDetailsActivity.class);
-                            intent.putExtra("EXTRA_DRIVER_TRIPS", palabra);
-                            startActivity(intent);
-                        }
-                    }
-                }));
-            }
+    private Date parseDate(String dateStr) {
+        try {
+            return sdf.parse(dateStr);
+        } catch (ParseException e) {
+            Log.e("RouteFinderActivity", "Date parsing error", e);
+            throw new RuntimeException("Error parsing date: " + dateStr);
+        }
+    }
+
+    private void updateDateDisplay(Date date) {
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.setTime(date);
+        String textToShow = calculateDateTextToShow(date, calendarDate);
+        timeText.setText(textToShow);
+    }
+
+    private String calculateDateTextToShow(Date date, Calendar calendarDate) {
+        Calendar today = Calendar.getInstance();
+        Calendar tomorrow = (Calendar) today.clone();
+        tomorrow.add(Calendar.DAY_OF_YEAR, 1);
+        Calendar endOfWeek = (Calendar) today.clone();
+        int daysUntilEndOfWeek = Calendar.SATURDAY - today.get(Calendar.DAY_OF_WEEK);
+        endOfWeek.add(Calendar.DAY_OF_YEAR, daysUntilEndOfWeek);
+
+        if (sdf.format(date).equals(sdf.format(today.getTime()))) {
+            return "Hoy";
+        } else if (sdf.format(date).equals(sdf.format(tomorrow.getTime()))) {
+            return "Mañana";
+        } else if (today.before(endOfWeek) && calendarDate.before(endOfWeek)) {
+            return dayFormat.format(date);
+        } else {
+            return sdf.format(date);
+        }
+    }
+
+    private void fetchAndDisplayRoutes(CustomLatLng originLocation, CustomLatLng destinationLocation, Date date, boolean type) {
+        // Simulating fetching users and calculating routes. Replace with actual fetching logic.
+        Utils.getUsers(userList -> {
+            List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, type ? originLocation : destinationLocation, 50.0, type);
+            updateRecyclerView(matchingDriverTrips);
         });
-
-
     }
 
     public List<DriverTrips> findRoutes(List<User> users, Date selectedDate, CustomLatLng latLon, double radiusKm, boolean type) {
@@ -165,4 +145,18 @@ public class RouteFinderActivity extends AppCompatActivity {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return earthRadiusKm * c;
     }
+
+    private void updateRecyclerView(List<DriverTrips> driverTrips) {
+        RecyclerTripsAdapter adapter = new RecyclerTripsAdapter(driverTrips, this::onTripSelected);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void onTripSelected(DriverTrips trip) {
+        Toast.makeText(this, "Selected Trip: " + trip.toString(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(RouteFinderActivity.this, TripDetailsActivity.class);
+        startActivity(intent);
+        DataHolder.getInstance().setYourData(trip);
+    }
 }
+
+

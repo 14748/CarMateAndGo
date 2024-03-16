@@ -3,6 +3,7 @@ package org.cuatrovientos.blablacar.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.adapters.RecyclerTripsDetailsAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
+import org.cuatrovientos.blablacar.models.DataHolder;
 import org.cuatrovientos.blablacar.models.DriverTrips;
 import org.cuatrovientos.blablacar.models.RouteEntity;
 import org.cuatrovientos.blablacar.models.User;
@@ -66,8 +68,11 @@ public class TripDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_details);
 
+        /*
         Intent intent = getIntent();
         DriverTrips driverTrips = (DriverTrips) intent.getSerializableExtra("EXTRA_DRIVER_TRIPS");
+         */
+        DriverTrips driverTrips = DataHolder.getInstance().getYourData();
 
         // Initialize header views
         header = findViewById(R.id.header);
@@ -213,6 +218,8 @@ public class TripDetailsActivity extends AppCompatActivity {
                                 users.add(currentUser);
                                 route.setPassengers(users);
                                 Utils.updateUser(driverTrips.getUser());
+                                Intent returnIntent = new Intent();
+                                setResult(Activity.RESULT_OK, returnIntent);
                                 finish();
                                 break;
                             }

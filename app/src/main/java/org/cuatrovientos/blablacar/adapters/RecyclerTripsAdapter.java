@@ -48,6 +48,11 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
         this.itemClickListener = itemClickListener;
     }
 
+    public void updateData(List<DriverTrips> newTrips) {
+        this.listPalabras = newTrips;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecyclerTripsAdapter.RecyclerDataHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
