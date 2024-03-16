@@ -34,6 +34,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.internal.Util;
+
 public class TripDetailsActivity extends AppCompatActivity {
     public final CustomLatLng CUATROVIENTOS = new CustomLatLng(42.824851, -1.660318);
     // Header
@@ -184,6 +186,11 @@ public class TripDetailsActivity extends AppCompatActivity {
                     return; // Exit the method early
                 }
 
+                if (currentUser.getBalance() < driverTrips.getRoute().getPrice()){
+                    Toast.makeText(getApplicationContext(), "You do not have enough money", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 boolean isUserAlreadyInRoute = false;
                 for (RouteEntity route : driverTrips.getUser().getPassengerRoutes()) {
                     if (route.getPassengers() != null && route.getPassengers().contains(currentUser)) {
@@ -218,6 +225,9 @@ public class TripDetailsActivity extends AppCompatActivity {
                                 users.add(currentUser);
                                 route.setPassengers(users);
                                 Utils.updateUser(driverTrips.getUser());
+                                currentUser.setBalance(currentUser.getBalance() - driverTrips.getRoute().getPrice());
+                                UserManager.setCurrentUser(currentUser);
+                                Utils.updateUser(currentUser);
                                 Intent returnIntent = new Intent();
                                 setResult(Activity.RESULT_OK, returnIntent);
                                 finish();

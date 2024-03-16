@@ -24,7 +24,7 @@ public class User implements Serializable {
     private Drawable userIcon;
     private List<Integer> ratings;
 
-    private int balance;
+    private float balance;
     public User(){
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
@@ -81,11 +81,11 @@ public class User implements Serializable {
         return email;
     }
 
-    public int getBalance() {
+    public float getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(float balance) {
         this.balance = balance;
     }
 

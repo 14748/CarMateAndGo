@@ -4,20 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.models.User;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private User currentUser;
     private ImageButton btnSearch;
     private ImageButton btnPublish;
+    private ImageView btnPagos;
     private Button btnEditPerfil;
     private TextView nombre;
     private TextView email;
@@ -40,6 +42,16 @@ public class ProfileActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);
         btnEditPerfil = findViewById(R.id.btnEditPerfil);
+        btnPagos = findViewById(R.id.imagePagos);
+
+        btnPagos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent balanceIntent = new Intent(ProfileActivity.this, BalanceActivity.class);
+                startActivity(balanceIntent);
+                finish();
+            }
+        });
 
         btnSearch.setOnClickListener(view -> {
             /*
@@ -67,7 +79,6 @@ public class ProfileActivity extends AppCompatActivity {
         email.setText(currentUser.getEmail());
         fechaNacimiento.setText(currentUser.getBirthDate().getDate() + "/" + (currentUser.getBirthDate().getMonth() + 1)
                 + "/" + currentUser.getBirthDate().getYear());
-        // TODO: completar cuando esté implementado el balance
-        // balance.setText(currentUser.getBalance());
+        balance.setText(String.valueOf(currentUser.getBalance()));
     }
 }

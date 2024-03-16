@@ -70,7 +70,7 @@ public class RouteService {
                                 public void onLinkClickListener(int position) {
                                     List<User> users = new ArrayList<>();
                                     RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                    RouteEntity r = new RouteEntity(routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date, origin, destination, originText, destinationText);
+                                    RouteEntity r = new RouteEntity(routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 50.00f, users, 5, false, date, origin, destination, originText, destinationText);
                                     mapHelper.map.clear();
                                     user.addCreatedRoute(r);
                                     Utils.updateUser(user);
