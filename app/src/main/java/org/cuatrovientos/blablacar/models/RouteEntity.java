@@ -19,7 +19,7 @@ public class RouteEntity implements Serializable {
     private String kms;
     private List<CustomLatLng> points;
     private float price;
-    private List<User> passengers;
+    private List<String> passengers;
     private int seats;
     private boolean isFull;
     private Date date;
@@ -30,7 +30,7 @@ public class RouteEntity implements Serializable {
         this.id = id;
     }
 
-    public RouteEntity(List<CustomLatLng> route, float price, ArrayList<User> passengers, boolean isFull, Date date) {
+    public RouteEntity(List<CustomLatLng> route, float price, ArrayList<String> passengers, boolean isFull, Date date) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();;
         this.points = route;
         this.price = price;
@@ -39,7 +39,7 @@ public class RouteEntity implements Serializable {
         this.date = date;
     }
 
-    public RouteEntity(String duration, String kms, List<CustomLatLng> points, float price, List<User> passengers, int seats, boolean isFull, Date date, CustomLatLng origin, CustomLatLng destination, String textOrigin, String textDestination) {
+    public RouteEntity(String duration, String kms, List<CustomLatLng> points, float price, List<String> passengers, int seats, boolean isFull, Date date, CustomLatLng origin, CustomLatLng destination, String textOrigin, String textDestination) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();;
         this.duration = duration;
         this.kms = kms;
@@ -96,7 +96,7 @@ public class RouteEntity implements Serializable {
         this.destinationText = destinationText;
     }
 
-    public void setPassengers(List<User> passengers) {
+    public void setPassengers(List<String> passengers) {
         this.passengers = passengers;
     }
 
@@ -112,7 +112,7 @@ public class RouteEntity implements Serializable {
         return price;
     }
 
-    public List<User> getPassengers() {
+    public List<String> getPassengers() {
         return passengers;
     }
 

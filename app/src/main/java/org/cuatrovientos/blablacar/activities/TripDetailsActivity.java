@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,10 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.adapters.RecyclerTripsDetailsAdapter;
@@ -33,6 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.internal.Util;
 
@@ -165,13 +172,21 @@ public class TripDetailsActivity extends AppCompatActivity {
 
         // Set up listeners or further initializations here
         recyclerViewTrayectos.setLayoutManager(new LinearLayoutManager(this));
-        if (driverTrips.getRoute().getPassengers() != null){
-            recyclerViewTrayectos.setAdapter(new RecyclerTripsDetailsAdapter(driverTrips.getRoute().getPassengers(), new RecyclerTripsDetailsAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(User user) {
 
+        if (driverTrips.getRoute().getPassengers() != null) {
+            // Fetch user objects for the passenger IDs
+            Utils.getUsersByIds(driverTrips.getRoute().getPassengers(), new Utils.UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    // Once users are fetched, set the RecyclerView adapter
+                    recyclerViewTrayectos.setAdapter(new RecyclerTripsDetailsAdapter(users, new RecyclerTripsDetailsAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(User user) {
+                            // Handle item click events
+                        }
+                    }));
                 }
-            }));
+            });
         }
 
 
@@ -191,57 +206,94 @@ public class TripDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
-                boolean isUserAlreadyInRoute = false;
-                for (RouteEntity route : driverTrips.getUser().getPassengerRoutes()) {
-                    if (route.getPassengers() != null && route.getPassengers().contains(currentUser)) {
-                        isUserAlreadyInRoute = true;
-                        break;
-                    }
-                }
+                checkIfUserInAnyRoute(currentUser, currentUser.getPassengerRoutes(), isUserInRoute -> {
+                    if (!isUserInRoute) {
+                        boolean hasTripToDestinationToday = false;
+                        boolean hasTripToOriginToday = false;
+                        Calendar today = Calendar.getInstance();
+                        for (RouteEntity route : currentUser.getPassengerRoutes()) {
+                            Calendar routeDate = Calendar.getInstance();
+                            routeDate.setTime(route.getDate());
 
-                if (!isUserAlreadyInRoute) {
-                    boolean hasTripToDestinationToday = false;
-                    Calendar today = Calendar.getInstance();
-                    for (RouteEntity route : currentUser.getPassengerRoutes()) {
-                        Calendar routeDate = Calendar.getInstance();
-                        routeDate.setTime(route.getDate());
+                            boolean sameDay = today.get(Calendar.YEAR) == routeDate.get(Calendar.YEAR) &&
+                                    today.get(Calendar.DAY_OF_YEAR) == routeDate.get(Calendar.DAY_OF_YEAR);
 
-                        boolean sameDay = today.get(Calendar.YEAR) == routeDate.get(Calendar.YEAR) &&
-                                today.get(Calendar.DAY_OF_YEAR) == routeDate.get(Calendar.DAY_OF_YEAR);
+                            if (sameDay && route.getDestination().equals(CUATROVIENTOS)) {
+                                hasTripToDestinationToday = true;
+                                break;
+                            }
 
-                        if (sameDay && route.getDestination().equals(CUATROVIENTOS)) {
-                            hasTripToDestinationToday = true;
-                            break;
-                        }
-                    }
-
-                    if (!hasTripToDestinationToday) {
-                        for (RouteEntity route : driverTrips.getUser().getCreatedRoutes()) {
-                            if (route.getId() == driverTrips.getRoute().getId()) {
-                                List<User> users = route.getPassengers();
-                                if (users == null) {
-                                    users = new ArrayList<>();
-                                }
-                                users.add(currentUser);
-                                route.setPassengers(users);
-                                Utils.updateUser(driverTrips.getUser());
-                                currentUser.setBalance(currentUser.getBalance() - driverTrips.getRoute().getPrice());
-                                UserManager.setCurrentUser(currentUser);
-                                Utils.updateUser(currentUser);
-                                Intent returnIntent = new Intent();
-                                setResult(Activity.RESULT_OK, returnIntent);
-                                finish();
+                            if (sameDay && route.getOrigin().equals(CUATROVIENTOS))
+                            {
+                                hasTripToOriginToday = true;
                                 break;
                             }
                         }
+
+
+                        if (!hasTripToDestinationToday && !hasTripToOriginToday) {
+                            for (RouteEntity route : driverTrips.getUser().getCreatedRoutes()) {
+                                if (route.getId().equals(driverTrips.getRoute().getId())) { // Use .equals for String comparison
+                                    List<String> userIDs = route.getPassengers(); // Assuming you're storing user IDs
+                                    if (userIDs == null) {
+                                        userIDs = new ArrayList<>();
+                                    }
+                                    userIDs.add(currentUser.getId());
+                                    User user = driverTrips.getUser();
+                                    user.getCreatedRoutes().get(driverTrips.getUser().getCreatedRoutes().indexOf(route)).setPassengers(userIDs);
+
+                                    float newBalance = currentUser.getBalance() - driverTrips.getRoute().getPrice();
+                                    currentUser.setBalance(newBalance);
+                                    currentUser.addPassengerRoute(route);
+                                    Utils.pushUser(currentUser);
+                                    Utils.pushUser(user);
+                                    UserManager.setCurrentUser(currentUser);
+
+                                    Intent returnIntent = new Intent();
+                                    setResult(Activity.RESULT_OK, returnIntent);
+                                    finish();
+                                    break;
+                                }
+                            }
+                        }
                     } else {
-                        Toast.makeText(getApplicationContext(), "You already have a trip to this destination today.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "You are already part of this route.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "You are already part of this route.", Toast.LENGTH_SHORT).show();
-                }
+                });
             }
         });
 
     }
+
+    public interface UserRouteCheckCallback {
+        void onResult(boolean isUserInRoute);
+    }
+
+    public void checkIfUserInAnyRoute(User currentUser, List<RouteEntity> passengerRoutes, UserRouteCheckCallback callback) {
+        AtomicBoolean isUserAlreadyInRoute = new AtomicBoolean(false);
+
+        if (passengerRoutes.isEmpty()) {
+            callback.onResult(false);
+            return;
+        }
+
+        for (RouteEntity route : passengerRoutes) {
+            Utils.getUsersByIds(route.getPassengers(), new Utils.UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    // Check if the list of users contains the currentUser
+                    for (User user : users) {
+                        if (user.getId().equals(currentUser.getId())) {
+                            isUserAlreadyInRoute.set(true);
+                            break;
+                        }
+                    }
+
+                    callback.onResult(isUserAlreadyInRoute.get());
+                }
+            });
+        }
+    }
+
+
 }

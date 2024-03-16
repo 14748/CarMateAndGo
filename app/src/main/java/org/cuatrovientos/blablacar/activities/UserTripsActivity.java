@@ -43,13 +43,23 @@ public class UserTripsActivity extends AppCompatActivity {
                     if (user.getCreatedRoutes() != null) { // Check if user has routes
                         for (RouteEntity route : user.getCreatedRoutes()) {
                             if (route.getPassengers() != null) { // Ensure passengers list is not null
-                                for (User passenger : route.getPassengers()) {
-                                    if (passenger.getId() != null && passenger.getId().equals(currentUser.getId())) {
-                                        // If any passenger's ID matches the current user's ID, add the route
-                                        routesUser.add(new DriverTrips(user, route));
-                                        break; // Stop checking other passengers in this route
-                                    }
+                                // Assuming `route.getPassengerIDs()` returns a List<String> of user IDs
+                                if (route.getPassengers() != null && !route.getPassengers().isEmpty()) {
+                                    Utils.getUsersByIds(route.getPassengers(), new Utils.UsersCallback() {
+                                        @Override
+                                        public void onCallback(List<User> passengers) {
+                                            // Now you have a list of User objects for the passengers
+                                            for (User passenger : passengers) {
+                                                if (passenger.getId() != null && passenger.getId().equals(currentUser.getId())) {
+                                                    // If any passenger's ID matches the current user's ID, add the route
+                                                    routesUser.add(new DriverTrips(user, route));
+                                                    break; // Stop checking other passengers in this route
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
+
                             }
                         }
                     }

@@ -70,7 +70,7 @@ public class BalanceActivity extends AppCompatActivity {
                 currentUser.setBalance(currentUser.getBalance() + addingMoney);
 
                 // Update user in Firebase
-                Utils.updateUser(currentUser);
+                Utils.pushUser(currentUser);
                 UserManager.setCurrentUser(currentUser);
 
                 // Proceed to ProfileActivity
