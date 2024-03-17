@@ -169,7 +169,8 @@ public class TripDetailsActivity extends AppCompatActivity {
         textName.setText(driverTrips.getUser().getName());
         textRating.setText("⭐ " + driverTrips.getUser().getRating() + "/5 - " + driverTrips.getUser().getTotalRatings() + " opiniones");
 
-
+        textCar.setText(driverTrips.getUser().getVehicle().getMake() + " " + driverTrips.getUser().getVehicle().getModel());
+        textCarColor.setText(String.valueOf(driverTrips.getUser().getVehicle().getColor()));
         // Set up listeners or further initializations here
         recyclerViewTrayectos.setLayoutManager(new LinearLayoutManager(this));
 

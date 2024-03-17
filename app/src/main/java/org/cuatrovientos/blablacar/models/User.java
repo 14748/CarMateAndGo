@@ -23,6 +23,7 @@ public class User implements Serializable {
     private List<RouteEntity> passengerRoutes;
     private Drawable userIcon;
     private List<Integer> ratings;
+    private Vehicle vehicle;
 
     private float balance;
     public User(){
@@ -61,6 +62,14 @@ public class User implements Serializable {
     /*
     * GETTERS
     * */
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
     public String getId() {
         return id;
     }

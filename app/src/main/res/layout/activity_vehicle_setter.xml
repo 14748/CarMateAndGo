@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.VehicleSetterActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Vehicle Make -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_vehicle_make"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vehicle_make"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/vehicle_make" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Vehicle Model -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_vehicle_model"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_vehicle_make"
+                app:layout_constraintStart_toStartOf="@+id/layout_vehicle_make"
+                app:layout_constraintEnd_toEndOf="@+id/layout_vehicle_make">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vehicle_model"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/vehicle_model" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Vehicle Year -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_vehicle_year"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_vehicle_model"
+                app:layout_constraintStart_toStartOf="@+id/layout_vehicle_model"
+                app:layout_constraintEnd_toEndOf="@+id/layout_vehicle_model">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vehicle_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="@string/vehicle_year" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Vehicle Color -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_vehicle_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_vehicle_year"
+                app:layout_constraintStart_toStartOf="@+id/layout_vehicle_year"
+                app:layout_constraintEnd_toEndOf="@+id/layout_vehicle_year">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vehicle_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/vehicle_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Vehicle License Plate -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_vehicle_license_plate"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_vehicle_color"
+                app:layout_constraintStart_toStartOf="@+id/layout_vehicle_color"
+                app:layout_constraintEnd_toEndOf="@+id/layout_vehicle_color">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vehicle_license_plate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/vehicle_license_plate" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Submit Button -->
+            <Button
+                android:id="@+id/submit_vehicle_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_vehicle_license_plate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,9 @@ import android.widget.TimePicker;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
+import org.cuatrovientos.blablacar.models.User;
 
 import java.io.Serializable;
 import java.text.BreakIterator;
@@ -56,11 +58,21 @@ public class CreateRoute extends AppCompatActivity {
     private ImageButton btnHistory;
     private ImageButton btnMessages;
     private ImageButton btnProfile;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_route);
+
+        UserManager.init(getApplicationContext());
+        currentUser = UserManager.getCurrentUser();
+
+        if (currentUser.getVehicle() == null){
+            Intent setVehicle = new Intent(this, VehicleSetterActivity.class);
+            startActivity(setVehicle);
+            finish();
+        }
 
         origin = findViewById(R.id.lblOrigin);
         destination = findViewById(R.id.lblDestination);
