@@ -207,7 +207,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
-                checkIfUserInAnyRoute(currentUser, currentUser.getPassengerRoutes(), isUserInRoute -> {
+                checkIfUserInAnyRoute(driverTrips.getRoute(), currentUser, isUserInRoute -> {
                     if (!isUserInRoute) {
                         boolean hasTripToDestinationToday = false;
                         boolean hasTripToOriginToday = false;
@@ -270,31 +270,36 @@ public class TripDetailsActivity extends AppCompatActivity {
         void onResult(boolean isUserInRoute);
     }
 
-    public void checkIfUserInAnyRoute(User currentUser, List<RouteEntity> passengerRoutes, UserRouteCheckCallback callback) {
-        AtomicBoolean isUserAlreadyInRoute = new AtomicBoolean(false);
-
-        if (passengerRoutes.isEmpty()) {
+    public void checkIfUserInAnyRoute(RouteEntity routeGettingIn, User currentUser, UserRouteCheckCallback callback) {
+        if (routeGettingIn.getPassengers().isEmpty()) {
             callback.onResult(false);
             return;
         }
 
-        for (RouteEntity route : passengerRoutes) {
-            Utils.getUsersByIds(route.getPassengers(), new Utils.UsersCallback() {
+        AtomicInteger pendingOperations = new AtomicInteger(routeGettingIn.getPassengers().size());
+        AtomicBoolean isUserAlreadyInRoute = new AtomicBoolean(false);
+
+            Utils.getUsersByIds(routeGettingIn.getPassengers(), new Utils.UsersCallback() {
                 @Override
                 public void onCallback(List<User> users) {
-                    // Check if the list of users contains the currentUser
+                    // Process each user list
                     for (User user : users) {
                         if (user.getId().equals(currentUser.getId())) {
                             isUserAlreadyInRoute.set(true);
+                            // If user found, no need to check further
                             break;
                         }
                     }
 
-                    callback.onResult(isUserAlreadyInRoute.get());
+                    // Check if this was the last operation
+                    if (pendingOperations.decrementAndGet() == 0) {
+                        // All operations completed, return the result
+                        callback.onResult(isUserAlreadyInRoute.get());
+                    }
                 }
             });
-        }
     }
+
 
 
 }
