@@ -21,4 +21,6 @@
     <string name="vehicle_color">Color</string>
     <string name="vehicle_license_plate">Matricula</string>
     <string name="submit">Guardar</string>
+    <string name="comment_hint">Escribe aqui tu comentario</string>
+    <string name="submit_rating">Enviar</string>
 </resources>

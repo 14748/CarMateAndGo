@@ -32,49 +32,59 @@ public class UserTripsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_trips);
 
-
         UserManager.init(getApplicationContext());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserTrips();
+    }
+
+    private void loadUserTrips() {
         User currentUser = UserManager.getCurrentUser();
         List<DriverTrips> routesUser = new ArrayList<>();
-         Utils.getUsers(new Utils.FirebaseCallback() {
+
+        Utils.getUsers(new Utils.FirebaseCallback() {
             @Override
             public void onCallback(List<User> userList) {
+                // Process users to find relevant trips
                 for (User user : userList) {
-                    if (user.getCreatedRoutes() != null) { // Check if user has routes
+                    if (user.getCreatedRoutes() != null) {
                         for (RouteEntity route : user.getCreatedRoutes()) {
-                            if (route.getPassengers() != null) { // Ensure passengers list is not null
-                                // Assuming `route.getPassengerIDs()` returns a List<String> of user IDs
-                                if (route.getPassengers() != null && !route.getPassengers().isEmpty()) {
-                                    Utils.getUsersByIds(route.getPassengers(), new Utils.UsersCallback() {
-                                        @Override
-                                        public void onCallback(List<User> passengers) {
-                                            // Now you have a list of User objects for the passengers
-                                            for (User passenger : passengers) {
-                                                if (passenger.getId() != null && passenger.getId().equals(currentUser.getId())) {
-                                                    // If any passenger's ID matches the current user's ID, add the route
-                                                    routesUser.add(new DriverTrips(user, route));
-                                                    break; // Stop checking other passengers in this route
-                                                }
+                            if (route.getPassengers() != null && !route.getPassengers().isEmpty()) {
+                                Utils.getUsersByIds(route.getPassengers(), new Utils.UsersCallback() {
+                                    @Override
+                                    public void onCallback(List<User> passengers) {
+                                        for (User passenger : passengers) {
+                                            if (passenger.getId() != null && passenger.getId().equals(currentUser.getId())) {
+                                                routesUser.add(new DriverTrips(user, route));
+                                                break;
                                             }
                                         }
-                                    });
-                                }
-
+                                        updateRecyclerView(routesUser);
+                                    }
+                                });
                             }
                         }
                     }
                 }
-
-
-                RecyclerView recyclerViewGroupedTrips = findViewById(R.id.recyclerViewGroupedTrips);
-                recyclerViewGroupedTrips.setLayoutManager(new LinearLayoutManager(UserTripsActivity.this));
-
-                // Preprocess routeEntities into List<DayTrips> as shown earlier
-                RecyclerUserTripsAdapter adapter = new RecyclerUserTripsAdapter(UserTripsActivity.this, routesUser);
-                recyclerViewGroupedTrips.setAdapter(adapter);
             }
         });
-
-
     }
+
+    private void updateRecyclerView(List<DriverTrips> routesUser) {
+        RecyclerView recyclerViewGroupedTrips = findViewById(R.id.recyclerViewGroupedTrips);
+        if (recyclerViewGroupedTrips.getAdapter() != null) {
+            RecyclerUserTripsAdapter adapter = (RecyclerUserTripsAdapter) recyclerViewGroupedTrips.getAdapter();
+            adapter.updateData(routesUser);
+        } else {
+            recyclerViewGroupedTrips.setLayoutManager(new LinearLayoutManager(this));
+            RecyclerUserTripsAdapter adapter = new RecyclerUserTripsAdapter(this, routesUser);
+            recyclerViewGroupedTrips.setAdapter(adapter);
+        }
+    }
+
+
+
 }

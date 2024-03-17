@@ -22,13 +22,14 @@ public class User implements Serializable {
     private List<RouteEntity> createdRoutes;
     private List<RouteEntity> passengerRoutes;
     private Drawable userIcon;
-    private List<Integer> ratings;
+    private List<Rating> ratings;
     private Vehicle vehicle;
 
     private float balance;
     public User(){
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
+        this.ratings = new ArrayList<>();
     }
 
     public User(String name, String lastName, Date birthDate, String email, String password) {
@@ -44,7 +45,7 @@ public class User implements Serializable {
         this.ratings = new ArrayList<>();
     }
 
-    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Drawable userIcon, List<Integer> ratings) {
+    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Drawable userIcon) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
@@ -56,7 +57,7 @@ public class User implements Serializable {
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
         this.userIcon = userIcon;
-        this.ratings = ratings;
+        this.ratings = new ArrayList<>();
     }
 
     /*
@@ -118,11 +119,11 @@ public class User implements Serializable {
         this.passengerRoutes = passengerRoutes;
     }
 
-    public List<Integer> getRatings() {
+    public List<Rating> getRatings() {
         return ratings;
     }
 
-    public void setRatings(List<Integer> ratings) {
+    public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
     }
 
@@ -147,6 +148,11 @@ public class User implements Serializable {
     public void addCreatedRoute(RouteEntity route) {
             this.createdRoutes.add(route);
     }
+
+    public void addRating(Rating rating) {
+        this.ratings.add(rating);
+    }
+
 
     public void addPassengerRoute(RouteEntity route) {
             this.passengerRoutes.add(route);
@@ -179,8 +185,8 @@ public class User implements Serializable {
         }
 
         float sum = 0;
-        for (Integer rating : ratings) {
-            sum += rating;
+        for (Rating rating : ratings) {
+            sum += rating.getValue();
         }
 
         return sum / ratings.size();

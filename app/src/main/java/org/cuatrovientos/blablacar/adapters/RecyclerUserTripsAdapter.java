@@ -1,6 +1,7 @@
 package org.cuatrovientos.blablacar.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.activities.RatingActivity;
+import org.cuatrovientos.blablacar.activities.UserTripsActivity;
 import org.cuatrovientos.blablacar.models.DriverTrips;
+import org.cuatrovientos.blablacar.models.Rating;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +54,13 @@ public class RecyclerUserTripsAdapter extends RecyclerView.Adapter<RecyclerUserT
         }
     }
 
+    public void updateData(List<DriverTrips> newDriverTripsList) {
+        groupedTripsByDate.clear();
+        groupDriverTripsByDate(newDriverTripsList);
+        notifyDataSetChanged();
+    }
+
+
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -66,9 +77,14 @@ public class RecyclerUserTripsAdapter extends RecyclerView.Adapter<RecyclerUserT
         // Format the date for display
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.dayTitle.setText(String.valueOf(dateFormat.format(date)));
-
-        // Pass the list of DriverTrips for this date to the RecyclerUserTripDayAdapter
-        RecyclerUserTripDayAdapter tripAdapter = new RecyclerUserTripDayAdapter(tripsForDate);
+        RecyclerUserTripDayAdapter tripAdapter = new RecyclerUserTripDayAdapter(context ,tripsForDate, new RecyclerUserTripDayAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DriverTrips trip) {
+                Intent rateIntent = new Intent(context, RatingActivity.class);
+                rateIntent.putExtra("DRIVERTRIPS_KEY", trip);
+                context.startActivity(rateIntent);
+            }
+        });
         holder.dayTripsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.dayTripsRecyclerView.setAdapter(tripAdapter);
     }

@@ -1,37 +1,46 @@
 package org.cuatrovientos.blablacar.adapters;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
+        import android.content.Context;
+        import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+        import android.widget.Button;
+        import android.widget.TextView;
 
         import androidx.annotation.NonNull;
         import androidx.recyclerview.widget.RecyclerView;
 
         import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.models.DriverTrips;
-import org.cuatrovientos.blablacar.models.RouteEntity;
+        import org.cuatrovientos.blablacar.models.DriverTrips;
+        import org.cuatrovientos.blablacar.models.Rating;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+        import java.text.SimpleDateFormat;
+        import java.util.Date;
+        import java.util.List;
+        import java.util.Locale;
 
 public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUserTripDayAdapter.TripViewHolder> {
     private List<DriverTrips> trips;
+    private Context context;
+    private OnItemClickListener listener;
 
-    public RecyclerUserTripDayAdapter(List<DriverTrips> trips) {
+    // Constructor
+    public RecyclerUserTripDayAdapter(Context context, List<DriverTrips> trips, OnItemClickListener listener) {
+        this.context = context;
         this.trips = trips;
+        this.listener = listener;
+    }
+
+    // Interface for click events
+    public interface OnItemClickListener {
+        void onItemClick(DriverTrips trip);
     }
 
     @NonNull
     @Override
     public TripViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_trips, parent, false);
-        return new TripViewHolder(view);
+        return new TripViewHolder(view, listener, trips);
     }
 
     @Override
@@ -42,16 +51,17 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
 
     @Override
     public int getItemCount() {
-        return trips.size();
+        return trips != null ? trips.size() : 0;
     }
 
-    static class TripViewHolder extends RecyclerView.ViewHolder {
+    // ViewHolder class
+    public static class TripViewHolder extends RecyclerView.ViewHolder {
         TextView startTime, duration, arrivalTime, originCity, destinationCity, price, driverName, driverRating;
-        Button rate_trip_button, cancel_trip_button;
-        // Initialize other views as needed, such as driverImage, cancelTripButton, rateTripButton
+        Button rateTripButton, cancelTripButton;
 
-        TripViewHolder(View itemView) {
+        public TripViewHolder(View itemView, final OnItemClickListener listener, final List<DriverTrips> trips) {
             super(itemView);
+            // Initialize your views here
             startTime = itemView.findViewById(R.id.start_time);
             duration = itemView.findViewById(R.id.duration);
             arrivalTime = itemView.findViewById(R.id.arrival_time);
@@ -60,9 +70,24 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
             price = itemView.findViewById(R.id.price);
             driverName = itemView.findViewById(R.id.driver_name);
             driverRating = itemView.findViewById(R.id.driver_rating);
-            rate_trip_button = itemView.findViewById(R.id.rate_trip_button);
-            cancel_trip_button = itemView.findViewById(R.id.cancel_trip_button);
+            rateTripButton = itemView.findViewById(R.id.rate_trip_button);
+            cancelTripButton = itemView.findViewById(R.id.cancel_trip_button);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(trips.get(position));
+                }
+            });
+
+            rateTripButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(trips.get(position));
+                }
+            });
         }
+
         public void assignData(DriverTrips route) {
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
@@ -108,12 +133,19 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
             driverName.setText(route.getUser().getName());
             driverRating.setText(String.valueOf(route.getUser().getRating()));
 
+            boolean alreadyRated = false;
+            for (Rating rating : route.getUser().getRatings()) {
+                if (rating.getRoute().getId().equals(route.getRoute().getId()) && rating.getUserId().equals(route.getUser().getId())){
+                    alreadyRated = true;
+                }
+            }
+
             if (route.getRoute().getDate().after(new Date())) {
-                cancel_trip_button.setVisibility(View.VISIBLE);
-                rate_trip_button.setVisibility(View.GONE);
-            } else {
-                rate_trip_button.setVisibility(View.VISIBLE);
-                cancel_trip_button.setVisibility(View.GONE);
+                cancelTripButton.setVisibility(View.VISIBLE);
+                rateTripButton.setVisibility(View.GONE);
+            } else if (route.getRoute().getDate().before(new Date()) && !alreadyRated) {
+                rateTripButton.setVisibility(View.VISIBLE);
+                cancelTripButton.setVisibility(View.GONE);
             }
 
         }
