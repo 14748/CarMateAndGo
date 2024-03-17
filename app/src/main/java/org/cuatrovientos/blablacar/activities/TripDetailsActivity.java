@@ -208,31 +208,42 @@ public class TripDetailsActivity extends AppCompatActivity {
                 }
 
                 checkIfUserInAnyRoute(driverTrips.getRoute(), currentUser, isUserInRoute -> {
+                    String type  = "";
+                    if (driverTrips.getRoute().getDestination().equals(CUATROVIENTOS)){
+                        type = "0";
+                    }else if (driverTrips.getRoute().getOrigin().equals(CUATROVIENTOS)){
+                        type = "1";
+                    }else{
+                        type = "2";
+                    }
+
                     if (!isUserInRoute) {
-                        boolean hasTripToDestinationToday = false;
-                        boolean hasTripToOriginToday = false;
-                        Calendar today = Calendar.getInstance();
+                        boolean hasTripToCuatrovientosToday = false;
+                        boolean hasTripFromCuatrovientosToday = false;
+
+                        // Assuming DriverTrips.getRoute() returns a RouteEntity and CUATROVIENTOS is correctly defined
                         for (RouteEntity route : currentUser.getPassengerRoutes()) {
-                            Calendar routeDate = Calendar.getInstance();
-                            routeDate.setTime(route.getDate());
 
-                            boolean sameDay = today.get(Calendar.YEAR) == routeDate.get(Calendar.YEAR) &&
-                                    today.get(Calendar.DAY_OF_YEAR) == routeDate.get(Calendar.DAY_OF_YEAR);
+                            if (isSameDay(route.getDate(), driverTrips.getDate())){
+                                boolean toCuatrovientos = route.getDestination().equals(CUATROVIENTOS);
+                                boolean fromCuatrovientos = route.getOrigin().equals(CUATROVIENTOS);
 
-                            if (sameDay && route.getDestination().equals(CUATROVIENTOS)) {
-                                hasTripToDestinationToday = true;
-                                break;
-                            }
+                                // If there's already a trip to Cuatrovientos today, no need to check further
+                                if (toCuatrovientos && !hasTripToCuatrovientosToday) {
+                                    hasTripToCuatrovientosToday = true;
+                                } else if (fromCuatrovientos && !hasTripFromCuatrovientosToday) {
+                                    hasTripFromCuatrovientosToday = true;
+                                }
 
-                            if (sameDay && route.getOrigin().equals(CUATROVIENTOS))
-                            {
-                                hasTripToOriginToday = true;
-                                break;
+                                // If both conditions are met, no need to continue checking other routes
+                                if (hasTripToCuatrovientosToday && hasTripFromCuatrovientosToday) {
+                                    break;
+                                }
                             }
                         }
 
 
-                        if (!hasTripToDestinationToday && !hasTripToOriginToday) {
+                        if ((!hasTripFromCuatrovientosToday && type.equals("1")) || (!hasTripToCuatrovientosToday && type.equals("0"))) {
                             for (RouteEntity route : driverTrips.getUser().getCreatedRoutes()) {
                                 if (route.getId().equals(driverTrips.getRoute().getId())) { // Use .equals for String comparison
                                     List<String> userIDs = route.getPassengers(); // Assuming you're storing user IDs
@@ -298,6 +309,16 @@ public class TripDetailsActivity extends AppCompatActivity {
                     }
                 }
             });
+    }
+
+    public boolean isSameDay(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+                cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
     }
 
 
