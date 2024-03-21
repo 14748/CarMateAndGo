@@ -1,8 +1,11 @@
 package org.cuatrovientos.blablacar.models;
 
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class User {
 
@@ -11,13 +14,13 @@ public class User {
     private String lastName;
     private Date birthDate;
     private String email;
+    private int telephone;
     private String password;
-    private Rute rutes;
+    private List<RouteEntity> routes;
     private Drawable userIcon;
 
-    public User(){} //por si se necesita
+    public User(){this.routes = new ArrayList<>();} //por si se necesita
 
-    // Constructor sin establecer imagen (y obviamente sin rutas)
     public User(int id, String name, String lastName, Date birthDate, String email, String password) {
         this.id = id;
         this.name = name;
@@ -25,6 +28,19 @@ public class User {
         this.birthDate = birthDate;
         this.email = email;
         this.password = password;
+        this.routes = new ArrayList<>();
+    }
+
+    public User(int id, String name, String lastName, Date birthDate, String email, int telephone, String password, List<RouteEntity> routes, Drawable userIcon) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.telephone = telephone;
+        this.password = password;
+        this.routes = routes;
+        this.userIcon = userIcon;
     }
 
     /*
@@ -54,13 +70,15 @@ public class User {
         return password;
     }
 
-    public Rute getRutes() {
-        return rutes;
+    public List<RouteEntity> getRoutes() {
+        return routes;
     }
 
     public Drawable getUserIcon() {
         return userIcon;
     }
+
+    public int getTelephone(){ return telephone;}
 
     /*
     * SETTERS (posible necesidad futura de tener que borrar alguno por seguridad)
@@ -90,11 +108,12 @@ public class User {
         this.password = password;
     }
 
-    public void setRutes(Rute rutes) {
-        this.rutes = rutes;
+    public void addRoute(RouteEntity route) {
+        this.routes.add(route);
     }
 
     public void setUserIcon(Drawable userIcon) {
         this.userIcon = userIcon;
     }
+    public void setTelephone(int telephone) { this.telephone = telephone; }
 }

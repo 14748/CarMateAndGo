@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado presionado -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#D0D0D0"/> <!-- Cambia el color cuando está presionado -->
+            <corners android:radius="25dp"/> <!-- Aumenta el radio de las esquinas -->
+            <stroke android:color="#92808080" android:width="2dp" /> <!-- Borde -->
+            <padding android:left="12dp" android:top="12dp" android:right="12dp" android:bottom="12dp" /> <!-- Aumenta el tamaño cuando está presionado -->
+            <corners android:radius="25dp"/>
+            <solid android:color="#EFEFEF"/>
+            <shadow android:color="#808080" android:radius="10dp"/> <!-- Añade sombra -->
+        </shape>
+    </item>
+
+    <!-- Estado normal -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#EFEFEF"/>
+            <corners android:radius="25dp"/>
+            <stroke android:color="#92808080" android:width="2dp" /> <!-- Borde -->
+        </shape>
+    </item>
+</selector>

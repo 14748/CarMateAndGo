@@ -1,0 +1,25 @@
+<!-- res/values/styles.xml -->
+<resources>
+    <style name="ButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/button_normal</item>
+    </style>
+    <style name="DatePickerTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">#38bdf8</item>
+    </style>
+
+    <style name="TimePickerTheme"  parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">#38bdf8</item>
+    </style>
+
+
+</resources>
+
+
+

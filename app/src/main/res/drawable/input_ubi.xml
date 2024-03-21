@@ -1,0 +1,25 @@
+<!-- res/drawable/edittext_custom_background.xml -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fondo transparente -->
+    <item android:drawable="@android:color/transparent" />
+
+    <!-- Línea inferior -->
+    <item
+        android:padding="2dp"
+        android:bottom="1dp"
+        android:left="-3dp"
+        android:right="-3dp"
+        android:top="-3dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000" />
+            <stroke
+                android:width="1dp"
+                android:color="#000000" />
+        </shape>
+    </item>
+
+
+
+</layer-list>

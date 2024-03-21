@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Estilo del RecyclerView -->
+    <style android:name="RecyclerViewStyle">
+        <!-- Estilo de espaciado interno y externo -->
+        <item android:name="android:paddingTop">16dp</item>
+        <item android:name="android:paddingBottom">16dp</item>
+        <item android:name="android:paddingStart">8dp</item>
+        <item android:name="android:paddingEnd">8dp</item>
+
+        <!-- Fondo del RecyclerView -->
+        <item android:name="android:background">@android:color/white</item>
+
+        <!-- Configuración de la orientación del RecyclerView (vertical u horizontal) -->
+        <item android:name="android:orientation">vertical</item>
+    </style>
+
+    <!-- Estilo del elemento individual en el RecyclerView (puedes personalizar esto según tus necesidades) -->
+    <style android:name="RecyclerViewItemStyle">
+        <!-- Añade estilos adicionales según tus necesidades -->
+    </style>
+
+</resources>

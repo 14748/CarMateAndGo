@@ -2,4 +2,26 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="green">#4B815D</color>
+    <color name="colorPrimary">#3490DC</color>
+    <color name="colorPrimaryDark">#2779BD</color>
+    <color name="colorAccent">#38B2AC</color>
+    <color name="colorButtonPressed">#E0E0E0</color>
+    <color name="colorButtonFocused">#F5F5F5</color>
+    <color name="colorButtonDefault">#FFFFFF</color>
+    <color name="colorButtonBorder">#BDBDBD</color>
+    <color name="colorButtonBorderFocused">#757575</color>
+    <color name="colorButtonBorderPressed">#757575</color>
+    <color name="colorButtonBorderDisabled">#BDBDBD</color>
+    <color name="colorButtonDisabled">#BDBDBD</color>
+    <color name="colorButtonDisabledText">#FFFFFF</color>
+    <color name="colorButtonFocusedText">#000000</color>
+    <color name="colorButtonPressedText">#000000</color>
+    <color name="colorButtonDefaultText">#000000</color>
+    <color name="gray500">#6b7280</color>
+    <color name="gray600">#4b5563</color>
+    <color name="gray700">#374151</color>
+    <color name="gray800">#1f2937</color>
+    <color name="gray900">#111827</color>
+
 </resources>
