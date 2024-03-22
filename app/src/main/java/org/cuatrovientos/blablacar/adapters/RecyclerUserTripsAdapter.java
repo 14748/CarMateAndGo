@@ -1,5 +1,6 @@
 package org.cuatrovientos.blablacar.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,10 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.RatingActivity;
 import org.cuatrovientos.blablacar.activities.UserTripsActivity;
 import org.cuatrovientos.blablacar.models.DriverTrips;
 import org.cuatrovientos.blablacar.models.Rating;
+import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,8 +34,11 @@ public class RecyclerUserTripsAdapter extends RecyclerView.Adapter<RecyclerUserT
     private Context context;
     private Map<Date, List<DriverTrips>> groupedTripsByDate = new LinkedHashMap<>();
 
+    private List<DriverTrips> allDriverTrips;
+
     public RecyclerUserTripsAdapter(Context context, List<DriverTrips> driverTripsList) {
         this.context = context;
+        this.allDriverTrips = driverTripsList;
         groupDriverTripsByDate(driverTripsList);
     }
 
@@ -77,12 +84,39 @@ public class RecyclerUserTripsAdapter extends RecyclerView.Adapter<RecyclerUserT
         // Format the date for display
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.dayTitle.setText(String.valueOf(dateFormat.format(date)));
-        RecyclerUserTripDayAdapter tripAdapter = new RecyclerUserTripDayAdapter(context ,tripsForDate, new RecyclerUserTripDayAdapter.OnItemClickListener() {
+        RecyclerUserTripDayAdapter tripAdapter = new RecyclerUserTripDayAdapter(context, tripsForDate, new RecyclerUserTripDayAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(DriverTrips trip) {
+            public void onRateClick(DriverTrips trip) {
                 Intent rateIntent = new Intent(context, RatingActivity.class);
                 rateIntent.putExtra("DRIVERTRIPS_KEY", trip);
                 context.startActivity(rateIntent);
+            }
+
+            @Override
+            public void onCancelClick(DriverTrips trip) {
+                UserManager.init(context.getApplicationContext());
+                User currentUser = UserManager.getCurrentUser();
+
+                List<String> userIDs = trip.getRoute().getPassengers();
+                if (userIDs == null) {
+                    userIDs = new ArrayList<>();
+                }
+                userIDs.remove(currentUser.getId());
+
+                User user = trip.getUser();
+                user.getCreatedRoutes().get(trip.getUser().getCreatedRoutes().indexOf(trip.getRoute())).setPassengers(userIDs);
+
+                float newBalance = currentUser.getBalance() + trip.getRoute().getPrice();
+                currentUser.setBalance(newBalance);
+
+                currentUser.removePassengerRoute(trip.getRoute().getId());
+
+                Utils.pushUser(currentUser);
+                Utils.pushUser(user);
+                UserManager.setCurrentUser(currentUser);
+
+                allDriverTrips.remove(trip);
+                updateData(allDriverTrips);
             }
         });
         holder.dayTripsRecyclerView.setLayoutManager(new LinearLayoutManager(context));

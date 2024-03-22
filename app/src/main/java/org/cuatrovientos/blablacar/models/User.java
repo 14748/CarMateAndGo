@@ -158,6 +158,16 @@ public class User implements Serializable {
             this.passengerRoutes.add(route);
     }
 
+    public void removePassengerRoute(String routeId) {
+        for (RouteEntity route:
+             this.passengerRoutes) {
+            if (route.getId().equals(routeId)){
+                this.passengerRoutes.remove(route);
+            }
+        }
+    }
+
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

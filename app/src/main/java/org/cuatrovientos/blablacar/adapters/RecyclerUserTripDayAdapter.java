@@ -33,7 +33,8 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
 
     // Interface for click events
     public interface OnItemClickListener {
-        void onItemClick(DriverTrips trip);
+        void onRateClick(DriverTrips trip);
+        void onCancelClick(DriverTrips trip);
     }
 
     @NonNull
@@ -73,19 +74,20 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
             rateTripButton = itemView.findViewById(R.id.rate_trip_button);
             cancelTripButton = itemView.findViewById(R.id.cancel_trip_button);
 
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(trips.get(position));
-                }
-            });
-
             rateTripButton.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(trips.get(position));
+                    listener.onRateClick(trips.get(position));
                 }
             });
+
+            cancelTripButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onCancelClick(trips.get(position));
+                }
+            });
+
         }
 
         public void assignData(DriverTrips route) {
@@ -149,6 +151,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
             }
 
         }
+
     }
 }
 
