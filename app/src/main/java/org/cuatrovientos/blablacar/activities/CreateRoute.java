@@ -133,10 +133,6 @@ public class CreateRoute extends AppCompatActivity {
             destination.setText(originText);
         });
 
-
-
-
-
         date.setOnClickListener(v -> {
             mostrarDatePicker();
         });
@@ -148,16 +144,9 @@ public class CreateRoute extends AppCompatActivity {
 
         });
 
-        btnPublish.setOnClickListener(view -> {
-            Intent publishIntent = new Intent(this, CreateRoute.class);
-            startActivity(publishIntent);
-        });
-
         btnHistory.setOnClickListener(view -> {
-            /*
-            Intent historyIntent = new Intent(this, HistoryActivity.class);
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
             startActivity(historyIntent);
-             */
         });
 
         btnMessages.setOnClickListener(view -> {
@@ -193,7 +182,7 @@ public class CreateRoute extends AppCompatActivity {
                 intent.putExtra("originText", destination.getText().toString());
                 intent.putExtra("destinationText", origin.getText().toString());
             }
-            setResult(RESULT_OK, intent);
+            startActivity(intent);
             finish();
         });
 

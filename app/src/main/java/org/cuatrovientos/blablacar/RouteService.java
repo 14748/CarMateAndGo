@@ -1,6 +1,10 @@
 package org.cuatrovientos.blablacar;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.activities.MapHelper;
+import org.cuatrovientos.blablacar.activities.SearchRoutes;
 import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
@@ -46,7 +51,7 @@ public class RouteService {
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, LinearLayout linearLayout, String originText, String destinationText) {
+    public void routeCreation(Context context, User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, LinearLayout linearLayout, String originText, String destinationText) {
         createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
@@ -75,6 +80,8 @@ public class RouteService {
                                     user.addCreatedRoute(r);
                                     Utils.pushUser(user);
                                     linearLayout.setVisibility(View.GONE);
+                                    Intent intent = new Intent(context, SearchRoutes.class);
+                                    startActivity(context, intent, null);
                                 }
                             }
                     ));

@@ -36,8 +36,8 @@ public class VehicleSetterActivity extends AppCompatActivity {
                 if (validateFields()) {
                     Vehicle vehicle = createVehicleFromInput();
                     currentUser.setVehicle(vehicle);
-                    UserManager.setCurrentUser(currentUser);
                     Utils.pushUser(currentUser);
+                    UserManager.setCurrentUser(currentUser);
 
                     Intent createRoute = new Intent(this, CreateRoute.class);
                     startActivity(createRoute);

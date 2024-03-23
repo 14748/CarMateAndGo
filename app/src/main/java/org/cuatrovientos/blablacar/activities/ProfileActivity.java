@@ -19,6 +19,7 @@ import org.cuatrovientos.blablacar.models.User;
 public class ProfileActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private ImageButton btnPublish;
+    private ImageButton btnHistory;
     private ImageView btnPagos;
     private Button btnEditPerfil;
     private TextView nombre;
@@ -43,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnPublish = findViewById(R.id.btnPublish);
         btnEditPerfil = findViewById(R.id.btnEditPerfil);
         btnPagos = findViewById(R.id.imagePagos);
+        btnHistory = findViewById(R.id.btnHistory);
 
         btnPagos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,15 +56,20 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         btnSearch.setOnClickListener(view -> {
-            /*
-             * TODO: redirigir a la pantalla de buscar
-             */
+
+            Intent searchIntent = new Intent(this, SearchRoutes.class);
+            startActivity(searchIntent);
+
         });
 
         btnPublish.setOnClickListener(view -> {
             Intent publishIntent = new Intent(this, CreateRoute.class);
             startActivity(publishIntent);
-            finish();
+        });
+
+        btnHistory.setOnClickListener(view -> {
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
+            startActivity(historyIntent);
         });
 
         btnEditPerfil.setOnClickListener(view -> {

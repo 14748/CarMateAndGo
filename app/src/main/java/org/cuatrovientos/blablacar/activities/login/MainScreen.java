@@ -9,6 +9,7 @@ import android.os.Bundle;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
+import org.cuatrovientos.blablacar.activities.SearchRoutes;
 import org.cuatrovientos.blablacar.activities.register.RegisterEmail;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
@@ -41,7 +42,7 @@ public class MainScreen extends AppCompatActivity {
                     UserManager.setCurrentUser(user);
                 }
             });
-            Intent intent = new Intent(MainScreen.this, MainActivity.class);
+            Intent intent = new Intent(MainScreen.this, SearchRoutes.class);
             startActivity(intent);
             finish();
         }

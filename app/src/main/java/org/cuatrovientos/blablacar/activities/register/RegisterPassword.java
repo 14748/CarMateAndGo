@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
+import org.cuatrovientos.blablacar.activities.SearchRoutes;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
@@ -93,7 +94,7 @@ public class RegisterPassword extends AppCompatActivity {
                         public void onCallback(List<User> userList) {
                             User keepUser = new User(keepNombre, keepApellidos, date, keepEmail, userPassword);
                             Utils.pushUser(keepUser);
-                            Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
+                            Intent intent = new Intent(RegisterPassword.this, SearchRoutes.class);
                             UserManager.init(getApplicationContext());
                             UserManager.setCurrentUser(keepUser);
                             startActivity(intent);

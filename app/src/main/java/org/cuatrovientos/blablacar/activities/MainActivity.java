@@ -90,8 +90,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView recyclerView;
 
     private LinearLayout linearLayout;
-    private ActivityResultLauncher<Intent> createRouteLauncher;
-
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
@@ -106,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initCreateRouteLauncher();
         setContentView(R.layout.activity_main);
         linearLayout = findViewById(R.id.linearLayout);
         recyclerView = findViewById(R.id.routesRecyclerView);
@@ -128,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         btnPublish.setOnClickListener(view -> {
             Intent publishIntent = new Intent(this, CreateRoute.class);
-            createRouteLauncher.launch(publishIntent);
+            startActivity(publishIntent);
         });
 
 
@@ -171,33 +168,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapHelper = new MapHelper(map);
         routeService = new RouteService(MainActivity.this, mapHelper);
-    }
 
-    private void initCreateRouteLauncher() {
-        createRouteLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        map.clear();
-                        Intent data = result.getData();
-
-                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
-                        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
-                        String dateStr = data.getStringExtra("date");
-                        String originText = data.getStringExtra("originText");
-                        String destinationText = data.getStringExtra("destinationText");
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                        Date date = new Date();
-                        try {
-                            date = sdf.parse(dateStr);
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                        Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
-                        CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
-                        CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-                        routeService.routeCreation(localUser, originLocation, destinationLocation, date, recyclerView, linearLayout, originText, destinationText);
-                    }
-                });
+        if (getIntent() != null) {
+            PlaceOpenStreetMap origin = (PlaceOpenStreetMap) getIntent().getSerializableExtra("origin");
+            PlaceOpenStreetMap destination = (PlaceOpenStreetMap) getIntent().getSerializableExtra("destination");
+            String dateStr = getIntent().getStringExtra("date");
+            String originText = getIntent().getStringExtra("originText");
+            String destinationText = getIntent().getStringExtra("destinationText");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = new Date();
+            try {
+                date = sdf.parse(dateStr);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
+            CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+            CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
+            routeService.routeCreation(this, localUser, originLocation, destinationLocation, date, recyclerView, linearLayout, originText, destinationText);
+        }
     }
 }
