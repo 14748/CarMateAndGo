@@ -174,46 +174,69 @@
         android:background="@drawable/grey_square"
         android:layout_below="@id/text_price_per_passenger"/>
 
-        <!-- Profile Image -->
-        <ImageView
-            android:id="@+id/image_profile"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/separator_after_price"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="18dp"
-        android:src="@drawable/ic_profile"/>
+
 
         <!-- Driver Name and Rating Container -->
         <LinearLayout
             android:id="@+id/container_name_rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/image_profile"
-            android:layout_alignTop="@id/image_profile"
+            android:layout_below="@id/separator_after_price"
             android:orientation="vertical"
             android:layout_alignParentLeft="true">
 
-            <!-- Driver Name -->
-            <TextView
-                android:id="@+id/text_name"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jorge"
-                android:layout_marginStart="18dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="left" />
+                android:layout_below="@+id/separator_after_price"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:id="@+id/container_driver_info">
 
-            <!-- Rating -->
-            <TextView
-                android:id="@+id/text_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:text="⭐ 5/5 - 7 opiniones"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:gravity="left" />
+                <!-- Profile Image -->
+                <ImageView
+                    android:id="@+id/image_profile"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="25dp"
+                    android:src="@drawable/ic_profile"/>
+
+                <!-- Driver Name -->
+                <TextView
+                    android:id="@+id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@id/image_profile"
+                    android:text="Jorge"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <!-- Rating -->
+                <TextView
+                    android:id="@+id/text_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_name"
+                    android:layout_alignStart="@id/text_name"
+                    android:text="⭐ 5/5 - 7 opiniones"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <!-- Arrow Image -->
+                <ImageView
+                    android:id="@+id/image_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow_backup_2_svgrepo_com" /> <!-- Replace with your actual arrow drawable resource -->
+                <!-- Additional details (e.g., "⭐ Nunca cancela un viaje") -->
+                <!-- Place other TextViews or Views related to the driver info here -->
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/text_cancel"

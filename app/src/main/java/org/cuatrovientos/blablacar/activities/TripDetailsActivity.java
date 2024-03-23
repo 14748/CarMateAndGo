@@ -32,6 +32,7 @@ import org.cuatrovientos.blablacar.models.RouteEntity;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,7 +65,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private LinearLayout containerNameRating;
     private TextView textName, textRating, textCancel, textQuestion, textSmoke, textEating, textCar, textCarColor;
     private View separatorBeforeQuestion, separatorAfterQuestion, separatorBeforePassengers, separatorAfterPassengers;
-
+    private RelativeLayout container_driver_info;
     // RecyclerView for passengers
     private RecyclerView recyclerViewTrayectos;
 
@@ -117,6 +118,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         textCarColor = findViewById(R.id.text_carColor);
         separatorBeforePassengers = findViewById(R.id.separator_before_passengers);
         separatorAfterPassengers = findViewById(R.id.separator_after_passengers);
+        container_driver_info = findViewById(R.id.container_driver_info);
 
         // Initialize RecyclerView for passengers
         recyclerViewTrayectos = findViewById(R.id.recyclerViewTrayectos);
@@ -160,6 +162,15 @@ public class TripDetailsActivity extends AppCompatActivity {
             arrivalTime.setText("Error");
         }
 
+        container_driver_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TripDetailsActivity.this, ShowRatingsActivity.class);
+                intent.putExtra("ratingsList", (Serializable) driverTrips.getUser().getRatings());
+                intent.putExtra("user", (Serializable) driverTrips.getUser());
+                startActivity(intent);
+            }
+        });
 
         originCity.setText(driverTrips.getRoute().getOriginText());
         destinationCity.setText(driverTrips.getRoute().getDestinationText());
