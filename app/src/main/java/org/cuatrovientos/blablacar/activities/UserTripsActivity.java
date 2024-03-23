@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
@@ -26,13 +28,31 @@ import java.util.Map;
 import okhttp3.internal.Util;
 
 public class UserTripsActivity extends AppCompatActivity {
-
+    Button buttonRutasPasajero;
+    Button buttonRutasConductor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_trips);
 
+        buttonRutasPasajero = findViewById(R.id.buttonRutasPasajero);
+        buttonRutasConductor = findViewById(R.id.buttonRutasConductor);
+
         UserManager.init(getApplicationContext());
+
+        buttonRutasPasajero.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadUserTrips();
+            }
+        });
+
+        buttonRutasConductor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadUserTripsDriver();
+            }
+        });
     }
 
     @Override
@@ -71,6 +91,19 @@ public class UserTripsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void loadUserTripsDriver() {
+        User currentUser = UserManager.getCurrentUser();
+        List<DriverTrips> routesUser = new ArrayList<>();
+
+
+        for (RouteEntity route:
+                currentUser.getCreatedRoutes()) {
+            routesUser.add(new DriverTrips(null, route));
+        }
+
+        updateRecyclerView(routesUser);
     }
 
     private void updateRecyclerView(List<DriverTrips> routesUser) {

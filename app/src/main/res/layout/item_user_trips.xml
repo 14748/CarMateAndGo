@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:background="@drawable/rounded_background"
@@ -71,27 +71,34 @@ android:layout_marginBottom="8dp">
     android:src="@drawable/dot_drawable" />
 
 <!-- Origin City -->
-<TextView
-    android:id="@+id/origin_city"
-    android:layout_toEndOf="@id/timeline"
-    android:layout_alignTop="@id/start_time"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Pamplona"
-    android:textSize="18sp"
-    android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/origin_city"
+        android:layout_toEndOf="@id/timeline"
+        android:layout_alignTop="@id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/price"
+        android:text="Pamplona"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginEnd="8dp"/>
 
 <!-- Destination City -->
-<TextView
-    android:id="@+id/destination_city"
-    android:layout_toEndOf="@id/timeline"
-    android:layout_alignTop="@id/arrival_time"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Zaragoza"
-    android:textSize="18sp"
-    android:textStyle="bold"/>
-
+    <TextView
+        android:id="@+id/destination_city"
+        android:layout_toEndOf="@id/timeline"
+        android:layout_alignTop="@id/arrival_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/price"
+        android:text="Zaragoza"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginEnd="8dp"/>
 <!-- Price -->
 <TextView
     android:id="@+id/price"
@@ -103,76 +110,107 @@ android:layout_marginBottom="8dp">
     android:textStyle="bold"
     android:textColor="@color/colorAccent"/>
 
-<!-- Driver Image -->
-<ImageView
-    android:id="@+id/driver_image"
-    android:layout_below="@id/arrival_time"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:src="@drawable/ic_profile"
-    android:layout_marginTop="16dp"
-    android:layout_alignParentStart="true"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTrayectos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrival_time"
+        tools:listitem="@layout/item_passengers"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
 
-<!-- Driver Name -->
-<TextView
-    android:id="@+id/driver_name"
-    android:layout_toEndOf="@id/driver_image"
-    android:layout_alignTop="@id/driver_image"
-    android:layout_marginStart="16dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Angel"
-    android:textSize="16sp"
-    android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/noPassengersNotice"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrival_time"
+        android:text="Nadie se ha apuntado a tu viaje"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-<!-- Super Driver Star -->
-<ImageView
-    android:id="@+id/super_driver_star"
-    android:layout_below="@id/driver_name"
-    android:layout_toEndOf="@id/driver_image"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="4dp"
-    android:layout_width="24dp"
-    android:layout_height="24dp"
-    android:src="@drawable/star_svgrepo_com" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrival_time"
+        android:id="@+id/layout_driver_rating">
 
-<!-- Rating -->
-<TextView
-    android:id="@+id/driver_rating"
-    android:layout_toEndOf="@id/super_driver_star"
-    android:layout_alignTop="@id/super_driver_star"
-    android:layout_marginTop="3dp"
-    android:layout_marginStart="0dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="4.9"
-    android:textSize="14sp"/>
+        <!-- Driver Image -->
+        <ImageView
+            android:id="@+id/driver_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_profile"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentStart="true"/>
 
-<Button
-    android:id="@+id/cancel_trip_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Cancel Trip"
-    android:textColor="#FFFFFF"
-    android:background="#D32F2F"
-    android:visibility="gone"
-    android:layout_alignTop="@id/driver_name"
-    android:layout_marginStart="8dp"
-    android:layout_alignParentEnd="true"
-    android:layout_marginEnd="4dp" />
+        <!-- Driver Name -->
+        <TextView
+            android:id="@+id/driver_name"
+            android:layout_toEndOf="@id/driver_image"
+            android:layout_alignTop="@id/driver_image"
+            android:layout_marginStart="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Angel"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
-<Button
-    android:id="@+id/rate_trip_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Rate Trip"
-    android:visibility="gone"
-    android:layout_alignTop="@id/driver_name"
-    android:layout_alignParentEnd="true"
-    android:textColor="#FFFFFF"
-    android:background="@color/green"
+        <!-- Super Driver Star -->
+        <ImageView
+            android:id="@+id/super_driver_star"
+            android:layout_below="@id/driver_name"
+            android:layout_toEndOf="@id/driver_image"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/star_svgrepo_com" />
 
-    android:layout_marginStart="8dp" />
+        <!-- Rating -->
+        <TextView
+            android:id="@+id/driver_rating"
+            android:layout_toEndOf="@id/super_driver_star"
+            android:layout_alignTop="@id/super_driver_star"
+            android:layout_marginTop="1dp"
+            android:layout_marginStart="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.9"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/cancel_trip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Trip"
+            android:layout_alignTop="@id/driver_image"
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFF"
+            android:background="@color/green"
+            android:visibility="gone"
+            android:layout_marginStart="8dp" />
+
+        <Button
+            android:id="@+id/rate_trip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate Trip"
+            android:visibility="gone"
+            android:layout_alignTop="@id/driver_image"
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFF"
+            android:background="@color/green"
+
+            android:layout_marginStart="8dp" />
+
+    </RelativeLayout>
+
+
+
+
 
 
 

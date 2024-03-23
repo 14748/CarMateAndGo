@@ -1,18 +1,24 @@
 package org.cuatrovientos.blablacar.adapters;
 
         import android.content.Context;
+        import android.graphics.Color;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.Button;
+        import android.widget.ImageView;
+        import android.widget.RelativeLayout;
         import android.widget.TextView;
 
         import androidx.annotation.NonNull;
+        import androidx.recyclerview.widget.LinearLayoutManager;
         import androidx.recyclerview.widget.RecyclerView;
 
         import org.cuatrovientos.blablacar.R;
         import org.cuatrovientos.blablacar.models.DriverTrips;
         import org.cuatrovientos.blablacar.models.Rating;
+        import org.cuatrovientos.blablacar.models.User;
+        import org.cuatrovientos.blablacar.models.Utils;
 
         import java.text.SimpleDateFormat;
         import java.util.Date;
@@ -47,7 +53,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
     @Override
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
         DriverTrips trip = trips.get(position);
-        holder.assignData(trip);
+        holder.assignData(trip, context);
     }
 
     @Override
@@ -57,8 +63,11 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
 
     // ViewHolder class
     public static class TripViewHolder extends RecyclerView.ViewHolder {
-        TextView startTime, duration, arrivalTime, originCity, destinationCity, price, driverName, driverRating;
+        TextView startTime, duration, arrivalTime, originCity, destinationCity, price, driverName, driverRating, noPassengersNotice;
         Button rateTripButton, cancelTripButton;
+        ImageView driverImage;
+        RelativeLayout driverRatingLayout;
+        RecyclerView recyclerViewTrayectos;
 
         public TripViewHolder(View itemView, final OnItemClickListener listener, final List<DriverTrips> trips) {
             super(itemView);
@@ -69,10 +78,14 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
             originCity = itemView.findViewById(R.id.origin_city);
             destinationCity = itemView.findViewById(R.id.destination_city);
             price = itemView.findViewById(R.id.price);
+            driverRatingLayout = itemView.findViewById(R.id.layout_driver_rating);
+            driverImage = itemView.findViewById(R.id.driver_image);
             driverName = itemView.findViewById(R.id.driver_name);
             driverRating = itemView.findViewById(R.id.driver_rating);
             rateTripButton = itemView.findViewById(R.id.rate_trip_button);
             cancelTripButton = itemView.findViewById(R.id.cancel_trip_button);
+            recyclerViewTrayectos = itemView.findViewById(R.id.recyclerViewTrayectos);
+            noPassengersNotice = itemView.findViewById(R.id.noPassengersNotice);
 
             rateTripButton.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -90,7 +103,64 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
 
         }
 
-        public void assignData(DriverTrips route) {
+        public void assignData(DriverTrips route, Context context) {
+            if (route.getUser() != null){
+                recyclerViewTrayectos.setVisibility(View.GONE);
+                noPassengersNotice.setVisibility(View.GONE);
+                driverRatingLayout.setVisibility(View.VISIBLE);
+
+
+                price.setText(String.valueOf("-" +route.getRoute().getPrice()) + "€");
+                price.setTextColor(Color.RED);
+
+                driverName.setText(route.getUser().getName());
+                driverRating.setText(String.valueOf(route.getUser().getRating()));
+
+                boolean alreadyRated = false;
+                for (Rating rating : route.getUser().getRatings()) {
+                    if (rating.getRoute().getId().equals(route.getRoute().getId()) && rating.getUserId().equals(route.getUser().getId())){
+                        alreadyRated = true;
+                    }
+                }
+
+                if (route.getRoute().getDate().after(new Date())) {
+                    cancelTripButton.setVisibility(View.VISIBLE);
+                    rateTripButton.setVisibility(View.GONE);
+                } else if (route.getRoute().getDate().before(new Date()) && !alreadyRated) {
+                    rateTripButton.setVisibility(View.VISIBLE);
+                    cancelTripButton.setVisibility(View.GONE);
+                }
+            }else{
+                recyclerViewTrayectos.setVisibility(View.VISIBLE);
+                driverRatingLayout.setVisibility(View.GONE);
+
+                price.setText(String.valueOf("+" + route.getRoute().getPrice() * route.getRoute().getPassengers().size()) + "€");
+                price.setTextColor(Color.GREEN);
+
+                recyclerViewTrayectos.setLayoutManager(new LinearLayoutManager(context));
+
+                if (route.getRoute().getPassengers() != null) {
+                    // Fetch user objects for the passenger IDs
+                    Utils.getUsersByIds(route.getRoute().getPassengers(), new Utils.UsersCallback() {
+                        @Override
+                        public void onCallback(List<User> users) {
+                            // Once users are fetched, set the RecyclerView adapter
+                            if (users.size() == 0){
+                                noPassengersNotice.setVisibility(View.VISIBLE);
+                            }else{
+                                noPassengersNotice.setVisibility(View.GONE);
+                                recyclerViewTrayectos.setAdapter(new RecyclerTripsDetailsAdapter(users, new RecyclerTripsDetailsAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(User user) {
+                                        // Handle item click events
+                                    }
+                                }));
+                            }
+
+                        }
+                    });
+                }
+            }
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
             // Format the start time to a String
@@ -128,28 +198,6 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
 
             originCity.setText(route.getRoute().getOriginText());
             destinationCity.setText(route.getRoute().getDestinationText());
-
-
-            price.setText(String.valueOf(route.getRoute().getPrice()) + "€");
-
-            driverName.setText(route.getUser().getName());
-            driverRating.setText(String.valueOf(route.getUser().getRating()));
-
-            boolean alreadyRated = false;
-            for (Rating rating : route.getUser().getRatings()) {
-                if (rating.getRoute().getId().equals(route.getRoute().getId()) && rating.getUserId().equals(route.getUser().getId())){
-                    alreadyRated = true;
-                }
-            }
-
-            if (route.getRoute().getDate().after(new Date())) {
-                cancelTripButton.setVisibility(View.VISIBLE);
-                rateTripButton.setVisibility(View.GONE);
-            } else if (route.getRoute().getDate().before(new Date()) && !alreadyRated) {
-                rateTripButton.setVisibility(View.VISIBLE);
-                cancelTripButton.setVisibility(View.GONE);
-            }
-
         }
 
     }
