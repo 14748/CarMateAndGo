@@ -1,5 +1,6 @@
 package org.cuatrovientos.blablacar.models;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 
@@ -21,7 +22,7 @@ public class User implements Serializable {
     private String password;
     private List<RouteEntity> createdRoutes;
     private List<RouteEntity> passengerRoutes;
-    private Drawable userIcon;
+    private Bitmap userIcon;
     private List<Rating> ratings;
     private Vehicle vehicle;
 
@@ -45,7 +46,7 @@ public class User implements Serializable {
         this.ratings = new ArrayList<>();
     }
 
-    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Drawable userIcon) {
+    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Bitmap userIcon) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
@@ -127,7 +128,7 @@ public class User implements Serializable {
         this.ratings = ratings;
     }
 
-    public Drawable getUserIcon() {
+    public Bitmap getUserIcon() {
         return userIcon;
     }
 
@@ -184,7 +185,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public void setUserIcon(Drawable userIcon) {
+    public void setUserIcon(Bitmap userIcon) {
         this.userIcon = userIcon;
     }
     public void setTelephone(int telephone) { this.telephone = telephone; }
