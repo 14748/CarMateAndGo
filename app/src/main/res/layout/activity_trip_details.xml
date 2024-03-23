@@ -238,15 +238,6 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/text_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="18dp"
-                android:text="⭐ Nunca cancela un viaje"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:gravity="left" />
 
             <View
                 android:layout_marginTop="18dp"
@@ -278,25 +269,13 @@
                 android:background="@drawable/grey_square"
                 android:layout_below="@id/text_price_per_passenger"/>
 
-            <TextView
-                android:id="@+id/text_smoke"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewPreferences"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="18dp"
-                android:text="⭐ Prohibido fumar"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:gravity="left" />
+                android:layout_below="@id/separator_before_passengers"
 
-            <TextView
-                android:id="@+id/text_eating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="18dp"
-                android:text="⭐ Prohibido comer/beber"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:gravity="left" />
+                tools:listitem="@layout/item_preference" />
 
             <TextView
                 android:id="@+id/text_car"

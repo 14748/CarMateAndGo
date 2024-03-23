@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -16,8 +17,12 @@ import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 import org.cuatrovientos.blablacar.models.Vehicle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VehicleSetterActivity extends AppCompatActivity {
         private TextInputEditText makeEditText, modelEditText, yearEditText, colorEditText, licensePlateEditText;
+        private CheckBox noSmokingCheckBox, musicPlayingCheckBox, luggageSpaceCheckBox, usbChargingCheckBox, wifiAvailableCheckBox;
         private Button submitButton;
 
         private User currentUser;
@@ -56,6 +61,12 @@ public class VehicleSetterActivity extends AppCompatActivity {
             colorEditText = findViewById(R.id.vehicle_color);
             licensePlateEditText = findViewById(R.id.vehicle_license_plate);
             submitButton = findViewById(R.id.submit_vehicle_button);
+
+            noSmokingCheckBox = findViewById(R.id.checkbox_no_smoking);
+            musicPlayingCheckBox = findViewById(R.id.checkbox_music_playing);
+            luggageSpaceCheckBox = findViewById(R.id.checkbox_luggage_space);
+            usbChargingCheckBox = findViewById(R.id.checkbox_usb_charging);
+            wifiAvailableCheckBox = findViewById(R.id.checkbox_wifi_available);
         }
 
         private boolean validateFields() {
@@ -73,7 +84,14 @@ public class VehicleSetterActivity extends AppCompatActivity {
             String color = colorEditText.getText().toString();
             String licensePlate = licensePlateEditText.getText().toString();
 
-            return new Vehicle(make, model, year, color, licensePlate);
+            List<String> preferences = new ArrayList<>();
+            if (noSmokingCheckBox.isChecked()) preferences.add("No Smoking");
+            if (musicPlayingCheckBox.isChecked()) preferences.add("Music Playing");
+            if (luggageSpaceCheckBox.isChecked()) preferences.add("Luggage Space");
+            if (usbChargingCheckBox.isChecked()) preferences.add("USB Charging");
+            if (wifiAvailableCheckBox.isChecked()) preferences.add("Wi-Fi Available");
+
+            return new Vehicle(make, model, year, color, licensePlate, preferences);
 
     }
 }

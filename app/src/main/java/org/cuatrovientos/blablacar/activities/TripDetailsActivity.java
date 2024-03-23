@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.adapters.PreferencesAdapter;
 import org.cuatrovientos.blablacar.adapters.RecyclerTripsDetailsAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.DataHolder;
@@ -67,7 +68,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private View separatorBeforeQuestion, separatorAfterQuestion, separatorBeforePassengers, separatorAfterPassengers;
     private RelativeLayout container_driver_info;
     // RecyclerView for passengers
-    private RecyclerView recyclerViewTrayectos;
+    private RecyclerView recyclerViewTrayectos, preferencesRecyclerView;
 
     // Footer
     private RelativeLayout footer;
@@ -108,12 +109,9 @@ public class TripDetailsActivity extends AppCompatActivity {
         containerNameRating = findViewById(R.id.container_name_rating);
         textName = findViewById(R.id.text_name);
         textRating = findViewById(R.id.text_rating);
-        textCancel = findViewById(R.id.text_cancel);
         textQuestion = findViewById(R.id.text_question);
         separatorBeforeQuestion = findViewById(R.id.separator_before_question);
         separatorAfterQuestion = findViewById(R.id.separator_after_question);
-        textSmoke = findViewById(R.id.text_smoke);
-        textEating = findViewById(R.id.text_eating);
         textCar = findViewById(R.id.text_car);
         textCarColor = findViewById(R.id.text_carColor);
         separatorBeforePassengers = findViewById(R.id.separator_before_passengers);
@@ -171,6 +169,12 @@ public class TripDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        preferencesRecyclerView = findViewById(R.id.recyclerViewPreferences);
+        preferencesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        PreferencesAdapter adapter = new PreferencesAdapter(driverTrips.getUser().getVehicle().getCarPreferences());
+        preferencesRecyclerView.setAdapter(adapter);
 
         originCity.setText(driverTrips.getRoute().getOriginText());
         destinationCity.setText(driverTrips.getRoute().getDestinationText());

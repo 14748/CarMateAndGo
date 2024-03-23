@@ -61,6 +61,21 @@
             android:layout_below="@id/search_and_title_container"
             tools:listitem="@layout/item_trayecto" />
 
+        <TextView
+            android:id="@+id/noElements"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_below="@id/search_and_title_container"
+            android:text="No hay ningun viaje disponible"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="18dp"
+            />
+
 
     </LinearLayout>
 

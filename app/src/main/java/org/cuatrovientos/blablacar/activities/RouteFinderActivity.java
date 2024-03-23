@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import java.util.*;
 
 public class RouteFinderActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private TextView timeText;
+    private TextView timeText, noElements;
     private EditText searchBox;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -41,6 +42,7 @@ public class RouteFinderActivity extends AppCompatActivity {
         timeText = findViewById(R.id.timeText);
         searchBox = findViewById(R.id.searchBox);
         recyclerView = findViewById(R.id.recyclerViewTrayectos);
+        noElements = findViewById(R.id.noElements);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
     }
 
@@ -147,8 +149,13 @@ public class RouteFinderActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView(List<DriverTrips> driverTrips) {
-        RecyclerTripsAdapter adapter = new RecyclerTripsAdapter(driverTrips, this::onTripSelected);
-        recyclerView.setAdapter(adapter);
+        if (driverTrips.size() == 0){
+            noElements.setVisibility(View.VISIBLE);
+        }else{
+            noElements.setVisibility(View.GONE);
+            RecyclerTripsAdapter adapter = new RecyclerTripsAdapter(driverTrips, this::onTripSelected);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     private void onTripSelected(DriverTrips trip) {
