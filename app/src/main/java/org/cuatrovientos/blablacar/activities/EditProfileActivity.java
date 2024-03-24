@@ -121,9 +121,9 @@ public class EditProfileActivity extends AppCompatActivity {
             Uri uri = data.getData();
 
             try {
-                // Aquí obtendrás la imagen seleccionada y la asignarás a tu ImageView edImgProfile
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 imgPerfil.setImageBitmap(bitmap);
+                currentUser.setUserIcon(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
