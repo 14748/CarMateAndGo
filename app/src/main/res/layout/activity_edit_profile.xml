@@ -30,17 +30,6 @@
                 app:srcCompat="@drawable/santorini"
                 android:alpha="0.7"/>
 
-            <ImageView
-                android:id="@+id/edImgProfile"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="104dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.149"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user" />
-
             <EditText
                 android:id="@+id/edTxtNombre"
                 android:layout_width="316dp"
@@ -123,6 +112,20 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/imgUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="104dp"
+                android:background="@drawable/style_txtview"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="75dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.149"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -39,7 +41,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
-    private ImageView imgPerfil;
+    private TextView imgPerfil;
     private static final int PICK_IMAGE_REQUEST = 1;
 
 
@@ -57,16 +59,13 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);
         btnHistory = findViewById(R.id.btnHistory);
-        imgPerfil = findViewById(R.id.edImgProfile);
+        imgPerfil = findViewById(R.id.imgUser);
 
         nombre.setText(currentUser.getName());
         apellido.setText(currentUser.getLastName());
         correo.setText(currentUser.getEmail());
-
-        Bitmap aux = currentUser.getUserIcon();
-        if (aux != null){
-            imgPerfil.setImageBitmap(aux);
-        }
+        imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
+        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
 
         btnSearch.setOnClickListener(view -> {
             Intent searchIntent = new Intent(this, SearchRoutes.class);
@@ -103,31 +102,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        imgPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
-            }
-        });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imgPerfil.setImageBitmap(bitmap);
-                currentUser.setUserIcon(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private boolean validateEmail(String email) {

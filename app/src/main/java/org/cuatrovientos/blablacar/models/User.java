@@ -25,6 +25,7 @@ public class User implements Serializable {
     private Bitmap userIcon;
     private List<Rating> ratings;
     private Vehicle vehicle;
+    private String color;
 
     private float balance;
     public User(){
@@ -44,6 +45,7 @@ public class User implements Serializable {
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
         this.ratings = new ArrayList<>();
+        this.color = Utils.getRandomColor();
     }
 
     public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Bitmap userIcon) {
@@ -107,6 +109,7 @@ public class User implements Serializable {
     public List<RouteEntity> getCreatedRoutes() {
         return createdRoutes;
     }
+    public String getColor(){ return color; }
 
     public void setCreatedRoutes(List<RouteEntity> createdRoutes) {
         this.createdRoutes = createdRoutes;

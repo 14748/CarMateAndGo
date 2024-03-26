@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -40,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView balance;
     private TextView password;
     private User currentUser;
-    private ImageView imgPerfil;
+    private TextView imgPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,10 +178,8 @@ public class ProfileActivity extends AppCompatActivity {
         fechaNacimiento.setText(currentUser.getBirthDate().getDate() + "/" + (currentUser.getBirthDate().getMonth() + 1)
                 + "/" + currentUser.getBirthDate().getYear());
         balance.setText(String.valueOf(currentUser.getBalance()));
-        Bitmap aux = currentUser.getUserIcon();
-        if (aux != null){
-            imgPerfil.setImageBitmap(aux);
-        }
+        imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
+        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
     }
 
     private void message(String text, int color) {
