@@ -243,6 +243,12 @@ public class TripDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
+                if (driverTrips.getDate().after(new Date())) {
+                    Toast.makeText(getApplicationContext(), "Cannot get in trips older than now", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 checkIfUserInAnyRoute(driverTrips.getRoute(), currentUser, isUserInRoute -> {
                     String type  = "";
                     if (driverTrips.getRoute().getDestination().equals(CUATROVIENTOS)){
@@ -273,6 +279,7 @@ public class TripDetailsActivity extends AppCompatActivity {
 
                                 // If both conditions are met, no need to continue checking other routes
                                 if (hasTripToCuatrovientosToday && hasTripFromCuatrovientosToday) {
+                                    Toast.makeText(getApplicationContext(), "YOu alr saved both your trips today", Toast.LENGTH_SHORT).show();
                                     break;
                                 }
                             }

@@ -110,24 +110,46 @@ public class RouteFinderActivity extends AppCompatActivity {
     private void fetchAndDisplayRoutes(CustomLatLng originLocation, CustomLatLng destinationLocation, Date date, boolean type) {
         // Simulating fetching users and calculating routes. Replace with actual fetching logic.
         Utils.getUsers(userList -> {
-            List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, type ? originLocation : destinationLocation, 5, type);
+            List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, type ? originLocation : destinationLocation, type);
             updateRecyclerView(matchingDriverTrips);
         });
     }
 
-    public List<DriverTrips> findRoutes(List<User> users, Date selectedDate, CustomLatLng latLon, double radiusKm, boolean type) {
+    public List<DriverTrips> findRoutes(List<User> users, Date selectedDate, CustomLatLng userLocation, boolean type) {
         List<DriverTrips> matchingDriverTrips = new ArrayList<>();
+        CustomLatLng cuatrovientosLatLng = new CustomLatLng(42.824851, -1.660318);
+        double radiusKm = 5.0;
 
         for (User user : users) {
             for (RouteEntity route : user.getCreatedRoutes()) {
-                if (isSameDay(route.getDate(), selectedDate) && isWithinRadius(type ? route.getOrigin() : route.getDestination(), latLon, radiusKm)) {
-                    matchingDriverTrips.add(new DriverTrips(user, route, selectedDate));
+                boolean isSameDay = isSameDay(route.getDate(), selectedDate);
+                CustomLatLng routeOrigin = route.getOrigin();
+                CustomLatLng routeDestination = route.getDestination();
+
+                boolean originMatchesCuatrovientos = routeOrigin.equals(cuatrovientosLatLng);
+                boolean destinationMatchesCuatrovientos = routeDestination.equals(cuatrovientosLatLng);
+
+                if (isSameDay) {
+                    if (originMatchesCuatrovientos && !type) {
+                        // If the origin matches Cuatrovientos, check if the destination is within 5 km radius of the user's destination
+                        if (isWithinRadius(routeDestination, userLocation, radiusKm)) {
+                            matchingDriverTrips.add(new DriverTrips(user, route, selectedDate));
+                        }
+                    } else if (destinationMatchesCuatrovientos && type) {
+                        // If the destination matches Cuatrovientos, check if the origin is within 5 km radius of the user's origin
+                        if (isWithinRadius(routeOrigin, userLocation, radiusKm)) {
+                            matchingDriverTrips.add(new DriverTrips(user, route, selectedDate));
+                        }
+                    }
                 }
             }
         }
 
         return matchingDriverTrips;
     }
+
+
+
 
     private boolean isSameDay(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();

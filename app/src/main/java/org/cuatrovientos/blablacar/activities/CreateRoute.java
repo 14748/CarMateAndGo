@@ -177,11 +177,11 @@ public class CreateRoute extends AppCompatActivity {
             int seatsValue = Integer.parseInt(seats.getText().toString());
             intent.putExtra("seats", seatsValue);
             if (ida){
-                intent.putExtra("originText", origin.getText().toString());
-                intent.putExtra("destinationText", destination.getText().toString());
-            }else{
                 intent.putExtra("originText", destination.getText().toString());
                 intent.putExtra("destinationText", origin.getText().toString());
+            }else{
+                intent.putExtra("originText", origin.getText().toString());
+                intent.putExtra("destinationText", destination.getText().toString());
             }
             startActivity(intent);
             finish();

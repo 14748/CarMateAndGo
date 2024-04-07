@@ -105,9 +105,10 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
         }
 
         public void assignData(DriverTrips route, Context context) {
-            driverImage.setText(route.getUser().getName().charAt(0) + "" + route.getUser().getLastName().charAt(0));
-            driverImage.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
             if (route.getUser() != null){
+                driverImage.setText(route.getUser().getName().charAt(0) + "" + route.getUser().getLastName().charAt(0));
+                driverImage.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
+
                 recyclerViewTrayectos.setVisibility(View.GONE);
                 noPassengersNotice.setVisibility(View.GONE);
                 driverRatingLayout.setVisibility(View.VISIBLE);
