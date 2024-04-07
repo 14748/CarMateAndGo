@@ -243,7 +243,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (driverTrips.getDate().after(new Date())) {
+                if (driverTrips.getDate().before(new Date())) {
                     Toast.makeText(getApplicationContext(), "Cannot get in trips older than now", Toast.LENGTH_SHORT).show();
                     return;
                 }
