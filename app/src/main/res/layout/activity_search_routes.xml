@@ -323,7 +323,8 @@
                 android:layout_height="wrap_content"
                 android:text="Perfil"
                 android:textSize="6sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 

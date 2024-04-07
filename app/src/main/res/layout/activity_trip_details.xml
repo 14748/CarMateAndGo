@@ -332,6 +332,24 @@
             android:layout_marginTop="48dp"
             tools:listitem="@layout/item_passengers" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            android:layout_below="@id/separator_before_passengers">
+
+            <TextView
+                android:id="@+id/noElements"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aun no se ha apuntado ningun usuario"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
         <!-- Separator after RecyclerView -->
         <View
             android:id="@+id/separator_after_passengers"

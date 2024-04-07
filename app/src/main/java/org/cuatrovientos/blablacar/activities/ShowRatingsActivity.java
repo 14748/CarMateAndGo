@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import org.cuatrovientos.blablacar.R;
@@ -25,20 +26,31 @@ public class ShowRatingsActivity extends AppCompatActivity {
     private List<Rating> ratingsList;
     private User user;
     private TextView headerOpinionesUsuario;
+    private  TextView noElements;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_ratings);
 
+        noElements = findViewById(R.id.noElements);
+        ratingsRecyclerView = findViewById(R.id.ratingsRecyclerView);
+
         if (getIntent() != null && getIntent().getSerializableExtra("ratingsList") != null) {
             ratingsList = (List<Rating>) getIntent().getSerializableExtra("ratingsList");
             user = (User) getIntent().getSerializableExtra("user");
 
-            ratingsRecyclerView = findViewById(R.id.ratingsRecyclerView);
-            ratingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            if (ratingsList.size() > 0){
+                noElements.setVisibility(View.GONE);
+                ratingsRecyclerView.setVisibility(View.VISIBLE);
+                ratingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            ratingsAdapter = new RecyclerRatingAdapter(ratingsList);
-            ratingsRecyclerView.setAdapter(ratingsAdapter);
+                ratingsAdapter = new RecyclerRatingAdapter(ratingsList);
+                ratingsRecyclerView.setAdapter(ratingsAdapter);
+            }else {
+                noElements.setVisibility(View.VISIBLE);
+                ratingsRecyclerView.setVisibility(View.GONE);
+            }
+
 
             headerOpinionesUsuario = findViewById(R.id.headerOpinionesUsuario);
             headerOpinionesUsuario.setText("Opiniones acerca de " + user.getName());

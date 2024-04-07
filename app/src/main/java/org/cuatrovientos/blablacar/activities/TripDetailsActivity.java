@@ -75,6 +75,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     // Footer
     private RelativeLayout footer;
     private Button btnReservar;
+    private TextView noElements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +127,9 @@ public class TripDetailsActivity extends AppCompatActivity {
         // Initialize footer and its contents
         footer = findViewById(R.id.footer);
         btnReservar = findViewById(R.id.btnReservar);
+
+        //noElements
+        noElements = findViewById(R.id.noElements);
 
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -202,8 +206,9 @@ public class TripDetailsActivity extends AppCompatActivity {
         // Set up listeners or further initializations here
         recyclerViewTrayectos.setLayoutManager(new LinearLayoutManager(this));
 
-        if (driverTrips.getRoute().getPassengers() != null) {
-            // Fetch user objects for the passenger IDs
+        if (driverTrips.getRoute().getPassengers() != null && driverTrips.getRoute().getPassengers().size() > 0) {
+            noElements.setVisibility(View.GONE);
+            recyclerViewTrayectos.setVisibility(View.VISIBLE);
             Utils.getUsersByIds(driverTrips.getRoute().getPassengers(), new Utils.UsersCallback() {
                 @Override
                 public void onCallback(List<User> users) {
@@ -216,6 +221,9 @@ public class TripDetailsActivity extends AppCompatActivity {
                     }));
                 }
             });
+        }else {
+            noElements.setVisibility(View.VISIBLE);
+            recyclerViewTrayectos.setVisibility(View.GONE);
         }
 
 
