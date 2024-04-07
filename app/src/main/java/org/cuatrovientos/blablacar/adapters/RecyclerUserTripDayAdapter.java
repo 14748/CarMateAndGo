@@ -2,6 +2,7 @@ package org.cuatrovientos.blablacar.adapters;
 
         import android.content.Context;
         import android.graphics.Color;
+        import android.graphics.PorterDuff;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
     public static class TripViewHolder extends RecyclerView.ViewHolder {
         TextView startTime, duration, arrivalTime, originCity, destinationCity, price, driverName, driverRating, noPassengersNotice;
         Button rateTripButton, cancelTripButton;
-        ImageView driverImage;
+        TextView driverImage;
         RelativeLayout driverRatingLayout;
         RecyclerView recyclerViewTrayectos;
 
@@ -104,6 +105,8 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
         }
 
         public void assignData(DriverTrips route, Context context) {
+            driverImage.setText(route.getUser().getName().charAt(0) + "" + route.getUser().getLastName().charAt(0));
+            driverImage.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
             if (route.getUser() != null){
                 recyclerViewTrayectos.setVisibility(View.GONE);
                 noPassengersNotice.setVisibility(View.GONE);

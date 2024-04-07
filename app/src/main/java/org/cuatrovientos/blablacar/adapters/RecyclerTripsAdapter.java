@@ -1,6 +1,7 @@
 package org.cuatrovientos.blablacar.adapters;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -21,6 +22,7 @@ import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.DriverTrips;
 import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -99,7 +101,7 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
         TextView userExtra;
         TextView rating;
         TextView tripCost;
-        ImageView userLogo;
+        TextView userLogo;
 
         public RecyclerDataHolder(@NonNull View itemView) {
             super(itemView);
@@ -125,6 +127,9 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
             // Get the duration as a String
             String durationStr = palabra.getRoute().getDuration();
             timeDiff.setText(durationStr);
+
+            userLogo.setText(palabra.getUser().getName().charAt(0) + "" + palabra.getUser().getLastName().charAt(0));
+            userLogo.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
 
             try {
                 // Split the duration string into hours and minutes

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,7 +64,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     // Price and driver details
     private View separatorBeforePrice, separatorAfterPrice;
     private TextView textPricePerPassenger, textPrice;
-    private ImageView imageProfile;
+    private TextView imageProfile;
     private LinearLayout containerNameRating;
     private TextView textName, textRating, textCancel, textQuestion, textSmoke, textEating, textCar, textCarColor;
     private View separatorBeforeQuestion, separatorAfterQuestion, separatorBeforePassengers, separatorAfterPassengers;
@@ -169,6 +171,9 @@ public class TripDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        imageProfile.setText(driverTrips.getUser().getName().charAt(0) + "" + driverTrips.getUser().getLastName().charAt(0));
+        imageProfile.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
 
         preferencesRecyclerView = findViewById(R.id.recyclerViewPreferences);
         preferencesRecyclerView.setLayoutManager(new LinearLayoutManager(this));

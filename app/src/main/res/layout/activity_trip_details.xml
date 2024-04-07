@@ -196,13 +196,14 @@
                 android:id="@+id/container_driver_info">
 
                 <!-- Profile Image -->
-                <ImageView
+                <TextView
                     android:id="@+id/image_profile"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="25dp"
-                    android:src="@drawable/ic_profile"/>
+                    android:background="@drawable/style_txtview"
+                    android:gravity="center"/>
 
                 <!-- Driver Name -->
                 <TextView

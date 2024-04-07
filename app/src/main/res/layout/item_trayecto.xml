@@ -103,14 +103,16 @@
         android:textColor="@color/colorAccent"/>
 
     <!-- Driver Image -->
-    <ImageView
+    <TextView
         android:id="@+id/driver_image"
         android:layout_below="@id/arrival_time"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_profile"
         android:layout_marginTop="16dp"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:background="@drawable/style_txtview"
+        android:gravity="center"/>
 
     <!-- Driver Name -->
     <TextView

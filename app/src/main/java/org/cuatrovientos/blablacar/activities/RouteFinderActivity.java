@@ -110,7 +110,7 @@ public class RouteFinderActivity extends AppCompatActivity {
     private void fetchAndDisplayRoutes(CustomLatLng originLocation, CustomLatLng destinationLocation, Date date, boolean type) {
         // Simulating fetching users and calculating routes. Replace with actual fetching logic.
         Utils.getUsers(userList -> {
-            List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, type ? originLocation : destinationLocation, 50.0, type);
+            List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, type ? originLocation : destinationLocation, 5, type);
             updateRecyclerView(matchingDriverTrips);
         });
     }
