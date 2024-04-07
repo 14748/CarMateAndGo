@@ -9,7 +9,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current balance"
+        android:text="Saldo Actual"
         android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -29,24 +29,10 @@
         android:layout_below="@id/titleTextView"
         android:layout_marginTop="-8dp"/>
 
-    <!-- Card number and type, positioned below balanceTextView -->
-    <TextView
-        android:id="@+id/cardTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pepito Manito"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_below="@id/balanceTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"/>
-
-
     <View
         android:layout_width="0dp"
         android:layout_height="0.3dp"
-        android:layout_below="@id/cardTextView"
+        android:layout_below="@id/balanceTextView"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
@@ -58,7 +44,7 @@
         android:id="@+id/circularSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cardTextView"
+        android:layout_below="@id/balanceTextView"
         android:layout_marginTop="-60dp" />
 
     <LinearLayout
@@ -77,7 +63,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="50dp"
             android:background="@drawable/custom_button"
-            android:text="Continue"
+            android:text="Continuar"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
