@@ -158,8 +158,6 @@ public class SearchRoutes extends AppCompatActivity {
             searchIntent.putExtra("text", origin.getText().toString() + " -> " + destination.getText().toString());
             setResult(RESULT_OK, searchIntent);
             startActivity(searchIntent);
-            finish();
-
         });
 
 

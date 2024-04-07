@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:text="Buscar"
                 android:textSize="6sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
