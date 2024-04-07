@@ -1,5 +1,6 @@
 package org.cuatrovientos.blablacar.models;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 
@@ -21,9 +22,10 @@ public class User implements Serializable {
     private String password;
     private List<RouteEntity> createdRoutes;
     private List<RouteEntity> passengerRoutes;
-    private Drawable userIcon;
+    private Bitmap userIcon;
     private List<Rating> ratings;
     private Vehicle vehicle;
+    private String color;
 
     private float balance;
     public User(){
@@ -43,9 +45,10 @@ public class User implements Serializable {
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
         this.ratings = new ArrayList<>();
+        this.color = Utils.getRandomColor();
     }
 
-    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Drawable userIcon) {
+    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Bitmap userIcon) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
@@ -106,6 +109,7 @@ public class User implements Serializable {
     public List<RouteEntity> getCreatedRoutes() {
         return createdRoutes;
     }
+    public String getColor(){ return color; }
 
     public void setCreatedRoutes(List<RouteEntity> createdRoutes) {
         this.createdRoutes = createdRoutes;
@@ -127,7 +131,7 @@ public class User implements Serializable {
         this.ratings = ratings;
     }
 
-    public Drawable getUserIcon() {
+    public Bitmap getUserIcon() {
         return userIcon;
     }
 
@@ -184,7 +188,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public void setUserIcon(Drawable userIcon) {
+    public void setUserIcon(Bitmap userIcon) {
         this.userIcon = userIcon;
     }
     public void setTelephone(int telephone) { this.telephone = telephone; }
