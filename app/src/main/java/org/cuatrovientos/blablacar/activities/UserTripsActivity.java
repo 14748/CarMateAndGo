@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
@@ -30,6 +32,12 @@ import okhttp3.internal.Util;
 public class UserTripsActivity extends AppCompatActivity {
     Button buttonRutasPasajero;
     Button buttonRutasConductor;
+
+    private ImageButton btnSearch;
+    private ImageButton btnPublish;
+    private ImageButton btnHistory;
+    private ImageButton btnMessages;
+    private ImageButton btnProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +45,36 @@ public class UserTripsActivity extends AppCompatActivity {
 
         buttonRutasPasajero = findViewById(R.id.buttonRutasPasajero);
         buttonRutasConductor = findViewById(R.id.buttonRutasConductor);
+
+        btnSearch = findViewById(R.id.btnSearch);
+        btnPublish = findViewById(R.id.btnPublish);
+        btnHistory = findViewById(R.id.btnHistory);
+        btnMessages = findViewById(R.id.btnMessages);
+        btnProfile = findViewById(R.id.btnProfile);
+
+        btnPublish.setOnClickListener(view -> {
+            Intent publishIntent = new Intent(this, CreateRoute.class);
+            startActivity(publishIntent);
+        });
+
+        btnSearch.setOnClickListener(view -> {
+            Intent searchIntent = new Intent(this, SearchRoutes.class);
+            startActivity(searchIntent);
+        });
+
+        btnMessages.setOnClickListener(view -> {
+            /*
+            Intent messagesIntent = new Intent(this, MessagesActivity.class);
+            startActivity(messagesIntent);
+             */
+        });
+
+        btnProfile.setOnClickListener(view -> {
+
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            startActivity(profileIntent);
+
+        });
 
         UserManager.init(getApplicationContext());
 
