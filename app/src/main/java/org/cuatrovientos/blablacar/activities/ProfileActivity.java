@@ -33,6 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton btnPublish;
     private ImageButton btnHistory;
     private ImageView btnPagos;
+    private ImageView btnNotificaciones;
+    private LinearLayout leaderboardLayout;
     private Button btnEditPerfil;
     private Button btnLogout;
     private TextView nombre;
@@ -64,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
         btnHistory = findViewById(R.id.btnHistory);
         password = findViewById(R.id.btnChangePassword);
         imgPerfil = findViewById(R.id.imageView2);
+        btnNotificaciones = findViewById(R.id.imageNotificaciones);
+        leaderboardLayout = findViewById(R.id.leaderboardLayout);
 
         password.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
@@ -140,6 +144,11 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(balanceIntent);
                 finish();
             }
+        });
+
+        leaderboardLayout.setOnClickListener(view -> {
+            Intent leaderboardIntent = new Intent(this, C02LeaderboardActivity.class);
+            startActivity(leaderboardIntent);
         });
 
         btnSearch.setOnClickListener(view -> {

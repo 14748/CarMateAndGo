@@ -102,7 +102,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            app:srcCompat="@drawable/ic_1" />
+                            app:srcCompat="@drawable/settings" />
 
                         <TextView
                             android:id="@+id/textAjustes"
@@ -124,6 +124,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/top_button_background"
                         android:elevation="5dp"
+                        android:id="@+id/leaderboardLayout"
                         android:orientation="vertical">
 
                         <ImageView
@@ -131,7 +132,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            app:srcCompat="@drawable/ic_2" />
+                            app:srcCompat="@drawable/lead" />
 
                         <TextView
                             android:id="@+id/textNotificaciones"
@@ -159,7 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            app:srcCompat="@drawable/ic_3" />
+                            app:srcCompat="@drawable/wallet" />
 
                         <TextView
                             android:id="@+id/textPagos"

@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -75,7 +78,33 @@ public class Utils {
                 });
     }
 
-    // Interface remains unchanged
+    public static void getTopUsersByCO2Reduction(final FirebaseCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("UsersTest1")
+                .orderBy("c02Reduction", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<User> users = new ArrayList<>();
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                                User user = document.toObject(User.class);
+                                users.add(user);
+                            }
+                        }
+                        callback.onCallback(users);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting documents: ", e);
+                    }
+                });
+    }
+
 
     public static void pushUser(User user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
