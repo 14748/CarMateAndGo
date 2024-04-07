@@ -59,7 +59,7 @@ public class RouteService {
                 mapHelper.drawRoute(Utils.convertListOfCustomLatLngListToListOfLatLngList(routes.getDecodedRoutes()));
                 List<RouteSelectionInfo> routeSelectionInfos = new ArrayList<>();
                 for (List<String> summary: routes.getSummaries()) {
-                    routeSelectionInfos.add(new RouteSelectionInfo("Ruta " + (routes.getSummaries().indexOf(summary) + 1), "Kilometros: " +  summary.get(0), "Duraction: " + summary.get(1)));
+                    routeSelectionInfos.add(new RouteSelectionInfo("Ruta " + (routes.getSummaries().indexOf(summary) + 1), summary.get(0), summary.get(1)));
                 }
                 activity.runOnUiThread(() -> {
                     linearLayout.setVisibility(View.VISIBLE);

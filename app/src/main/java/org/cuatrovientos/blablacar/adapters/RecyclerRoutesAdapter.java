@@ -97,8 +97,8 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
 
         public void assignData(RouteSelectionInfo palabra, onItemClickListener onItemClickListener, onLinkClickListener onLinkClickListener) {
             title.setText(palabra.getTitle());
-            kms.setText(palabra.getKilometers());
-            time.setText(palabra.getTime());
+            kms.setText("Kilometros: " + palabra.getKilometers());
+            time.setText("Duracion: " + palabra.getTime());
 
             itemView.setOnClickListener(view -> {
                 if(itemClickListener != null) {

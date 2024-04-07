@@ -105,36 +105,30 @@ public class Utils {
     }
 
     public static void getUsersByIds(List<String> userIds, final UsersCallback callback) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("UsersTest1");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         List<User> users = new ArrayList<>();
         AtomicInteger remainingUsers = new AtomicInteger(userIds.size());
 
         if (userIds.isEmpty()) {
-            callback.onCallback(users); // Return an empty list immediately if no IDs are provided
+            callback.onCallback(users);
             return;
         }
 
-        for (String id : userIds) {
-            usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user != null) {
+        for (String userId : userIds) {
+            DocumentReference docRef = db.collection("UsersTest1").document(userId);
+            docRef.get().addOnSuccessListener(documentSnapshot -> {
+                User user = documentSnapshot.toObject(User.class);
+                if (user != null) {
+                    synchronized (users) {
                         users.add(user);
                     }
-                    // Check if this is the last user to fetch
-                    if (remainingUsers.decrementAndGet() == 0) {
-                        callback.onCallback(users); // Return the list of users once all have been fetched
-                    }
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Decrement the count and check if it's time to callback even if there's an error
-                    if (remainingUsers.decrementAndGet() == 0) {
-                        callback.onCallback(users);
-                    }
+                if (remainingUsers.decrementAndGet() == 0) {
+                    callback.onCallback(users);
+                }
+            }).addOnFailureListener(e -> {
+                if (remainingUsers.decrementAndGet() == 0) {
+                    callback.onCallback(users);
                 }
             });
         }

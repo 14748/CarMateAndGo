@@ -132,25 +132,33 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
             userLogo.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
 
             try {
-                // Split the duration string into hours and minutes
                 String[] parts = durationStr.split(":");
-                int hours = Integer.parseInt(parts[0]);
-                int minutes = Integer.parseInt(parts[1]);
+                int hours = 0;
+                int minutes = 0;
 
-                // Convert the duration to milliseconds
+                try {
+                    hours = Integer.parseInt(parts[1]);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid hours format, setting to 0");
+                }
+
+                try {
+                    minutes = Integer.parseInt(parts[2]);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid minutes format, setting to 0");
+                }
+
                 long durationMillis = (hours * 3600 + minutes * 60) * 1000;
 
-                // Add the duration to the start date's time
                 long startTimeMillis = palabra.getRoute().getDate().getTime();
                 long endTimeMillis = startTimeMillis + durationMillis;
 
-                // Create a new Date object for the end time
                 Date endTime = new Date(endTimeMillis);
 
-                // Format the end time to a String
-                String endTimeStr = timeFormat.format(endTime);
+                SimpleDateFormat timeFormatEnd = new SimpleDateFormat("HH:mm");
+                String endTimeStr = timeFormatEnd.format(endTime);
                 time2.setText(endTimeStr);
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 time2.setText("Error");
             }

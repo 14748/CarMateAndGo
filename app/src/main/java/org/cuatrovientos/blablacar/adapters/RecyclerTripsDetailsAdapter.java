@@ -1,5 +1,7 @@
 package org.cuatrovientos.blablacar.adapters;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.List;
 
@@ -49,14 +52,18 @@ public class RecyclerTripsDetailsAdapter extends RecyclerView.Adapter<RecyclerTr
     public static class TripsDetailsHolder extends RecyclerView.ViewHolder {
 
         TextView textName;
+        TextView imageProfile;
 
         public TripsDetailsHolder(@NonNull View itemView) {
             super(itemView);
             textName = itemView.findViewById(R.id.text_name);
+            imageProfile = itemView.findViewById(R.id.image_profile);
         }
 
         public void bind(User user) {
-            textName.setText(String.valueOf(user.getName()));
+            textName.setText(String.valueOf(user.getName() + " " +  user.getLastName()));
+            imageProfile.setText(user.getName().charAt(0) + "" + user.getLastName().charAt(0));
+            imageProfile.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
         }
     }
 
