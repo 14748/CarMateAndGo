@@ -16,13 +16,13 @@
         <!-- Search Box with arrow background -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="2dp">
 
-            <EditText
+            <TextView
                 android:id="@+id/searchBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/arrow_left_svgrepo_com"
                 android:background="@drawable/search_box_background"
                 android:hint="Pamplona, Navarra -> Zaragoza"
                 android:drawablePadding="8dp"
@@ -31,14 +31,6 @@
                 android:layout_marginLeft="18dp"
                 android:padding="12dp"
                 android:drawableTint="@color/colorPrimaryDark" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:text="Filtrar"
-                android:background="?attr/selectableItemBackground"
-                android:textAllCaps="false"/>
         </FrameLayout>
 
         <!-- Title "Hoy" -->
@@ -60,24 +52,28 @@
             android:layout_height="match_parent"
             android:layout_below="@id/search_and_title_container"
             tools:listitem="@layout/item_trayecto" />
-
-        <TextView
-            android:id="@+id/noElements"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="18dp"
-            android:layout_marginLeft="18dp"
-            android:layout_below="@id/search_and_title_container"
-            android:text="No hay ningun viaje disponible"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="18dp"
-            />
-
-
     </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/noElements"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No hay ningun viaje disponible"
+                android:layout_gravity="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+
+
+
+
 
 
 

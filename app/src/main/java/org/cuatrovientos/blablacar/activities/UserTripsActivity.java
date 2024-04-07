@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
@@ -32,7 +33,7 @@ import okhttp3.internal.Util;
 public class UserTripsActivity extends AppCompatActivity {
     Button buttonRutasPasajero;
     Button buttonRutasConductor;
-
+    TextView noElements;
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
@@ -46,6 +47,7 @@ public class UserTripsActivity extends AppCompatActivity {
         buttonRutasPasajero = findViewById(R.id.buttonRutasPasajero);
         buttonRutasConductor = findViewById(R.id.buttonRutasConductor);
 
+        noElements = findViewById(R.id.noElements);
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);
         btnHistory = findViewById(R.id.btnHistory);
@@ -146,16 +148,22 @@ public class UserTripsActivity extends AppCompatActivity {
 
     private void updateRecyclerView(List<DriverTrips> routesUser) {
         RecyclerView recyclerViewGroupedTrips = findViewById(R.id.recyclerViewGroupedTrips);
-        if (recyclerViewGroupedTrips.getAdapter() != null) {
-            RecyclerUserTripsAdapter adapter = (RecyclerUserTripsAdapter) recyclerViewGroupedTrips.getAdapter();
-            adapter.updateData(routesUser);
-        } else {
-            recyclerViewGroupedTrips.setLayoutManager(new LinearLayoutManager(this));
-            RecyclerUserTripsAdapter adapter = new RecyclerUserTripsAdapter(this, routesUser);
-            recyclerViewGroupedTrips.setAdapter(adapter);
+        if (routesUser.size() > 0)
+        {
+            noElements.setVisibility(View.GONE);
+            recyclerViewGroupedTrips.setVisibility(View.VISIBLE);
+
+            if (recyclerViewGroupedTrips.getAdapter() != null) {
+                RecyclerUserTripsAdapter adapter = (RecyclerUserTripsAdapter) recyclerViewGroupedTrips.getAdapter();
+                adapter.updateData(routesUser);
+            } else {
+                recyclerViewGroupedTrips.setLayoutManager(new LinearLayoutManager(this));
+                RecyclerUserTripsAdapter adapter = new RecyclerUserTripsAdapter(this, routesUser);
+                recyclerViewGroupedTrips.setAdapter(adapter);
+            }
+        }else{
+            noElements.setVisibility(View.VISIBLE);
+            recyclerViewGroupedTrips.setVisibility(View.GONE);
         }
     }
-
-
-
 }

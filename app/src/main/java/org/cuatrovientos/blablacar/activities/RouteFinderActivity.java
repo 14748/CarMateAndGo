@@ -24,7 +24,7 @@ import java.util.*;
 public class RouteFinderActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TextView timeText, noElements;
-    private EditText searchBox;
+    private TextView searchBox;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
