@@ -137,13 +137,13 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
                 int minutes = 0;
 
                 try {
-                    hours = Integer.parseInt(parts[1]);
+                    hours = Integer.parseInt(parts[0]);
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid hours format, setting to 0");
                 }
 
                 try {
-                    minutes = Integer.parseInt(parts[2]);
+                    minutes = Integer.parseInt(parts[1]);
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid minutes format, setting to 0");
                 }
