@@ -28,13 +28,16 @@ import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class ProfileActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
     private ImageView btnPagos;
     private ImageView btnNotificaciones;
-    private LinearLayout leaderboardLayout;
+    private LinearLayout leaderboardLayout, settingsLayout, paymentLayout;
     private Button btnEditPerfil;
     private Button btnLogout;
     private TextView nombre;
@@ -43,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView balance;
     private TextView password;
     private User currentUser;
+    private TextView txtc02User;
     private TextView imgPerfil;
 
     @Override
@@ -60,14 +64,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);
-        btnEditPerfil = findViewById(R.id.btnEditPerfil);
         btnLogout = findViewById(R.id.btnLogout);
         btnPagos = findViewById(R.id.imagePagos);
         btnHistory = findViewById(R.id.btnHistory);
         password = findViewById(R.id.btnChangePassword);
+        txtc02User = findViewById(R.id.txtc02User);
         imgPerfil = findViewById(R.id.imageView2);
         btnNotificaciones = findViewById(R.id.imageNotificaciones);
         leaderboardLayout = findViewById(R.id.leaderboardLayout);
+        settingsLayout = findViewById(R.id.settingsLayout);
+        paymentLayout = findViewById(R.id.paymentLayout);
 
         password.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
@@ -137,13 +143,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-        btnPagos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        paymentLayout.setOnClickListener(view -> {
                 Intent balanceIntent = new Intent(ProfileActivity.this, BalanceActivity.class);
                 startActivity(balanceIntent);
-                finish();
-            }
         });
 
         leaderboardLayout.setOnClickListener(view -> {
@@ -166,7 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(historyIntent);
         });
 
-        btnEditPerfil.setOnClickListener(view -> {
+        settingsLayout.setOnClickListener(view -> {
             Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
             startActivity(editProfileIntent);
         });
@@ -184,9 +186,13 @@ public class ProfileActivity extends AppCompatActivity {
         balance = findViewById(R.id.btnBalance);
         nombre.setText(currentUser.getName() + " " + currentUser.getLastName());
         email.setText(currentUser.getEmail());
-        fechaNacimiento.setText(currentUser.getBirthDate().getDate() + "/" + (currentUser.getBirthDate().getMonth() + 1)
-                + "/" + currentUser.getBirthDate().getYear());
-        balance.setText(String.valueOf(currentUser.getBalance()));
+        if(currentUser.getBirthDate() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            String formattedDate = sdf.format(currentUser.getBirthDate());
+            fechaNacimiento.setText(formattedDate);
+        }
+        balance.setText(String.valueOf(currentUser.getBalance()) + "€");
+        txtc02User.setText(currentUser.getC02Reduction() + "kg");
         imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
         imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
     }
