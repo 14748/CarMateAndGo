@@ -88,14 +88,22 @@ public class RouteFinderActivity extends AppCompatActivity {
         int daysUntilEndOfWeek = Calendar.SATURDAY - today.get(Calendar.DAY_OF_WEEK);
         endOfWeek.add(Calendar.DAY_OF_YEAR, daysUntilEndOfWeek);
 
-        if (sdf.format(date).equals(sdf.format(today.getTime()))) {
-            return "Hoy";
-        } else if (sdf.format(date).equals(sdf.format(tomorrow.getTime()))) {
-            return "Mañana";
-        } else if (today.before(endOfWeek) && calendarDate.before(endOfWeek)) {
-            return dayFormat.format(date);
+        Calendar targetDate = Calendar.getInstance();
+        targetDate.setTime(date);
+
+        if (targetDate.get(Calendar.WEEK_OF_YEAR) == today.get(Calendar.WEEK_OF_YEAR))
+        {
+            if (sdf.format(date).equals(sdf.format(today.getTime()))) {
+                return "Hoy";
+            } else if (sdf.format(date).equals(sdf.format(tomorrow.getTime()))) {
+                return "Mañana";
+            } else if (today.before(endOfWeek) && calendarDate.before(endOfWeek)) {
+                return dayFormat.format(date);
+            } else {
+                return sdf.format(date);
+            }
         } else {
-            return sdf.format(date);
+        return sdf.format(date);
         }
     }
 
