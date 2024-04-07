@@ -31,6 +31,8 @@ import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,13 +47,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RouteService {
     private final Activity activity;
     private final MapHelper mapHelper;
+    static float averageGasPrice = 1.5f;
+    static float averageMileagePerLiter = 15.0f;
+    static float co2EmissionPerLiter = 2.31f;
 
     public RouteService(Activity activity, MapHelper mapHelper) {
         this.activity = activity;
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(Context context, User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, LinearLayout linearLayout, String originText, String destinationText) {
+    public void routeCreation(Context context, User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, LinearLayout linearLayout, String originText, String destinationText, int seats) {
         createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
@@ -75,8 +80,9 @@ public class RouteService {
                                 public void onLinkClickListener(int position) {
                                     List<String> users = new ArrayList<>();
                                     RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                    RouteEntity r = new RouteEntity(routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 50.00f, users, 5, false, date, origin, destination, originText, destinationText);
+                                    RouteEntity r = new RouteEntity(routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), calculateTripCost(parseKilometers(routeSelectionInfos.get(position).getKilometers())), users, seats, false, date, origin, destination, originText, destinationText);
                                     mapHelper.map.clear();
+                                    user.addC02Reduction(calculateCO2Reduction(parseKilometers(routeSelectionInfos.get(position).getKilometers()), seats));
                                     user.addCreatedRoute(r);
                                     Utils.pushUser(user);
                                     linearLayout.setVisibility(View.GONE);
@@ -94,6 +100,33 @@ public class RouteService {
                 Log.d("Womp", e.toString());
             }
         });
+    }
+
+    public float calculateTripCost(float kilometers) {
+        BigDecimal litersNeeded = BigDecimal.valueOf(kilometers / averageMileagePerLiter);
+        BigDecimal cost = litersNeeded.multiply(BigDecimal.valueOf(averageGasPrice));
+        return cost.setScale(2, RoundingMode.HALF_UP).floatValue();
+    }
+
+    public float calculateCO2Reduction(float kilometers, int seats) {
+        if (seats <= 1) return 0;
+
+        BigDecimal litersNeeded = BigDecimal.valueOf(kilometers / averageMileagePerLiter);
+        BigDecimal totalCO2Emissions = litersNeeded.multiply(BigDecimal.valueOf(co2EmissionPerLiter));
+        BigDecimal co2PerSeatIfAlone = totalCO2Emissions;
+        BigDecimal co2PerSeatWhenShared = totalCO2Emissions.divide(BigDecimal.valueOf(seats), 2, RoundingMode.HALF_UP);
+
+        BigDecimal reduction = co2PerSeatIfAlone.subtract(co2PerSeatWhenShared).multiply(BigDecimal.valueOf(seats - 1));
+        return reduction.setScale(2, RoundingMode.HALF_UP).floatValue();
+    }
+
+    private static float parseKilometers(String kilometersStr) {
+        try {
+            return Float.parseFloat(kilometersStr);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid format for kilometers: " + kilometersStr);
+            return 0;
+        }
     }
 
     public void createRoute(CustomLatLng start, CustomLatLng end, RouteService.RouteCallback callback) {

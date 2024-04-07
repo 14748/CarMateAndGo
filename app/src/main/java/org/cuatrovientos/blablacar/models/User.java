@@ -26,6 +26,7 @@ public class User implements Serializable {
     private List<Rating> ratings;
     private Vehicle vehicle;
     private String color;
+    private  float c02Reduction;
 
     private float balance;
     public User(){
@@ -66,6 +67,18 @@ public class User implements Serializable {
     /*
     * GETTERS
     * */
+
+    public float getC02Reduction() {
+        return c02Reduction;
+    }
+
+    public void setC02Reduction(float c02Reduction) {
+        this.c02Reduction = c02Reduction;
+    }
+    public void addC02Reduction(float additionalC02Reduction) {
+        this.c02Reduction += additionalC02Reduction;
+    }
+
     public Vehicle getVehicle() {
         return vehicle;
     }

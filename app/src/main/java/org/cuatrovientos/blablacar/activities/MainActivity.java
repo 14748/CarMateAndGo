@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String dateStr = getIntent().getStringExtra("date");
             String originText = getIntent().getStringExtra("originText");
             String destinationText = getIntent().getStringExtra("destinationText");
+            int seats = getIntent().getIntExtra("seats", 0);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date date = new Date();
             try {
@@ -182,10 +183,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
+
             Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
             CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
             CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-            routeService.routeCreation(this, localUser, originLocation, destinationLocation, date, recyclerView, linearLayout, originText, destinationText);
+            routeService.routeCreation(this, localUser, originLocation, destinationLocation, date, recyclerView, linearLayout, originText, destinationText, seats);
         }
     }
 }
