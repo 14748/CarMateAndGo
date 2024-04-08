@@ -2,10 +2,19 @@
     <!-- Base application theme. -->
     <!-- Theme.Material3.DayNight.NoActionBar
     top one is default changed for button default color no enforced-->
-    <style name="Base.Theme.BlaBlaCar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Base.Theme.BlaBlaCar" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/blue_primary</item>
+        <item name="colorSecondary">@color/blue_secondary</item>
+        <item name="colorAccent">#38bdf8</item> <!-- Customize as needed -->
+        <item name="android:statusBarColor">@color/blue_primary</item>
     </style>
 
-    <style name="Theme.BlaBlaCar" parent="Base.Theme.BlaBlaCar" />
+    <style name="Theme.BlaBlaCar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/blue_primary</item>
+        <item name="colorSecondary">@color/blue_secondary</item>
+        <item name="colorAccent">#38bdf8</item> <!-- Customize as needed -->
+        <item name="android:statusBarColor">@color/blue_primary</item>
+    </style>
 </resources>

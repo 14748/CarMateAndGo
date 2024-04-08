@@ -14,32 +14,46 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButtonBar"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="60dp">
 
-            <ImageView
-                android:id="@+id/imageView"
+            <FrameLayout
                 android:layout_width="445dp"
-                android:layout_height="394dp"
+                android:layout_height="370dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/cloudslandscape" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/cloudslandscape" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#66000000" /> <!-- Semi-transparent black overlay -->
+            </FrameLayout>
+
+            <TextView
                 android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
                 android:layout_marginTop="32dp"
+                android:background="@drawable/style_txtview"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="75dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/profile" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewNombre"
@@ -86,6 +100,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/settingsLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -99,7 +114,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            app:srcCompat="@drawable/ic_1" />
+                            app:srcCompat="@drawable/settings"
+                            />
 
                         <TextView
                             android:id="@+id/textAjustes"
@@ -109,7 +125,7 @@
                             android:text="Ajustes"
                             android:textAlignment="center"
                             android:textColor="#000000"
-                            android:textSize="14sp"
+                            android:textSize="11sp"
                             android:textStyle="bold"
                             tools:ignore="DuplicateIds" />
                     </LinearLayout>
@@ -121,6 +137,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/top_button_background"
                         android:elevation="5dp"
+                        android:id="@+id/leaderboardLayout"
                         android:orientation="vertical">
 
                         <ImageView
@@ -128,17 +145,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            app:srcCompat="@drawable/ic_2" />
+                            app:srcCompat="@drawable/lead" />
 
                         <TextView
                             android:id="@+id/textNotificaciones"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:text="Notificaciones"
+                            android:text="Clasificaciones"
                             android:textAlignment="center"
                             android:textColor="#000000"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -146,6 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        android:id="@+id/paymentLayout"
                         android:layout_weight="1"
                         android:background="@drawable/top_button_background"
                         android:elevation="5dp"
@@ -156,7 +174,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            app:srcCompat="@drawable/ic_3" />
+                            app:srcCompat="@drawable/wallet" />
 
                         <TextView
                             android:id="@+id/textPagos"
@@ -166,10 +184,44 @@
                             android:text="Pagos"
                             android:textAlignment="center"
                             android:textColor="#000000"
-                            android:textSize="14sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textc02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="C02 Reducido"
+                        android:textColor="@color/blue_primary"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/txtc02User"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="0kg"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#5b5b5b"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/appCompatImageView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:alpha="0.5"
+                    android:background="#585858" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -183,7 +235,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Contraseña:"
-                        android:textColor="#5917e1"
+                        android:textColor="@color/blue_primary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -193,7 +245,8 @@
                         android:layout_weight="1"
                         android:text="Cambiar contraseña"
                         android:textAlignment="viewEnd"
-                        android:textColor="#5b5b5b"
+                        android:textColor="#FF00EEFF"
+
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -217,7 +270,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Email:"
-                        android:textColor="#5917e1"
+                        android:textColor="@color/blue_primary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -251,7 +304,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Fecha de Nacimiento:"
-                        android:textColor="#5917e1"
+                        android:textColor="@color/blue_primary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -285,7 +338,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Balance:"
-                        android:textColor="#5917e1"
+                        android:textColor="@color/blue_primary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -303,22 +356,19 @@
 
             </LinearLayout>
 
+
+
             <Button
-                android:id="@+id/btnEditPerfil"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="60dp"
-                android:background="@drawable/btn_background"
-                android:gravity="center"
-                android:text="Editar Perfil"
-                android:textColor="#ffffff"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                android:id="@+id/btnLogout"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/logout"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
+                app:layout_constraintVertical_bias="0.088" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

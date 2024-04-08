@@ -1,8 +1,14 @@
 package org.cuatrovientos.blablacar;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -12,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.cuatrovientos.blablacar.activities.MainActivity;
 import org.cuatrovientos.blablacar.activities.MapHelper;
+import org.cuatrovientos.blablacar.activities.SearchRoutes;
 import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
@@ -24,6 +31,8 @@ import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,13 +47,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RouteService {
     private final Activity activity;
     private final MapHelper mapHelper;
+    static float averageGasPrice = 1.5f;
+    static float averageMileagePerLiter = 15.0f;
+    static float co2EmissionPerLiter = 2.31f;
 
     public RouteService(Activity activity, MapHelper mapHelper) {
         this.activity = activity;
         this.mapHelper = mapHelper;
     }
 
-    public void routeCreation(User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView) {
+    public void routeCreation(Context context, User user, CustomLatLng origin, CustomLatLng destination, Date date, RecyclerView recyclerView, LinearLayout linearLayout, String originText, String destinationText, int seats) {
         createRoute(origin, destination, new RouteService.RouteCallback() {
             @Override
             public void onRouteReady(RouteInfo routes) {
@@ -52,9 +64,10 @@ public class RouteService {
                 mapHelper.drawRoute(Utils.convertListOfCustomLatLngListToListOfLatLngList(routes.getDecodedRoutes()));
                 List<RouteSelectionInfo> routeSelectionInfos = new ArrayList<>();
                 for (List<String> summary: routes.getSummaries()) {
-                    routeSelectionInfos.add(new RouteSelectionInfo("Ruta numero " + routes.getSummaries().indexOf(summary)+1, summary.get(0), summary.get(1)));
+                    routeSelectionInfos.add(new RouteSelectionInfo("Ruta " + (routes.getSummaries().indexOf(summary) + 1), summary.get(0), summary.get(1)));
                 }
                 activity.runOnUiThread(() -> {
+                    linearLayout.setVisibility(View.VISIBLE);
                     recyclerView.setAdapter(new RecyclerRoutesAdapter(routeSelectionInfos,
                             new RecyclerRoutesAdapter.onItemClickListener() {
                                 @Override
@@ -65,28 +78,16 @@ public class RouteService {
                             new RecyclerRoutesAdapter.onLinkClickListener() {
                                 @Override
                                 public void onLinkClickListener(int position) {
-                                    List<RouteEntity> userRoutes = new ArrayList<>();
-                                    Drawable userIcon = ContextCompat.getDrawable(activity, R.drawable.arrowderecha);
-                                    ;
-                                    User newUser = new User(
-                                            1, // id
-                                            "John", // name
-                                            "Doe", // lastName
-                                            new Date(), // birthDate
-                                            "johndoe@example.com", // email
-                                            1234567890, // telephone
-                                            "securepassword123", // password
-                                            userRoutes, // List of RouteEntity objects
-                                            userIcon // Drawable for user icon
-                                    );
-                                    List<User> users = new ArrayList<>();
-                                    users.add(new User());
+                                    List<String> users = new ArrayList<>();
                                     RouteSelectionInfo routeSelected = routeSelectionInfos.get(position);
-                                    //TODO: Si aqui es ida a 4V le pasamos origin si es vuelta de 4V le pasamos destination
-                                    RouteEntity r = new RouteEntity(0, origin, routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), 1.0f, users, 5, false, date);
+                                    RouteEntity r = new RouteEntity(routeSelected.getTime(), routeSelected.getKilometers(), routes.getDecodedRoutes().get(position), calculateTripCost(parseKilometers(routeSelectionInfos.get(position).getKilometers())), users, seats, false, date, origin, destination, originText, destinationText);
                                     mapHelper.map.clear();
-                                    user.addRoute(r);
+                                    user.addC02Reduction(calculateCO2Reduction(parseKilometers(routeSelectionInfos.get(position).getKilometers()), seats));
+                                    user.addCreatedRoute(r);
                                     Utils.pushUser(user);
+                                    linearLayout.setVisibility(View.GONE);
+                                    Intent intent = new Intent(context, SearchRoutes.class);
+                                    startActivity(context, intent, null);
                                 }
                             }
                     ));
@@ -99,6 +100,33 @@ public class RouteService {
                 Log.d("Womp", e.toString());
             }
         });
+    }
+
+    public float calculateTripCost(float kilometers) {
+        BigDecimal litersNeeded = BigDecimal.valueOf(kilometers / averageMileagePerLiter);
+        BigDecimal cost = litersNeeded.multiply(BigDecimal.valueOf(averageGasPrice));
+        return cost.setScale(2, RoundingMode.HALF_UP).floatValue();
+    }
+
+    public float calculateCO2Reduction(float kilometers, int seats) {
+        if (seats <= 1) return 0;
+
+        BigDecimal litersNeeded = BigDecimal.valueOf(kilometers / averageMileagePerLiter);
+        BigDecimal totalCO2Emissions = litersNeeded.multiply(BigDecimal.valueOf(co2EmissionPerLiter));
+        BigDecimal co2PerSeatIfAlone = totalCO2Emissions;
+        BigDecimal co2PerSeatWhenShared = totalCO2Emissions.divide(BigDecimal.valueOf(seats), 2, RoundingMode.HALF_UP);
+
+        BigDecimal reduction = co2PerSeatIfAlone.subtract(co2PerSeatWhenShared).multiply(BigDecimal.valueOf(seats - 1));
+        return reduction.setScale(2, RoundingMode.HALF_UP).floatValue();
+    }
+
+    private static float parseKilometers(String kilometersStr) {
+        try {
+            return Float.parseFloat(kilometersStr);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid format for kilometers: " + kilometersStr);
+            return 0;
+        }
     }
 
     public void createRoute(CustomLatLng start, CustomLatLng end, RouteService.RouteCallback callback) {
@@ -187,7 +215,7 @@ public class RouteService {
                     // Ensure the distance is shown up to two decimal places
                     double distanceKm = distance / 1000.0;
                     String formattedDistance = String.format("%.2f", distanceKm);
-                    routeSummary.add("Distancia: " + formattedDistance + " km");
+                    routeSummary.add(formattedDistance);
 
                     // Assuming summary.getDuration() returns a double value representing seconds
                     double totalSecsDouble = summary.getDuration();
@@ -198,13 +226,11 @@ public class RouteService {
                     // Build the duration string based on the values of hours, minutes, and seconds
                     String formattedDuration;
                     if (hours > 0) {
-                        formattedDuration = String.format("%d h %02d min %02d sec", hours, minutes, seconds);
-                    } else if (minutes > 0) {
-                        formattedDuration = String.format("%d min %02d sec", minutes, seconds);
+                        formattedDuration = String.format("%02d:%02d", hours, minutes);
                     } else {
-                        formattedDuration = String.format("%d sec", seconds);
+                        formattedDuration = String.format("00:%02d", minutes);
                     }
-                    routeSummary.add("Duracion: " + formattedDuration);
+                    routeSummary.add(formattedDuration);
                     summaries.add(routeSummary);
 
                     List<LatLng> routeCoordinates = decodePolyline(encodedPolyline);

@@ -148,8 +148,6 @@ public class CircularSlider extends View {
         topLabelPaint.setColor(Color.BLACK);
         topLabelPaint.setTextSize(25);
         topLabelPaint.setTextAlign(Paint.Align.CENTER);
-        String topLabel = "TOP-UP AMOUNT";
-        canvas.drawText(topLabel, centerX, centerY - radius / 4, topLabelPaint);
 
         // Main value label
         textPaint.setTextSize(85);

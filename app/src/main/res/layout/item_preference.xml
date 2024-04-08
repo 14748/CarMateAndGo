@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/preference_text_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="⭐ Prohibido fumar"
+    android:textSize="16sp"
+    android:layout_marginTop="18dp"
+    android:layout_marginStart="18dp"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:gravity="start"/>

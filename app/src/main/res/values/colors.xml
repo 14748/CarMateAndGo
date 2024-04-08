@@ -23,5 +23,7 @@
     <color name="gray700">#374151</color>
     <color name="gray800">#1f2937</color>
     <color name="gray900">#111827</color>
+    <color name="blue_primary">#2196F3</color>
+    <color name="blue_secondary">#64B5F6</color>
 
 </resources>

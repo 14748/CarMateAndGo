@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
+import org.cuatrovientos.blablacar.activities.SearchRoutes;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
@@ -91,15 +92,10 @@ public class RegisterPassword extends AppCompatActivity {
                     Utils.getUsers(new Utils.FirebaseCallback() {
                         @Override
                         public void onCallback(List<User> userList) {
-                            int maxID = -1;
-                            for (User user : userList) {
-                                if (user.getId() > maxID){
-                                    maxID = user.getId();
-                                }
-                            }
-                            User keepUser = new User(maxID, keepNombre, keepApellidos, date, keepEmail, userPassword);
+                            User keepUser = new User(keepNombre, keepApellidos, date, keepEmail, userPassword);
                             Utils.pushUser(keepUser);
-                            Intent intent = new Intent(RegisterPassword.this, MainActivity.class);
+                            Intent intent = new Intent(RegisterPassword.this, SearchRoutes.class);
+                            UserManager.init(getApplicationContext());
                             UserManager.setCurrentUser(keepUser);
                             startActivity(intent);
                         }

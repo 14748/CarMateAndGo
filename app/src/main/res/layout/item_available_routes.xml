@@ -44,7 +44,7 @@
         android:id="@+id/textViewLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click Here"
+        android:text="Utilizar esta ruta"
         android:textColor="@android:color/holo_blue_bright"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"

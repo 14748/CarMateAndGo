@@ -20,7 +20,9 @@ import android.widget.TimePicker;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
+import org.cuatrovientos.blablacar.models.User;
 
 import java.io.Serializable;
 import java.text.BreakIterator;
@@ -40,8 +42,7 @@ public class CreateRoute extends AppCompatActivity {
     Double destinationLon;
     PlaceOpenStreetMap PlaceDestination;
     TextView date;
-    TextView seats;
-
+    EditText seats;
     Boolean ida = true;
 
     Date dateToday = new Date();
@@ -56,11 +57,21 @@ public class CreateRoute extends AppCompatActivity {
     private ImageButton btnHistory;
     private ImageButton btnMessages;
     private ImageButton btnProfile;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_route);
+
+        UserManager.init(getApplicationContext());
+        currentUser = UserManager.getCurrentUser();
+
+        if (currentUser.getVehicle() == null){
+            Intent setVehicle = new Intent(this, VehicleSetterActivity.class);
+            startActivity(setVehicle);
+            finish();
+        }
 
         origin = findViewById(R.id.lblOrigin);
         destination = findViewById(R.id.lblDestination);
@@ -94,6 +105,9 @@ public class CreateRoute extends AppCompatActivity {
         destinationLat = 42.824851;
         destinationLon = -1.660318;
 
+        PlaceDestination.setLat(destinationLat.toString());
+        PlaceDestination.setLon(destinationLon.toString());
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String formattedDate = dateFormat.format(dateToday);
@@ -110,13 +124,13 @@ public class CreateRoute extends AppCompatActivity {
             this.originLon = this.destinationLon;
             this.destinationLat = originLat;
             this.destinationLon = originLon;
+
+            PlaceOpenStreetMap temp = PlaceDestination;
+            PlaceDestination = PlaceOrigin;
+            PlaceOrigin = temp;
             origin.setText(destinationText);
             destination.setText(originText);
         });
-
-
-
-
 
         date.setOnClickListener(v -> {
             mostrarDatePicker();
@@ -129,16 +143,9 @@ public class CreateRoute extends AppCompatActivity {
 
         });
 
-        btnPublish.setOnClickListener(view -> {
-            Intent publishIntent = new Intent(this, CreateRoute.class);
-            startActivity(publishIntent);
-        });
-
         btnHistory.setOnClickListener(view -> {
-            /*
-            Intent historyIntent = new Intent(this, HistoryActivity.class);
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
             startActivity(historyIntent);
-             */
         });
 
         btnMessages.setOnClickListener(view -> {
@@ -167,7 +174,11 @@ public class CreateRoute extends AppCompatActivity {
             intent.putExtra("origin", PlaceOrigin);
             intent.putExtra("destination", PlaceDestination);
             intent.putExtra("date", date.getText().toString());
-            setResult(RESULT_OK, intent);
+            int seatsValue = Integer.parseInt(seats.getText().toString());
+            intent.putExtra("seats", seatsValue);
+            intent.putExtra("originText", origin.getText().toString());
+            intent.putExtra("destinationText", destination.getText().toString());
+            startActivity(intent);
             finish();
         });
 

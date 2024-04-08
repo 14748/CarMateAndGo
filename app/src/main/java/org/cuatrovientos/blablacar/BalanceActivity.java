@@ -2,6 +2,7 @@ package org.cuatrovientos.blablacar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,8 +18,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
+import com.stripe.android.paymentsheet.PaymentSheetResult;
 
 import org.cuatrovientos.blablacar.activities.MainActivity;
+import org.cuatrovientos.blablacar.activities.ProfileActivity;
+import org.cuatrovientos.blablacar.activities.login.MainScreen;
+import org.cuatrovientos.blablacar.models.User;
+import org.cuatrovientos.blablacar.models.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,17 +50,36 @@ public class BalanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balance);
 
+        UserManager.init(getApplicationContext());
+        User currentUser = UserManager.getCurrentUser();
+
         circularSlider = findViewById(R.id.circularSlider);
         btnContinue = findViewById(R.id.button_continue);
         txtBalance = findViewById(R.id.balanceTextView);
 
-        txtBalance.setText("€"+"50.00");
+        txtBalance.setText("€"+String.valueOf(currentUser.getBalance()));
 
         PaymentConfiguration.init(this, PUBLISH_KEY);
 
         paymentSheet = new PaymentSheet(this, paymentSheetResult -> {
+            if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
+                // Payment succeeded
+                Log.d("PaymentSuccess", "Payment completed successfully.");
 
+                // Assuming the payment was successful, update the user's balance here
+                currentUser.setBalance(currentUser.getBalance() + addingMoney);
+
+                // Update user in Firebase
+                Utils.pushUser(currentUser);
+                UserManager.setCurrentUser(currentUser);
+
+                // Proceed to ProfileActivity
+                Intent profileIntent = new Intent(BalanceActivity.this, ProfileActivity.class);
+                startActivity(profileIntent);
+                finish();
+            }
         });
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://api.stripe.com/v1/customers",
@@ -214,8 +239,10 @@ public class BalanceActivity extends AppCompatActivity {
             });
         } else {
             // Handle case where addingMoney <= 0, e.g., show an error message
+            Toast.makeText(BalanceActivity.this, "Invalid amount.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public static String convertFloatToStripeAmount(float amount) {
         int stripeAmount = Math.round(amount * 100);

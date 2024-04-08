@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -42,6 +43,11 @@ public class SearchRoutes extends AppCompatActivity {
 
     int codigoDeSolicitud = 1;
 
+    private ImageButton btnSearch;
+    private ImageButton btnPublish;
+    private ImageButton btnHistory;
+    private ImageButton btnMessages;
+    private ImageButton btnProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,36 @@ public class SearchRoutes extends AppCompatActivity {
         PlaceOrigin = new PlaceOpenStreetMap();
         PlaceDestination = new PlaceOpenStreetMap();
 
+        btnSearch = findViewById(R.id.btnSearch);
+        btnPublish = findViewById(R.id.btnPublish);
+        btnHistory = findViewById(R.id.btnHistory);
+        btnMessages = findViewById(R.id.btnMessages);
+        btnProfile = findViewById(R.id.btnProfile);
+
+        btnPublish.setOnClickListener(view -> {
+            Intent publishIntent = new Intent(this, CreateRoute.class);
+            startActivity(publishIntent);
+        });
+
+
+        btnHistory.setOnClickListener(view -> {
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
+            startActivity(historyIntent);
+        });
+
+        btnMessages.setOnClickListener(view -> {
+            /*
+            Intent messagesIntent = new Intent(this, MessagesActivity.class);
+            startActivity(messagesIntent);
+             */
+        });
+
+        btnProfile.setOnClickListener(view -> {
+
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            startActivity(profileIntent);
+
+        });
 
         origin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +116,9 @@ public class SearchRoutes extends AppCompatActivity {
         destinationLat = 42.824851;
         destinationLon = -1.660318;
 
+        PlaceDestination.setLat(destinationLat.toString());
+        PlaceDestination.setLon(destinationLon.toString());
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         Date dateToday = new Date();
@@ -101,6 +140,9 @@ public class SearchRoutes extends AppCompatActivity {
             this.originLon = this.destinationLon;
             this.destinationLat = originLat;
             this.destinationLon = originLon;
+            PlaceOpenStreetMap temp = PlaceDestination;
+            PlaceDestination = PlaceOrigin;
+            PlaceOrigin = temp;
             origin.setText(destinationText);
             destination.setText(originText);
         });
@@ -108,18 +150,14 @@ public class SearchRoutes extends AppCompatActivity {
         searchRoutesButton.setOnClickListener(view -> {
 
 
-            Intent searchIntent = new Intent();
+            Intent searchIntent = new Intent(SearchRoutes.this, RouteFinderActivity.class);
             searchIntent.putExtra("origin", PlaceOrigin);
-            searchIntent.putExtra("origin-lat", PlaceDestination.getLat());
-            searchIntent.putExtra("origin-lon", PlaceDestination.getLon());
             searchIntent.putExtra("destination", PlaceDestination);
-            searchIntent.putExtra("destination-lat", PlaceDestination.getLat());
-            searchIntent.putExtra("destination-lon", PlaceDestination.getLon());
-            searchIntent.putExtra("date", (CharSequence) date);
-            searchIntent.putExtra("ida", ida);
+            searchIntent.putExtra("date", date.getText().toString());
+            searchIntent.putExtra("type", ida);
+            searchIntent.putExtra("text", origin.getText().toString() + " -> " + destination.getText().toString());
             setResult(RESULT_OK, searchIntent);
-            finish();
-
+            startActivity(searchIntent);
         });
 
 

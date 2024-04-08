@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.MainActivity;
+import org.cuatrovientos.blablacar.activities.SearchRoutes;
 import org.cuatrovientos.blablacar.activities.register.RegisterPassword;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
@@ -52,8 +53,9 @@ public class LogIn extends AppCompatActivity {
                                 if (user.getEmail().equalsIgnoreCase(email)){
                                     emailDontExists = false;
                                     if (user.getPassword().equals(password)){
+                                        UserManager.init(getApplicationContext());
                                         UserManager.setCurrentUser(user);
-                                        Intent intent = new Intent(LogIn.this, MainActivity.class);
+                                        Intent intent = new Intent(LogIn.this, SearchRoutes.class);
                                         startActivity(intent);
                                     }
                                     else {

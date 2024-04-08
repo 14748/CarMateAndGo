@@ -4,15 +4,26 @@ import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Utils {
     public static List<LatLng> convertCustomLatLngListToLatLngList(List<CustomLatLng> customLatLngList) {
@@ -41,70 +52,139 @@ public class Utils {
         return latLngLists;
     }
 
-    public static void getUsers(FirebaseCallback callback) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("UsersTest");
+    public static void getUsers(final FirebaseCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("UsersTest1")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<User> users = new ArrayList<>();
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            for (DocumentSnapshot document : list) {
+                                User user = document.toObject(User.class);
+                                users.add(user);
+                            }
+                        }
+                        callback.onCallback(users); // Callback with users
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.w(TAG, "Error getting documents: ", e);
+                    }
+                });
+    }
 
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<User> users = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Assuming each child under "Users" is a User object
-                    User user = snapshot.getValue(User.class);
-                    if (user != null) {
+    public static void getTopUsersByCO2Reduction(final FirebaseCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("UsersTest1")
+                .orderBy("c02Reduction", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<User> users = new ArrayList<>();
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                                User user = document.toObject(User.class);
+                                users.add(user);
+                            }
+                        }
+                        callback.onCallback(users);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting documents: ", e);
+                    }
+                });
+    }
+
+
+    public static void pushUser(User user) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("UsersTest1").document(user.getId())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+    public static void getUserById(String userId, final FirebaseCallbackUser callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("UsersTest1").document(userId);
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            User user = documentSnapshot.toObject(User.class);
+            callback.onCallback(user); // Callback with user
+        }).addOnFailureListener(e -> Log.w(TAG, "Error getting document: ", e));
+    }
+
+    public static void getUsersByIds(List<String> userIds, final UsersCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        List<User> users = new ArrayList<>();
+        AtomicInteger remainingUsers = new AtomicInteger(userIds.size());
+
+        if (userIds.isEmpty()) {
+            callback.onCallback(users);
+            return;
+        }
+
+        for (String userId : userIds) {
+            DocumentReference docRef = db.collection("UsersTest1").document(userId);
+            docRef.get().addOnSuccessListener(documentSnapshot -> {
+                User user = documentSnapshot.toObject(User.class);
+                if (user != null) {
+                    synchronized (users) {
                         users.add(user);
                     }
                 }
-                callback.onCallback(users); // Pass the users list to the callback
-            }
+                if (remainingUsers.decrementAndGet() == 0) {
+                    callback.onCallback(users);
+                }
+            }).addOnFailureListener(e -> {
+                if (remainingUsers.decrementAndGet() == 0) {
+                    callback.onCallback(users);
+                }
+            });
+        }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
-            }
-        });
+    public interface UsersCallback {
+        void onCallback(List<User> users);
+    }
+
+    public interface FirebaseCallbackUser {
+        void onCallback(User user);
     }
 
     public interface FirebaseCallback {
         void onCallback(List<User> userList);
     }
 
-    public static void pushUser(User user) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("UsersTest");
+    public static String[] colors = new String[]
+            {"F44336", "E91E63", "9C27B0", "673AB7", "3F51B5",
+                    "03A9F4", "009688", "4CAF50", "CDDC39", "FFC107",
+                    "FF5722", "795548", "9E9E9E", "455A64", "FF5722"};
 
-        // Generate a new unique key for each new user
-        String userId = usersRef.push().getKey();
-
-        // Use the generated key to create a new entry in your database
-        if (userId != null) {
-            usersRef.child(userId).setValue(user)
-                    .addOnSuccessListener(aVoid -> Log.d(TAG, "User added successfully!"))
-                    .addOnFailureListener(e -> Log.d(TAG, "Failed to add user: " + e.getMessage()));
-        }
-    }
-
-    public static void getUserById(String userId, FirebaseCallbackUser callback) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("UsersTest").child(userId);
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                callback.onCallback(user); // Pass the single user to the callback
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Data could not be retrieved " + databaseError.getMessage());
-            }
-        });
-    }
-
-    public interface FirebaseCallbackUser {
-        void onCallback(User user);
+    public static String getRandomColor() {
+        // Número aleatorio entre [0] y [14];
+        int randonNumber = new Random().nextInt(colors.length) + 0;
+        // Devolvemos el color
+        return colors[randonNumber];
     }
 
 }

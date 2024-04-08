@@ -15,4 +15,12 @@
     <string name="mensaje"><![CDATA[Descubre cuánto ahorras en un viaje con CarMate&Go.]]></string>
     <string name="buscar_viaje">Buscar Viaje</string>
     <string name="mensaje_buscar">Miles de viajes a muy buen precio.</string>
+    <string name="vehicle_make">Fabricante</string>
+    <string name="vehicle_model">Modelo</string>
+    <string name="vehicle_year">Anyo</string>
+    <string name="vehicle_color">Color</string>
+    <string name="vehicle_license_plate">Matricula</string>
+    <string name="submit">Guardar</string>
+    <string name="comment_hint">Escribe aqui tu comentario</string>
+    <string name="submit_rating">Enviar</string>
 </resources>

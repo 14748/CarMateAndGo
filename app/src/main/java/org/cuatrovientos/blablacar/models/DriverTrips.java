@@ -1,8 +1,13 @@
 package org.cuatrovientos.blablacar.models;
 
-public class DriverTrips {
+import java.io.Serializable;
+import java.util.Date;
+
+public class DriverTrips implements Serializable {
     private User user;
     private RouteEntity route;
+
+    private Date date;
 
     public DriverTrips() {
     }
@@ -12,7 +17,22 @@ public class DriverTrips {
         this.route = route;
     }
 
+    public DriverTrips(User user, RouteEntity route, Date date) {
+        this.user = user;
+        this.route = route;
+        this.date = date;
+    }
+
     // Getters y Setters
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public User getUser() {
         return user;
     }

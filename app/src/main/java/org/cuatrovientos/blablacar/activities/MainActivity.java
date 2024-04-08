@@ -82,12 +82,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     private List<Polyline> polylineList = new ArrayList<>();
-    private Button button;
     private static LatLng CUATROVIENTOS = new LatLng(42.824851, -1.660318);
-    private Button btnCreateRoute;
-    private Button btnLogIn;
-
-    private Button btnTest;
 
     private final Executor executor = Executors.newSingleThreadExecutor();
     private ArrayList<User> users = new ArrayList<>();
@@ -95,8 +90,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView recyclerView;
 
     private LinearLayout linearLayout;
-    private ActivityResultLauncher<Intent> createRouteLauncher;
-
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
@@ -104,18 +97,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageButton btnProfile;
 
     private MapHelper mapHelper;
+    private User localUser;
 
     private RouteService routeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initCreateRouteLauncher();
         setContentView(R.layout.activity_main);
-        button = findViewById(R.id.button2);
-        btnCreateRoute = findViewById(R.id.btnCreateScreen);
-        btnLogIn = findViewById(R.id.bntLogIn);
-        btnTest = findViewById(R.id.buttontest);
         linearLayout = findViewById(R.id.linearLayout);
         recyclerView = findViewById(R.id.routesRecyclerView);
         btnSearch = findViewById(R.id.btnSearch);
@@ -130,10 +119,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Utils.pushUser(new User(0, "pepito", "pepita", new Date(), "mail", "pass"));
         btnSearch.setOnClickListener(view -> {
-            /*
-            Intent searchIntent = new Intent(this, Search.class);
+            Intent searchIntent = new Intent(this, SearchRoutes.class);
             startActivity(searchIntent);
-             */
         });
 
         btnPublish.setOnClickListener(view -> {
@@ -141,11 +128,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(publishIntent);
         });
 
+
         btnHistory.setOnClickListener(view -> {
-            /*
-            Intent historyIntent = new Intent(this, HistoryActivity.class);
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
             startActivity(historyIntent);
-             */
         });
 
         btnMessages.setOnClickListener(view -> {
@@ -162,46 +148,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
 
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnCreateRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CreateRoute.class);
-                createRouteLauncher.launch(intent);
-            }
-        });
-
-        btnLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainScreen.class);
-                startActivity(intent);
-            }
-        });
-
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RouteFinderActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        if (UserManager.getCurrentUser() == null){
+        UserManager.init(getApplicationContext());
+        User currentUser = UserManager.getCurrentUser();
+        if (currentUser == null){
             View contentView = findViewById(android.R.id.content);
             Snackbar snackbar = Snackbar.make(contentView, "NO ESTÁ LOGGEADO", Snackbar.LENGTH_SHORT);
             snackbar.setTextColor(Color.WHITE);
             snackbar.setBackgroundTint(Color.RED);
             snackbar.show();
         }
+        localUser = currentUser;
     }
 
     @Override
@@ -212,31 +168,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapHelper = new MapHelper(map);
         routeService = new RouteService(MainActivity.this, mapHelper);
-    }
 
-    private void initCreateRouteLauncher() {
-        createRouteLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        map.clear();
-                        Intent data = result.getData();
+        if (getIntent() != null) {
+            PlaceOpenStreetMap origin = (PlaceOpenStreetMap) getIntent().getSerializableExtra("origin");
+            PlaceOpenStreetMap destination = (PlaceOpenStreetMap) getIntent().getSerializableExtra("destination");
+            String dateStr = getIntent().getStringExtra("date");
+            String originText = getIntent().getStringExtra("originText");
+            String destinationText = getIntent().getStringExtra("destinationText");
+            int seats = getIntent().getIntExtra("seats", 0);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = new Date();
+            try {
+                date = sdf.parse(dateStr);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
 
-                        PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
-                        PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
-                        String dateStr = data.getStringExtra("date");
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        Date date = new Date();
-                        try {
-                             date = sdf.parse(dateStr);
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                        Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
-                        CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
-                        CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
-                        routeService.routeCreation(new User(), originLocation, destinationLocation, date, recyclerView);
-                    }
-                });
+            Log.d("Womp", origin.getLon() + " " + origin.getLat() + " " + destination.getLon() + " " + destination.getLat());
+            CustomLatLng originLocation = new CustomLatLng(Double.parseDouble(origin.getLat()), Double.parseDouble(origin.getLon()));
+            CustomLatLng destinationLocation = new CustomLatLng(Double.parseDouble(destination.getLat()), Double.parseDouble(destination.getLon()));
+            routeService.routeCreation(this, localUser, originLocation, destinationLocation, date, recyclerView, linearLayout, originText, destinationText, seats);
+        }
     }
 }
