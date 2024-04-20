@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pamplona"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"/>
 
     <!-- Destination City -->
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Zaragoza"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"/>
 
     <!-- Price -->
@@ -112,7 +112,7 @@
         android:layout_marginTop="16dp"
         android:layout_alignParentStart="true"
         android:background="@drawable/style_txtview"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <!-- Driver Name -->
     <TextView

@@ -139,6 +139,7 @@
             android:id="@+id/separator_before_price"
             android:layout_width="match_parent"
             android:layout_height="8dp"
+            android:layout_marginTop="6dp"
         android:background="@drawable/grey_square"
         android:layout_alignParentTop="true"/>
 
@@ -349,15 +350,6 @@
                 android:textStyle="bold" />
 
         </FrameLayout>
-
-        <!-- Separator after RecyclerView -->
-        <View
-            android:id="@+id/separator_after_passengers"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@drawable/grey_square"
-            android:layout_below="@id/recyclerViewTrayectos"
-            android:layout_marginTop="18dp" />
 
     </RelativeLayout>
 

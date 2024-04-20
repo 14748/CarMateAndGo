@@ -118,7 +118,6 @@ public class TripDetailsActivity extends AppCompatActivity {
         textCar = findViewById(R.id.text_car);
         textCarColor = findViewById(R.id.text_carColor);
         separatorBeforePassengers = findViewById(R.id.separator_before_passengers);
-        separatorAfterPassengers = findViewById(R.id.separator_after_passengers);
         container_driver_info = findViewById(R.id.container_driver_info);
 
         // Initialize RecyclerView for passengers
@@ -183,6 +182,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        textQuestion.setText("Haz una pregunta a " + driverTrips.getUser().getName());
 
         imageProfile.setText(driverTrips.getUser().getName().charAt(0) + "" + driverTrips.getUser().getLastName().charAt(0));
         imageProfile.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
