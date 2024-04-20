@@ -122,7 +122,6 @@ public class UserTripsActivity extends AppCompatActivity {
                                                 break;
                                             }
                                         }
-                                        updateRecyclerView(routesUser);
                                     }
                                 });
                             }
@@ -131,6 +130,8 @@ public class UserTripsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        updateRecyclerView(routesUser);
     }
 
     private void loadUserTripsDriver() {
