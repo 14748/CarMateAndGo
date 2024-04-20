@@ -174,7 +174,13 @@ public class CreateRoute extends AppCompatActivity {
             intent.putExtra("origin", PlaceOrigin);
             intent.putExtra("destination", PlaceDestination);
             intent.putExtra("date", date.getText().toString());
-            int seatsValue = Integer.parseInt(seats.getText().toString());
+            int seatsValue;
+            String seatsText = seats.getText().toString();
+            try {
+                seatsValue = Integer.parseInt(seatsText);
+            } catch (NumberFormatException e) {
+                seatsValue = 4; //placeholder on seats
+            }
             intent.putExtra("seats", seatsValue);
             intent.putExtra("originText", origin.getText().toString());
             intent.putExtra("destinationText", destination.getText().toString());

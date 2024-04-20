@@ -123,12 +123,14 @@ public class RouteService {
 
     private static float parseKilometers(String kilometersStr) {
         try {
-            return Float.parseFloat(kilometersStr);
+            String normalizedKilometersStr = kilometersStr.replace(",", ".");
+            return Float.parseFloat(normalizedKilometersStr);
         } catch (NumberFormatException e) {
             System.err.println("Invalid format for kilometers: " + kilometersStr);
             return 0;
         }
     }
+
 
     public void createRoute(CustomLatLng start, CustomLatLng end, RouteService.RouteCallback callback) {
         CompletableFuture.supplyAsync(() -> {
