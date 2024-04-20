@@ -136,7 +136,7 @@
                 android:id="@+id/checkbox_music_playing"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Música permitida"
+                android:text="Se pone música"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkbox_no_smoking"
                 app:layout_constraintStart_toStartOf="parent"

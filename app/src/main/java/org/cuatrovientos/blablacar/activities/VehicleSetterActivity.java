@@ -85,11 +85,11 @@ public class VehicleSetterActivity extends AppCompatActivity {
             String licensePlate = licensePlateEditText.getText().toString();
 
             List<String> preferences = new ArrayList<>();
-            if (noSmokingCheckBox.isChecked()) preferences.add("No Smoking");
-            if (musicPlayingCheckBox.isChecked()) preferences.add("Music Playing");
-            if (luggageSpaceCheckBox.isChecked()) preferences.add("Luggage Space");
-            if (usbChargingCheckBox.isChecked()) preferences.add("USB Charging");
-            if (wifiAvailableCheckBox.isChecked()) preferences.add("Wi-Fi Available");
+            if (noSmokingCheckBox.isChecked()) preferences.add("No fumar");
+            if (musicPlayingCheckBox.isChecked()) preferences.add("Se pone música");
+            if (luggageSpaceCheckBox.isChecked()) preferences.add("Espacio para equipaje");
+            if (usbChargingCheckBox.isChecked()) preferences.add("Carga USB disponible");
+            if (wifiAvailableCheckBox.isChecked()) preferences.add("Wi-Fi Disponible");
 
             return new Vehicle(make, model, year, color, licensePlate, preferences);
 
