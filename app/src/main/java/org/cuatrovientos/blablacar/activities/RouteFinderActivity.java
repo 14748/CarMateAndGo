@@ -189,7 +189,7 @@ public class RouteFinderActivity extends AppCompatActivity {
     }
 
     private void onTripSelected(DriverTrips trip) {
-        Toast.makeText(this, "Selected Trip: " + trip.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Selected Trip: " + trip.toString(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(RouteFinderActivity.this, TripDetailsActivity.class);
         startActivity(intent);
         DataHolder.getInstance().setYourData(trip);

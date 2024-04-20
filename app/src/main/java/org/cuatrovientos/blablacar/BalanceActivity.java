@@ -89,7 +89,7 @@ public class BalanceActivity extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             customerID = object.getString("id");
-                            Toast.makeText(BalanceActivity.this, customerID, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(BalanceActivity.this, customerID, Toast.LENGTH_LONG).show();
 
 
                             getEphericalKey(customerID);
@@ -101,7 +101,7 @@ public class BalanceActivity extends AppCompatActivity {
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(BalanceActivity.this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(BalanceActivity.this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("NetworkError", error.toString());
             }
 
@@ -138,7 +138,7 @@ public class BalanceActivity extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             EphericalKey = object.getString("id");
-                            Toast.makeText(BalanceActivity.this, EphericalKey, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(BalanceActivity.this, EphericalKey, Toast.LENGTH_LONG).show();
                             //getClientSecret(customerID, EphericalKey);
                         }catch (JSONException e){
                             e.printStackTrace();
@@ -148,7 +148,7 @@ public class BalanceActivity extends AppCompatActivity {
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(BalanceActivity.this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(BalanceActivity.this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("NetworkError", error.toString());
             }
         }){
@@ -234,12 +234,12 @@ public class BalanceActivity extends AppCompatActivity {
                 @Override
                 public void onError(String error) {
                     // Handle error, show message to user
-                    Toast.makeText(BalanceActivity.this, error, Toast.LENGTH_LONG).show();
+                    //.makeText(BalanceActivity.this, error, Toast.LENGTH_LONG).show();
                 }
             });
         } else {
             // Handle case where addingMoney <= 0, e.g., show an error message
-            Toast.makeText(BalanceActivity.this, "Invalid amount.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(BalanceActivity.this, "Invalid amount.", Toast.LENGTH_SHORT).show();
         }
     }
 

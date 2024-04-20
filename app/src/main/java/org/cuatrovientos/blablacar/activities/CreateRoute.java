@@ -179,7 +179,6 @@ public class CreateRoute extends AppCompatActivity {
             intent.putExtra("originText", origin.getText().toString());
             intent.putExtra("destinationText", destination.getText().toString());
             startActivity(intent);
-            finish();
         });
 
 

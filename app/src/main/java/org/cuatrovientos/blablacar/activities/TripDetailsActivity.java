@@ -234,17 +234,17 @@ public class TripDetailsActivity extends AppCompatActivity {
                 User currentUser = UserManager.getCurrentUser();
 
                 if (currentUser.getId().equals(driverTrips.getUser().getId())) {
-                    Toast.makeText(getApplicationContext(), "You cannot reserve your own trip.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No puedes reservar tu propio viaje.", Toast.LENGTH_SHORT).show();
                     return; // Exit the method early
                 }
 
                 if (currentUser.getBalance() < driverTrips.getRoute().getPrice()){
-                    Toast.makeText(getApplicationContext(), "You do not have enough money", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No tienes suficiente dinero", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (driverTrips.getDate().before(new Date())) {
-                    Toast.makeText(getApplicationContext(), "Cannot get in trips older than now", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No puedes inscribirte en viajes pasados", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -279,7 +279,7 @@ public class TripDetailsActivity extends AppCompatActivity {
 
                                 // If both conditions are met, no need to continue checking other routes
                                 if (hasTripToCuatrovientosToday && hasTripFromCuatrovientosToday) {
-                                    Toast.makeText(getApplicationContext(), "YOu alr saved both your trips today", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Ya estas inscrito en 1 viaje de ida y 1 viaje de vuelta", Toast.LENGTH_SHORT).show();
                                     break;
                                 }
                             }
@@ -310,9 +310,11 @@ public class TripDetailsActivity extends AppCompatActivity {
                                     break;
                                 }
                             }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Ya estas insctito para un viaje de " + (type.equals("0") ? "vuelta" : "ida") + " hoy.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "You are already part of this route.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Ya estas inscrito a esta ruta.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

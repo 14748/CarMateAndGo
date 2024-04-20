@@ -120,8 +120,8 @@ public class Search extends AppCompatActivity {
         // Manejar clic en un elemento del RecyclerView
         adapter.setOnItemClickListener(position -> {
             PlaceOpenStreetMap place = results.get(position);
-            makeText(this, "Seleccionado: " + place.getDisplayName(), Toast.LENGTH_SHORT).show();
-            makeText(this, "Latitud: " + place.getLat() + ", Longitud: " + place.getLon(), Toast.LENGTH_SHORT).show();
+            //makeText(this, "Seleccionado: " + place.getDisplayName(), Toast.LENGTH_SHORT).show();
+            //makeText(this, "Latitud: " + place.getLat() + ", Longitud: " + place.getLon(), Toast.LENGTH_SHORT).show();
             if (type != null) {
                 if (type.equals("origin")) {
                     Intent intent = new Intent(this, CreateRoute.class);
@@ -240,7 +240,7 @@ public class Search extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 obtenerUbicacionActual();
             } else {
-                makeText(this, "Permiso de ubicación denegado.", Toast.LENGTH_SHORT).show();
+                //makeText(this, "Permiso de ubicación denegado.", Toast.LENGTH_SHORT).show();
             }
         }
     }
