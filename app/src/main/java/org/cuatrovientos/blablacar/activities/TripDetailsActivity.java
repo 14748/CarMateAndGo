@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.chat.ChatActivity;
+import org.cuatrovientos.blablacar.activities.chat.util.AndroidUtil;
 import org.cuatrovientos.blablacar.adapters.PreferencesAdapter;
 import org.cuatrovientos.blablacar.adapters.RecyclerTripsDetailsAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
@@ -183,6 +185,13 @@ public class TripDetailsActivity extends AppCompatActivity {
             }
         });
         textQuestion.setText("Haz una pregunta a " + driverTrips.getUser().getName());
+        textQuestion.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+            AndroidUtil.passUserModelAsIntent(intent,driverTrips.getUser());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+        });
+
 
         imageProfile.setText(driverTrips.getUser().getName().charAt(0) + "" + driverTrips.getUser().getLastName().charAt(0));
         imageProfile.getBackground().setColorFilter(Color.parseColor("#" + driverTrips.getUser().getColor()), PorterDuff.Mode.SRC);

@@ -47,6 +47,7 @@ import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.RouteService;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
@@ -135,10 +136,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         btnMessages.setOnClickListener(view -> {
-            /*
-            Intent messagesIntent = new Intent(this, MessagesActivity.class);
-            startActivity(messagesIntent);
-             */
+            Intent chatIntent = new Intent(this, MainActivityChat.class);
+            startActivity(chatIntent);
         });
 
         btnProfile.setOnClickListener(view -> {

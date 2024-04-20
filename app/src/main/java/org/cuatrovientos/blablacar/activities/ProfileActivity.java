@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
 import org.cuatrovientos.blablacar.activities.login.LogIn;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.models.User;
@@ -35,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
+    private ImageButton btnMessages;
     private ImageView btnPagos;
     private ImageView btnNotificaciones;
     private LinearLayout leaderboardLayout, settingsLayout, paymentLayout;
@@ -66,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnPublish = findViewById(R.id.btnPublish);
         btnLogout = findViewById(R.id.btnLogout);
         btnPagos = findViewById(R.id.imagePagos);
+        btnMessages = findViewById(R.id.btnMessages);
         btnHistory = findViewById(R.id.btnHistory);
         password = findViewById(R.id.btnChangePassword);
         txtc02User = findViewById(R.id.txtc02User);
@@ -166,6 +169,11 @@ public class ProfileActivity extends AppCompatActivity {
         btnHistory.setOnClickListener(view -> {
             Intent historyIntent = new Intent(this, UserTripsActivity.class);
             startActivity(historyIntent);
+        });
+
+        btnMessages.setOnClickListener(v -> {
+            Intent chatIntent = new Intent(this, MainActivityChat.class);
+            startActivity(chatIntent);
         });
 
         settingsLayout.setOnClickListener(view -> {

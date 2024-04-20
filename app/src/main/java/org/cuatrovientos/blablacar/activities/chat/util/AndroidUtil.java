@@ -17,6 +17,8 @@ public class AndroidUtil {
 
     public static void passUserModelAsIntent(Intent intent, User model){
        intent.putExtra("username",model.getName());
+       intent.putExtra("lastname",model.getLastName());
+       intent.putExtra("color",model.getColor());
        intent.putExtra("phone",model.getTelephone());
        intent.putExtra("userId",model.getId());
     }
@@ -24,6 +26,8 @@ public class AndroidUtil {
     public static User getUserModelFromIntent(Intent intent) {
         User userModel = new User();
         userModel.setName(intent.getStringExtra("username"));
+        userModel.setLastName(intent.getStringExtra("lastname"));
+        userModel.setColor(intent.getStringExtra("color"));
         String telephoneNumberStr = intent.getStringExtra("phone"); // Get the phone number as a String
 
         // Check if the phone number string is not null before parsing

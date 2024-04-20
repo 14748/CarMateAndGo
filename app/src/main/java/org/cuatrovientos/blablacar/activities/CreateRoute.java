@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 import org.cuatrovientos.blablacar.models.User;
 
@@ -149,10 +150,8 @@ public class CreateRoute extends AppCompatActivity {
         });
 
         btnMessages.setOnClickListener(view -> {
-            /*
-            Intent messagesIntent = new Intent(this, MessagesActivity.class);
-            startActivity(messagesIntent);
-             */
+            Intent chatIntent = new Intent(this, MainActivityChat.class);
+            startActivity(chatIntent);
         });
 
         btnProfile.setOnClickListener(view -> {

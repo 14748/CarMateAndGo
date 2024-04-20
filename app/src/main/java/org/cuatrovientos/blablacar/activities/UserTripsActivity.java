@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
 import org.cuatrovientos.blablacar.adapters.RecyclerUserTripsAdapter;
 import org.cuatrovientos.blablacar.models.DayTrips;
 import org.cuatrovientos.blablacar.models.DriverTrips;
@@ -65,10 +66,8 @@ public class UserTripsActivity extends AppCompatActivity {
         });
 
         btnMessages.setOnClickListener(view -> {
-            /*
-            Intent messagesIntent = new Intent(this, MessagesActivity.class);
-            startActivity(messagesIntent);
-             */
+            Intent chatIntent = new Intent(this, MainActivityChat.class);
+            startActivity(chatIntent);
         });
 
         btnProfile.setOnClickListener(view -> {

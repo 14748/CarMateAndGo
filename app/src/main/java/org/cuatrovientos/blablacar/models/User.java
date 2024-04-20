@@ -190,6 +190,10 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
+    public void setColor(String color){
+        this.color = color;
+    }
+
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }

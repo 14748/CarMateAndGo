@@ -81,8 +81,15 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.chat_recycler_view);
         imageView = findViewById(R.id.ivAvatar);
 
-        imageView.setText(otherUser.getName().charAt(0) + "" + otherUser.getLastName().charAt(0));
-        imageView.getBackground().setColorFilter(Color.parseColor("#" + otherUser.getColor()), PorterDuff.Mode.SRC);
+        if (otherUser != null && otherUser.getName() != null && otherUser.getLastName() != null) {
+            char firstInitial = otherUser.getName().charAt(0);
+            char lastInitial = otherUser.getLastName().charAt(0);
+            imageView.setText(String.valueOf(firstInitial) + lastInitial);
+            imageView.getBackground().setColorFilter(Color.parseColor("#" + otherUser.getColor()), PorterDuff.Mode.SRC);
+        } else {
+            Log.e("ChatActivity", "User details are incomplete.");
+        }
+
 
         backBtn.setOnClickListener((v)->{
             onBackPressed();
