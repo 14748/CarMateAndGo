@@ -194,7 +194,7 @@ public class ProfileActivity extends AppCompatActivity {
         balance.setText(String.valueOf(currentUser.getBalance()) + "€");
         txtc02User.setText(currentUser.getC02Reduction() + "kg");
         imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
-        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
+        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + currentUser.getColor()), PorterDuff.Mode.SRC);
     }
 
     private void message(String text, int color) {

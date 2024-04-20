@@ -185,7 +185,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         textQuestion.setText("Haz una pregunta a " + driverTrips.getUser().getName());
 
         imageProfile.setText(driverTrips.getUser().getName().charAt(0) + "" + driverTrips.getUser().getLastName().charAt(0));
-        imageProfile.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
+        imageProfile.getBackground().setColorFilter(Color.parseColor("#" + driverTrips.getUser().getColor()), PorterDuff.Mode.SRC);
 
         preferencesRecyclerView = findViewById(R.id.recyclerViewPreferences);
         preferencesRecyclerView.setLayoutManager(new LinearLayoutManager(this));

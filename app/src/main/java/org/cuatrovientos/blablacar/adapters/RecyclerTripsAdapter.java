@@ -129,7 +129,7 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
             timeDiff.setText(durationStr);
 
             userLogo.setText(palabra.getUser().getName().charAt(0) + "" + palabra.getUser().getLastName().charAt(0));
-            userLogo.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
+            userLogo.getBackground().setColorFilter(Color.parseColor("#" + palabra.getUser().getColor()), PorterDuff.Mode.SRC);
 
             try {
                 String[] parts = durationStr.split(":");

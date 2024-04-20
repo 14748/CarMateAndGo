@@ -65,7 +65,7 @@ public class EditProfileActivity extends AppCompatActivity {
         apellido.setText(currentUser.getLastName());
         correo.setText(currentUser.getEmail());
         imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
-        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
+        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + currentUser.getColor()), PorterDuff.Mode.SRC);
 
         btnSearch.setOnClickListener(view -> {
             Intent searchIntent = new Intent(this, SearchRoutes.class);

@@ -37,7 +37,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         holder.tvUserName.setText(user.getName() + " " + user.getLastName());
         holder.tvCO2Reduction.setText(String.format("%.2f", user.getC02Reduction()) + " kg");
         holder.ivAvatar.setText(user.getName().charAt(0) + "" + user.getLastName().charAt(0));
-        holder.ivAvatar.getBackground().setColorFilter(Color.parseColor("#" + Utils.getRandomColor()), PorterDuff.Mode.SRC);
+        holder.ivAvatar.getBackground().setColorFilter(Color.parseColor("#" + user.getColor()), PorterDuff.Mode.SRC);
     }
 
     @Override
