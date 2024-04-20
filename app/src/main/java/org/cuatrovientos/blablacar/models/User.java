@@ -29,6 +29,7 @@ public class User implements Serializable {
     private  float c02Reduction;
 
     private float balance;
+    private String fcmToken;
     public User(){
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
@@ -221,5 +222,13 @@ public class User implements Serializable {
 
     public int getTotalRatings(){
         return ratings != null ? ratings.size() : 0;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

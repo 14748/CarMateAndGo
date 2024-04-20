@@ -25,5 +25,7 @@
     <color name="gray900">#111827</color>
     <color name="blue_primary">#2196F3</color>
     <color name="blue_secondary">#64B5F6</color>
+    <color name="chat_color_sender">#1E88E5</color>
+    <color name="chat_color_receiver">#7CB342</color>
 
 </resources>

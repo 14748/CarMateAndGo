@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.activities.chat.ChatActivity;
+import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 
 import java.text.SimpleDateFormat;
@@ -81,10 +83,8 @@ public class SearchRoutes extends AppCompatActivity {
         });
 
         btnMessages.setOnClickListener(view -> {
-            /*
-            Intent messagesIntent = new Intent(this, MessagesActivity.class);
+            Intent messagesIntent = new Intent(this, MainActivityChat.class);
             startActivity(messagesIntent);
-             */
         });
 
         btnProfile.setOnClickListener(view -> {

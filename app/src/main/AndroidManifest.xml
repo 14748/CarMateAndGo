@@ -19,6 +19,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.chat.MainActivityChat"
+            android:exported="false" />
+        <activity
+            android:name=".activities.chat.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.C02LeaderboardActivity"
             android:exported="false" />
         <activity
@@ -80,6 +86,9 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.chat.SearchUserActivity"
             android:exported="false" />
 
         <meta-data
