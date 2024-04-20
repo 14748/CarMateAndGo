@@ -36,6 +36,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.MediaType;
@@ -135,7 +136,7 @@ public class RouteService {
                 Retrofit retrofit = getRetrofit();
                 ApiService service = retrofit.create(ApiService.class);
 
-                String rawJson = String.format(
+                String rawJson = String.format(Locale.US,
                         "{" +
                                 "\"coordinates\": [" +
                                 "[%f,%f]," +
