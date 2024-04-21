@@ -48,6 +48,18 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    sourceSets {
+        getByName("main") {
+            res {
+                srcDirs("src\\main\\res", "src\\main\\res\\layouts\\chat",
+                    "src\\main\\res",
+                    "src\\main\\res\\layouts\\search", "src\\main\\res", "src\\main\\res\\layouts\\create",
+                    "src\\main\\res",
+                    "src\\main\\res\\layouts\\history", "src\\main\\res", "src\\main\\res\\layouts\\profile"
+                )
+            }
+        }
+    }
 }
 
 dependencies {
@@ -63,15 +75,21 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.activity:activity:1.8.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    //phone picker prefix
+    implementation("com.hbb20:ccp:2.5.0")
 
     //FireBase
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore")
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
+    implementation("com.google.firebase:firebase-auth")
 
     //Map
     implementation("com.google.android.gms:play-services-maps:18.2.0")

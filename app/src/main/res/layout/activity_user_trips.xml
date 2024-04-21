@@ -196,6 +196,7 @@
             android:layout_height="wrap_content"
             android:text="No hay ningun viaje disponible"
             android:layout_gravity="center"
+            android:gravity="center"
             android:textSize="24sp"
             android:textStyle="bold" />
 

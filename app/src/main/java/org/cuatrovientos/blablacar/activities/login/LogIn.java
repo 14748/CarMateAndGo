@@ -14,9 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
-import org.cuatrovientos.blablacar.activities.MainActivity;
-import org.cuatrovientos.blablacar.activities.SearchRoutes;
-import org.cuatrovientos.blablacar.activities.register.RegisterPassword;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 

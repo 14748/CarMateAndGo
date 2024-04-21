@@ -18,21 +18,24 @@ public class User implements Serializable {
     private String lastName;
     private Date birthDate;
     private String email;
-    private int telephone;
+    private String telephone;
     private String password;
     private List<RouteEntity> createdRoutes;
     private List<RouteEntity> passengerRoutes;
     private Bitmap userIcon;
     private List<Rating> ratings;
+    private List<String> bannedUsers;
     private Vehicle vehicle;
     private String color;
     private  float c02Reduction;
 
     private float balance;
+    private String fcmToken;
     public User(){
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
         this.ratings = new ArrayList<>();
+        this.bannedUsers = new ArrayList<>();
     }
 
     public User(String name, String lastName, Date birthDate, String email, String password) {
@@ -49,7 +52,7 @@ public class User implements Serializable {
         this.color = Utils.getRandomColor();
     }
 
-    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Bitmap userIcon) {
+    public User(String name, String lastName, Date birthDate, String email, String telephone, String password, Bitmap userIcon) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
@@ -136,6 +139,22 @@ public class User implements Serializable {
         this.passengerRoutes = passengerRoutes;
     }
 
+    public List<String> getBannedUsers() {
+        return bannedUsers;
+    }
+
+    public void setBannedUsers(List<String> bannedUsers) {
+        this.bannedUsers = bannedUsers;
+    }
+
+    public void addBannedUsers(String userId) {
+        this.bannedUsers.add(userId);
+    }
+
+    public void removeBannedUsers(String userId) {
+        this.bannedUsers.remove(userId);
+    }
+
     public List<Rating> getRatings() {
         return ratings;
     }
@@ -148,7 +167,7 @@ public class User implements Serializable {
         return userIcon;
     }
 
-    public int getTelephone(){ return telephone;}
+    public String getTelephone(){ return telephone;}
 
     /*
     * SETTERS (posible necesidad futura de tener que borrar alguno por seguridad)
@@ -189,6 +208,10 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
+    public void setColor(String color){
+        this.color = color;
+    }
+
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
@@ -204,7 +227,7 @@ public class User implements Serializable {
     public void setUserIcon(Bitmap userIcon) {
         this.userIcon = userIcon;
     }
-    public void setTelephone(int telephone) { this.telephone = telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
 
     public float getRating(){
         if (ratings == null || ratings.isEmpty()) {
@@ -221,5 +244,13 @@ public class User implements Serializable {
 
     public int getTotalRatings(){
         return ratings != null ? ratings.size() : 0;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

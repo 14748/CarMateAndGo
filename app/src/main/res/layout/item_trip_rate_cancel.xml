@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:background="@drawable/rounded_background"
+android:elevation="4dp"
+android:layout_marginLeft="10dp"
+android:layout_marginRight="10dp"
+android:padding="16dp"
+android:layout_marginTop="8dp"
+android:layout_marginBottom="8dp">
+
+<!-- Start Time -->
+<TextView
+    android:id="@+id/start_time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="08:30"
+    android:textSize="18sp"
+    android:textStyle="bold"/>
+
+<!-- Duration -->
+<TextView
+    android:id="@+id/duration"
+    android:layout_below="@id/start_time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="2h00"
+    android:textSize="16sp"/>
+
+<!-- Arrival Time -->
+<TextView
+    android:id="@+id/arrival_time"
+    android:layout_below="@id/duration"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="10:30"
+    android:textSize="18sp"
+    android:textStyle="bold"/>
+
+<!-- Timeline View -->
+<ImageView
+    android:id="@+id/timeline_top_dot"
+    android:layout_width="10dp"
+    android:layout_height="10dp"
+    android:layout_toEndOf="@id/arrival_time"
+    android:layout_alignTop="@id/start_time"
+    android:layout_marginStart="4dp"
+    android:src="@drawable/dot_drawable" />
+
+<!-- Timeline View -->
+<View
+    android:id="@+id/timeline"
+    android:layout_width="2dp"
+    android:layout_height="fill_parent"
+    android:layout_toEndOf="@id/arrival_time"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_below="@id/timeline_top_dot"
+    android:layout_above="@+id/timeline_bottom_dot"
+    android:background="@android:color/darker_gray"/>
+
+<!-- Timeline Bottom Dot -->
+<ImageView
+    android:id="@+id/timeline_bottom_dot"
+    android:layout_width="10dp"
+    android:layout_height="10dp"
+    android:layout_toEndOf="@id/arrival_time"
+    android:layout_alignBottom="@id/destination_city"
+    android:layout_marginStart="4dp"
+    android:src="@drawable/dot_drawable" />
+
+<!-- Origin City -->
+    <TextView
+        android:id="@+id/origin_city"
+        android:layout_toEndOf="@id/timeline"
+        android:layout_alignTop="@id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/price"
+        android:text="Pamplona"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginEnd="8dp"/>
+
+<!-- Destination City -->
+    <TextView
+        android:id="@+id/destination_city"
+        android:layout_toEndOf="@id/timeline"
+        android:layout_alignTop="@id/arrival_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/price"
+        android:text="Zaragoza"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginEnd="8dp"/>
+<!-- Price -->
+<TextView
+    android:id="@+id/price"
+    android:layout_alignParentEnd="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="16.59 €"
+    android:textSize="18sp"
+    android:textStyle="bold"
+    android:textColor="@color/colorAccent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTrayectos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrival_time"
+        tools:listitem="@layout/item_passengers"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/noPassengersNotice"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrival_time"
+        android:text="Nadie se ha apuntado a tu viaje"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrival_time"
+        android:id="@+id/layout_driver_rating">
+
+        <!-- Driver Image -->
+        <TextView
+            android:id="@+id/driver_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_profile"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/style_txtview"
+            android:gravity="center"/>
+
+        <!-- Driver Name -->
+        <TextView
+            android:id="@+id/driver_name"
+            android:layout_toEndOf="@id/driver_image"
+            android:layout_alignTop="@id/driver_image"
+            android:layout_marginStart="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Angel"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <!-- Super Driver Star -->
+        <ImageView
+            android:id="@+id/super_driver_star"
+            android:layout_below="@id/driver_name"
+            android:layout_toEndOf="@id/driver_image"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/star_svgrepo_com" />
+
+        <!-- Rating -->
+        <TextView
+            android:id="@+id/driver_rating"
+            android:layout_toEndOf="@id/super_driver_star"
+            android:layout_alignTop="@id/super_driver_star"
+            android:layout_marginTop="1dp"
+            android:layout_marginStart="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.9"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/cancel_trip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar Viaje"
+            android:layout_alignTop="@id/driver_image"
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFF"
+            android:background="@color/green"
+            android:visibility="gone"
+            android:layout_marginStart="8dp" />
+
+        <Button
+            android:id="@+id/rate_trip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valorar Conductor"
+            android:visibility="gone"
+            android:layout_alignTop="@id/driver_image"
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFF"
+            android:background="@color/green"
+
+            android:layout_marginStart="8dp" />
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+</RelativeLayout>

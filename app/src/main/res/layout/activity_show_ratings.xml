@@ -21,15 +21,17 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/noElements"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="Este usuario aun no ha sido puntuado"
             android:layout_gravity="center"
+            android:gravity="center"
             android:textSize="24sp"
             android:textStyle="bold" />
 
