@@ -79,6 +79,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("com.hbb20:ccp:2.5.0")
 
     //FireBase
     implementation("com.google.firebase:firebase-database-ktx")
@@ -86,6 +87,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
+    implementation("com.google.firebase:firebase-auth")
 
     //Map
     implementation("com.google.android.gms:play-services-maps:18.2.0")

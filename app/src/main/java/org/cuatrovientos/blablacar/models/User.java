@@ -18,7 +18,7 @@ public class User implements Serializable {
     private String lastName;
     private Date birthDate;
     private String email;
-    private int telephone;
+    private String telephone;
     private String password;
     private List<RouteEntity> createdRoutes;
     private List<RouteEntity> passengerRoutes;
@@ -50,7 +50,7 @@ public class User implements Serializable {
         this.color = Utils.getRandomColor();
     }
 
-    public User(String name, String lastName, Date birthDate, String email, int telephone, String password, Bitmap userIcon) {
+    public User(String name, String lastName, Date birthDate, String email, String telephone, String password, Bitmap userIcon) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.name = name;
         this.lastName = lastName;
@@ -149,7 +149,7 @@ public class User implements Serializable {
         return userIcon;
     }
 
-    public int getTelephone(){ return telephone;}
+    public String getTelephone(){ return telephone;}
 
     /*
     * SETTERS (posible necesidad futura de tener que borrar alguno por seguridad)
@@ -209,7 +209,7 @@ public class User implements Serializable {
     public void setUserIcon(Bitmap userIcon) {
         this.userIcon = userIcon;
     }
-    public void setTelephone(int telephone) { this.telephone = telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
 
     public float getRating(){
         if (ratings == null || ratings.isEmpty()) {

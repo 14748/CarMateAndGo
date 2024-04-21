@@ -9,10 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.create.CreateRoute;
+import org.cuatrovientos.blablacar.activities.phone_register;
 import org.cuatrovientos.blablacar.activities.profile.ProfileActivity;
 import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
 import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
+import org.cuatrovientos.blablacar.models.User;
 
 public class MainActivityChat extends AppCompatActivity {
 
@@ -32,6 +35,14 @@ public class MainActivityChat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_chat);
+
+        UserManager.init(getApplicationContext());
+        User currentUser = UserManager.getCurrentUser();
+
+        if (currentUser.getTelephone() == null){
+            Intent phoneIntent = new Intent(this, phone_register.class);
+            startActivity(phoneIntent);
+        }
 
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);

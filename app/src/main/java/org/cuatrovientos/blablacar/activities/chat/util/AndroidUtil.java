@@ -28,22 +28,7 @@ public class AndroidUtil {
         userModel.setName(intent.getStringExtra("username"));
         userModel.setLastName(intent.getStringExtra("lastname"));
         userModel.setColor(intent.getStringExtra("color"));
-        String telephoneNumberStr = intent.getStringExtra("phone"); // Get the phone number as a String
-
-        // Check if the phone number string is not null before parsing
-        if (telephoneNumberStr != null) {
-            try {
-                int telephoneNumber = Integer.parseInt(telephoneNumberStr);
-                userModel.setTelephone(telephoneNumber);
-            } catch (NumberFormatException e) {
-                userModel.setTelephone(0); // Set default or handle error
-                Log.e("ConversionError", "Failed to convert telephone number to integer", e);
-            }
-        } else {
-            userModel.setTelephone(0); // Set default if the phone number string is null
-            Log.e("DataError", "Telephone number is missing in the intent data");
-        }
-
+        userModel.setTelephone(intent.getStringExtra("phone")); // Get the phone number as a String
         userModel.setId(intent.getStringExtra("userId"));
         return userModel;
     }
