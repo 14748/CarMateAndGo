@@ -40,7 +40,7 @@
         android:layout_marginEnd="10dp"
         android:background="@android:color/darker_gray" />
 
-    <org.cuatrovientos.blablacar.CircularSlider
+    <org.cuatrovientos.blablacar.activities.profile.CircularSlider
         android:id="@+id/circularSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

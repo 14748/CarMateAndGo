@@ -1,4 +1,6 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.search.adapters;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -11,8 +13,6 @@ import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.List;
-
-import okhttp3.internal.Util;
 
 public class RecyclerRatingAdapter extends RecyclerView.Adapter<RecyclerRatingAdapter.RatingViewHolder> {
 
@@ -38,6 +38,8 @@ public class RecyclerRatingAdapter extends RecyclerView.Adapter<RecyclerRatingAd
                 holder.ratingValue.setText(String.valueOf(rating.getValue()) + "★");
                 holder.ratingComment.setText(rating.getComment());
                 holder.username.setText(String.valueOf(user.getName()));
+                holder.driverImage.setText(user.getName().charAt(0) + "" + user.getLastName().charAt(0));
+                holder.driverImage.getBackground().setColorFilter(Color.parseColor("#" + user.getColor()), PorterDuff.Mode.SRC);
             }
         });
 
@@ -49,13 +51,14 @@ public class RecyclerRatingAdapter extends RecyclerView.Adapter<RecyclerRatingAd
     }
 
     public static class RatingViewHolder extends RecyclerView.ViewHolder {
-        public TextView ratingValue, ratingComment, username;
+        public TextView ratingValue, ratingComment, username, driverImage;
 
         public RatingViewHolder(View view) {
             super(view);
             username = view.findViewById(R.id.username);
             ratingValue = view.findViewById(R.id.ratingValue);
             ratingComment = view.findViewById(R.id.ratingComment);
+            driverImage = view.findViewById(R.id.driver_image);
         }
     }
 }

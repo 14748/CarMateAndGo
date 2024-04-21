@@ -1,36 +1,18 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.search.adapters;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.Image;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.DriverTrips;
-import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
-import org.cuatrovientos.blablacar.models.User;
-import org.cuatrovientos.blablacar.models.Utils;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

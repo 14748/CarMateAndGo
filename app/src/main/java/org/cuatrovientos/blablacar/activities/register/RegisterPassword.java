@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -16,8 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
-import org.cuatrovientos.blablacar.activities.MainActivity;
-import org.cuatrovientos.blablacar.activities.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
@@ -25,11 +23,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import okhttp3.internal.Util;
 
 public class RegisterPassword extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.seachInput;
 
 import static android.content.ContentValues.TAG;
 import static android.widget.Toast.makeText;
@@ -22,7 +22,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,13 +31,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.adapters.RouteAdapter;
-import org.cuatrovientos.blablacar.models.ORS.Route;
+import org.cuatrovientos.blablacar.activities.create.CreateRoute;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.seachInput.adapter.RouteAdapter;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 import org.cuatrovientos.blablacar.services.OpenStreetMap;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

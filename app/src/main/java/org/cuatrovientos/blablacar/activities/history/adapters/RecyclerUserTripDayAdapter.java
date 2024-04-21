@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.history.adapters;
 
         import android.content.Context;
         import android.graphics.Color;
@@ -7,7 +7,6 @@ package org.cuatrovientos.blablacar.adapters;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.Button;
-        import android.widget.ImageView;
         import android.widget.RelativeLayout;
         import android.widget.TextView;
 
@@ -16,6 +15,7 @@ package org.cuatrovientos.blablacar.adapters;
         import androidx.recyclerview.widget.RecyclerView;
 
         import org.cuatrovientos.blablacar.R;
+        import org.cuatrovientos.blablacar.activities.search.adapters.RecyclerTripsDetailsAdapter;
         import org.cuatrovientos.blablacar.models.DriverTrips;
         import org.cuatrovientos.blablacar.models.Rating;
         import org.cuatrovientos.blablacar.models.User;

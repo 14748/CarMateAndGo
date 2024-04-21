@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar;
+package org.cuatrovientos.blablacar.activities.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -20,9 +19,8 @@ import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
 
-import org.cuatrovientos.blablacar.activities.MainActivity;
-import org.cuatrovientos.blablacar.activities.ProfileActivity;
-import org.cuatrovientos.blablacar.activities.login.MainScreen;
+import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 import org.json.JSONException;
@@ -57,7 +55,7 @@ public class BalanceActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.button_continue);
         txtBalance = findViewById(R.id.balanceTextView);
 
-        txtBalance.setText("€"+String.valueOf(currentUser.getBalance()));
+        txtBalance.setText("€" + String.format("%.2f", currentUser.getBalance()));
 
         PaymentConfiguration.init(this, PUBLISH_KEY);
 

@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.history;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,22 +14,17 @@ import android.widget.TextView;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
-import org.cuatrovientos.blablacar.adapters.RecyclerUserTripsAdapter;
-import org.cuatrovientos.blablacar.models.DayTrips;
+import org.cuatrovientos.blablacar.activities.create.CreateRoute;
+import org.cuatrovientos.blablacar.activities.profile.ProfileActivity;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.history.adapters.RecyclerUserTripsAdapter;
 import org.cuatrovientos.blablacar.models.DriverTrips;
 import org.cuatrovientos.blablacar.models.RouteEntity;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import okhttp3.internal.Util;
 
 public class UserTripsActivity extends AppCompatActivity {
     Button buttonRutasPasajero;
@@ -118,6 +113,7 @@ public class UserTripsActivity extends AppCompatActivity {
                                         for (User passenger : passengers) {
                                             if (passenger.getId() != null && passenger.getId().equals(currentUser.getId())) {
                                                 routesUser.add(new DriverTrips(user, route));
+                                                updateRecyclerView(routesUser);
                                                 break;
                                             }
                                         }

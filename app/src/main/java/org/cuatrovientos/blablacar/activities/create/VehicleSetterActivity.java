@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.create;
 
 import androidx.appcompat.app.AppCompatActivity;
 

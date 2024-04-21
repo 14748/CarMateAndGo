@@ -1,30 +1,17 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.create;
 
-import static android.content.ContentValues.TAG;
-
-import static java.security.AccessController.getContext;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,52 +20,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import org.checkerframework.checker.units.qual.C;
-import org.checkerframework.checker.units.qual.Time;
-import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.RouteService;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.profile.ProfileActivity;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
 import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
-import org.cuatrovientos.blablacar.activities.login.MainScreen;
-import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
-import org.cuatrovientos.blablacar.models.ORS.ApiService;
-import org.cuatrovientos.blablacar.models.ORS.Route;
-import org.cuatrovientos.blablacar.models.ORS.RouteInfo;
-import org.cuatrovientos.blablacar.models.ORS.RouteResponse;
-import org.cuatrovientos.blablacar.models.ORS.Summary;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
-import org.cuatrovientos.blablacar.models.RouteEntity;
-import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 import org.cuatrovientos.blablacar.models.User;
-import org.cuatrovientos.blablacar.models.Utils;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.internal.Util;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;

@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar;
+package org.cuatrovientos.blablacar.activities.profile;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.history;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,25 +1,21 @@
-package org.cuatrovientos.blablacar;
+package org.cuatrovientos.blablacar.activities.create;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.cuatrovientos.blablacar.activities.MainActivity;
-import org.cuatrovientos.blablacar.activities.MapHelper;
-import org.cuatrovientos.blablacar.activities.SearchRoutes;
-import org.cuatrovientos.blablacar.adapters.RecyclerRoutesAdapter;
+import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.create.adapters.RecyclerRoutesAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.ORS.ApiService;
 import org.cuatrovientos.blablacar.models.ORS.Route;
@@ -85,6 +81,7 @@ public class RouteService {
                                     mapHelper.map.clear();
                                     user.addC02Reduction(calculateCO2Reduction(parseKilometers(routeSelectionInfos.get(position).getKilometers()), seats));
                                     user.addCreatedRoute(r);
+                                    UserManager.setCurrentUser(user);
                                     Utils.pushUser(user);
                                     linearLayout.setVisibility(View.GONE);
                                     Intent intent = new Intent(context, SearchRoutes.class);

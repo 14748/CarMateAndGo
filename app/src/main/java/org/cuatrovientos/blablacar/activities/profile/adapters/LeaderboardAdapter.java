@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.profile.adapters;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.models.User;
-import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.List;
 

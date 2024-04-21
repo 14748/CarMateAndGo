@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.create;
 
 import android.graphics.Color;
 import android.os.Handler;

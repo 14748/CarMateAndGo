@@ -1,21 +1,16 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.seachInput.adapter;
 
 import static android.widget.Toast.makeText;
 
-import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
 
 import java.util.List;

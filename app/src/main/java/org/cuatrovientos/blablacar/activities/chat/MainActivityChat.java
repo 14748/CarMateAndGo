@@ -2,25 +2,17 @@ package org.cuatrovientos.blablacar.activities.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ImageButton;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.activities.CreateRoute;
-import org.cuatrovientos.blablacar.activities.ProfileActivity;
-import org.cuatrovientos.blablacar.activities.SearchRoutes;
-import org.cuatrovientos.blablacar.activities.UserTripsActivity;
-import org.cuatrovientos.blablacar.activities.chat.util.FirebaseUtil;
+import org.cuatrovientos.blablacar.activities.create.CreateRoute;
+import org.cuatrovientos.blablacar.activities.profile.ProfileActivity;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
 
 public class MainActivityChat extends AppCompatActivity {
 

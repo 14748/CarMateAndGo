@@ -1,11 +1,10 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.profile;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -20,11 +19,12 @@ import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.cuatrovientos.blablacar.BalanceActivity;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
 import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
-import org.cuatrovientos.blablacar.activities.login.LogIn;
+import org.cuatrovientos.blablacar.activities.create.CreateRoute;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
@@ -199,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
             String formattedDate = sdf.format(currentUser.getBirthDate());
             fechaNacimiento.setText(formattedDate);
         }
-        balance.setText(String.valueOf(currentUser.getBalance()) + "€");
+        balance.setText(String.format("%.2f€", currentUser.getBalance()));
         txtc02User.setText(currentUser.getC02Reduction() + "kg");
         imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
         imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + currentUser.getColor()), PorterDuff.Mode.SRC);

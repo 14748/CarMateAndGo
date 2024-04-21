@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.search;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,15 +9,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.adapters.RecyclerRatingAdapter;
+import org.cuatrovientos.blablacar.activities.search.adapters.RecyclerRatingAdapter;
 import org.cuatrovientos.blablacar.models.Rating;
 import org.cuatrovientos.blablacar.models.User;
-import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.internal.Util;
 
 public class ShowRatingsActivity extends AppCompatActivity {
 

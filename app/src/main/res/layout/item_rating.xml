@@ -17,12 +17,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <TextView
             android:id="@+id/driver_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_profile"
-            android:layout_marginEnd="16dp" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/style_txtview"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/username"

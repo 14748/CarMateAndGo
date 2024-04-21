@@ -1,6 +1,5 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.history.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -14,17 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
-import org.cuatrovientos.blablacar.activities.RatingActivity;
-import org.cuatrovientos.blablacar.activities.UserTripsActivity;
+import org.cuatrovientos.blablacar.activities.history.RatingActivity;
 import org.cuatrovientos.blablacar.models.DriverTrips;
-import org.cuatrovientos.blablacar.models.Rating;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;

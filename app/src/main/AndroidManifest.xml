@@ -25,31 +25,31 @@
             android:name=".activities.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.C02LeaderboardActivity"
+            android:name=".activities.profile.C02LeaderboardActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.EditProfileActivity"
+            android:name=".activities.profile.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ShowRatingsActivity"
+            android:name=".activities.search.ShowRatingsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.RatingActivity"
+            android:name=".activities.history.RatingActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.VehicleSetterActivity"
+            android:name=".activities.create.VehicleSetterActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.UserTripsActivity"
+            android:name=".activities.history.UserTripsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.TripDetailsActivity"
+            android:name=".activities.search.TripDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SearchRoutes"
+            android:name=".activities.search.SearchRoutes"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".activities.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".activities.login.LogIn"
@@ -73,19 +73,19 @@
             android:name=".activities.register.RegisterEmail"
             android:exported="false" />
         <activity
-            android:name=".activities.RouteFinderActivity"
+            android:name=".activities.search.RouteFinderActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CreateRoute"
+            android:name=".activities.create.CreateRoute"
             android:exported="false" />
         <activity
-            android:name=".BalanceActivity"
+            android:name=".activities.profile.BalanceActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.Search"
+            android:name=".activities.seachInput.Search"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.create.MainActivity"
             android:exported="false" />
         <activity
             android:name=".activities.chat.SearchUserActivity"

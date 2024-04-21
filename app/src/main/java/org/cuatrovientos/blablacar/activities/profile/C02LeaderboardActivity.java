@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.adapters.LeaderboardAdapter;
+import org.cuatrovientos.blablacar.activities.create.CreateRoute;
+import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
+import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
+import org.cuatrovientos.blablacar.activities.profile.adapters.LeaderboardAdapter;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 

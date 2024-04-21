@@ -1,18 +1,14 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.create.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.models.ORS.Route;
 import org.cuatrovientos.blablacar.models.RouteSelectionInfo;
 
 import java.util.List;

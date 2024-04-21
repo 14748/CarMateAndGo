@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.adapters;
+package org.cuatrovientos.blablacar.activities.search.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,4 +1,4 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.search;
 
 import static android.content.ContentValues.TAG;
 
@@ -12,44 +12,39 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.cuatrovientos.blablacar.R;
-import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
 import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
+import org.cuatrovientos.blablacar.activities.create.CreateRoute;
+import org.cuatrovientos.blablacar.activities.profile.ProfileActivity;
+import org.cuatrovientos.blablacar.activities.seachInput.Search;
 import org.cuatrovientos.blablacar.models.PlaceOpenStreetMap;
-import org.cuatrovientos.blablacar.models.User;
 
-import java.io.Serializable;
-import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateRoute extends AppCompatActivity {
+public class SearchRoutes extends AppCompatActivity {
 
-    TextView origin;
+     Button searchRoutesButton;
+     TextView origin;
     Double originLat;
     Double originLon;
     PlaceOpenStreetMap PlaceOrigin;
-    TextView destination;
+     TextView destination;
     Double destinationLat;
     Double destinationLon;
     PlaceOpenStreetMap PlaceDestination;
-    TextView date;
-    EditText seats;
-    Boolean ida = true;
 
-    Date dateToday = new Date();
+     TextView date;
+     Button switchRouteButton;
 
-    Button createRoute;
-    Button switchRoute;
+     boolean ida = true;
 
     int codigoDeSolicitud = 1;
 
@@ -58,28 +53,20 @@ public class CreateRoute extends AppCompatActivity {
     private ImageButton btnHistory;
     private ImageButton btnMessages;
     private ImageButton btnProfile;
-    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_route);
+        setContentView(R.layout.activity_search_routes);
 
-        UserManager.init(getApplicationContext());
-        currentUser = UserManager.getCurrentUser();
+        searchRoutesButton = findViewById(R.id.btnSearchRoute);
+        origin = findViewById(R.id.lblOriginSearch);
+        destination = findViewById(R.id.lblDestinationSearch);
+        date = findViewById(R.id.lblDateSearch);
+        switchRouteButton = findViewById(R.id.btnSwitchRouteSearch);
 
-        if (currentUser.getVehicle() == null){
-            Intent setVehicle = new Intent(this, VehicleSetterActivity.class);
-            startActivity(setVehicle);
-            finish();
-        }
-
-        origin = findViewById(R.id.lblOrigin);
-        destination = findViewById(R.id.lblDestination);
-        date = findViewById(R.id.lblDate);
-        createRoute = findViewById(R.id.btnCreateRoute);
-        seats = findViewById(R.id.lblSeats);
-        switchRoute = findViewById(R.id.btnSwitchRoute);
+        PlaceOrigin = new PlaceOpenStreetMap();
+        PlaceDestination = new PlaceOpenStreetMap();
 
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);
@@ -87,19 +74,45 @@ public class CreateRoute extends AppCompatActivity {
         btnMessages = findViewById(R.id.btnMessages);
         btnProfile = findViewById(R.id.btnProfile);
 
-        PlaceOrigin = new PlaceOpenStreetMap();
-        PlaceDestination = new PlaceOpenStreetMap();
-
-        origin.setOnClickListener(v -> {
-            Intent intent = new Intent(CreateRoute.this, Search.class);
-            intent.putExtra("type", "origin");
-            startActivityForResult(intent, codigoDeSolicitud);
+        btnPublish.setOnClickListener(view -> {
+            Intent publishIntent = new Intent(this, CreateRoute.class);
+            startActivity(publishIntent);
         });
 
-        destination.setOnClickListener(v -> {
-            Intent intent = new Intent(CreateRoute.this, Search.class);
-            intent.putExtra("type", "destination");
-            startActivityForResult(intent, codigoDeSolicitud);
+
+        btnHistory.setOnClickListener(view -> {
+            Intent historyIntent = new Intent(this, UserTripsActivity.class);
+            startActivity(historyIntent);
+        });
+
+        btnMessages.setOnClickListener(view -> {
+            Intent messagesIntent = new Intent(this, MainActivityChat.class);
+            startActivity(messagesIntent);
+        });
+
+        btnProfile.setOnClickListener(view -> {
+
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            startActivity(profileIntent);
+
+        });
+
+        origin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchRoutes.this, Search.class);
+                intent.putExtra("type", "origin-search");
+                startActivityForResult(intent, codigoDeSolicitud);
+            }
+        });
+
+        destination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchRoutes.this, Search.class);
+                intent.putExtra("type", "destination-search");
+                startActivityForResult(intent, codigoDeSolicitud);
+            }
         });
 
         destination.setText("C.I. Cuatrovientos");
@@ -111,11 +124,16 @@ public class CreateRoute extends AppCompatActivity {
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        Date dateToday = new Date();
         String formattedDate = dateFormat.format(dateToday);
         date.setText(formattedDate);
 
 
-        switchRoute.setOnClickListener(v -> {
+        date.setOnClickListener(v -> {
+            mostrarDatePicker();
+        });
+
+        switchRouteButton.setOnClickListener(v -> {
             ida = !ida;
             String originText = origin.getText().toString();
             String destinationText = destination.getText().toString();
@@ -125,7 +143,6 @@ public class CreateRoute extends AppCompatActivity {
             this.originLon = this.destinationLon;
             this.destinationLat = originLat;
             this.destinationLon = originLon;
-
             PlaceOpenStreetMap temp = PlaceDestination;
             PlaceDestination = PlaceOrigin;
             PlaceOrigin = temp;
@@ -133,58 +150,21 @@ public class CreateRoute extends AppCompatActivity {
             destination.setText(originText);
         });
 
-        date.setOnClickListener(v -> {
-            mostrarDatePicker();
-        });
+        searchRoutesButton.setOnClickListener(view -> {
 
-        btnSearch.setOnClickListener(view -> {
 
-            Intent searchIntent = new Intent(this, SearchRoutes.class);
+            Intent searchIntent = new Intent(SearchRoutes.this, RouteFinderActivity.class);
+            searchIntent.putExtra("origin", PlaceOrigin);
+            searchIntent.putExtra("destination", PlaceDestination);
+            searchIntent.putExtra("date", date.getText().toString());
+            searchIntent.putExtra("type", ida);
+            searchIntent.putExtra("text", origin.getText().toString() + " -> " + destination.getText().toString());
+            setResult(RESULT_OK, searchIntent);
             startActivity(searchIntent);
-
-        });
-
-        btnHistory.setOnClickListener(view -> {
-            Intent historyIntent = new Intent(this, UserTripsActivity.class);
-            startActivity(historyIntent);
-        });
-
-        btnMessages.setOnClickListener(view -> {
-            Intent chatIntent = new Intent(this, MainActivityChat.class);
-            startActivity(chatIntent);
-        });
-
-        btnProfile.setOnClickListener(view -> {
-
-            Intent profileIntent = new Intent(this, ProfileActivity.class);
-            startActivity(profileIntent);
-
         });
 
 
 
-
-
-
-
-
-        createRoute.setOnClickListener(v -> {
-            Intent intent = new Intent(CreateRoute.this, MainActivity.class);
-            intent.putExtra("origin", PlaceOrigin);
-            intent.putExtra("destination", PlaceDestination);
-            intent.putExtra("date", date.getText().toString());
-            int seatsValue;
-            String seatsText = seats.getText().toString();
-            try {
-                seatsValue = Integer.parseInt(seatsText);
-            } catch (NumberFormatException e) {
-                seatsValue = 4; //placeholder on seats
-            }
-            intent.putExtra("seats", seatsValue);
-            intent.putExtra("originText", origin.getText().toString());
-            intent.putExtra("destinationText", destination.getText().toString());
-            startActivity(intent);
-        });
 
 
 
@@ -193,7 +173,7 @@ public class CreateRoute extends AppCompatActivity {
 
 
     }
-    @Override
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -207,8 +187,12 @@ public class CreateRoute extends AppCompatActivity {
             if (origin != null) {
                 this.originLat = Double.valueOf(origin.getLat());
                 this.originLon = Double.valueOf(origin.getLon());
-                this.PlaceOrigin.setLat(originLat.toString());
-                this.PlaceOrigin.setLon(originLon.toString());
+
+
+
+                this.PlaceOrigin.setLat(origin.getLat());
+                this.PlaceOrigin.setLon(origin.getLon());
+
                 String textoCortado = cortarTexto(origin.getDisplayName(), 20);
                 this.origin.setText(textoCortado);
             } else {
@@ -219,8 +203,11 @@ public class CreateRoute extends AppCompatActivity {
             if (destination != null) {
                 this.destinationLat = Double.valueOf(destination.getLat());
                 this.destinationLon = Double.valueOf(destination.getLon());
-                this.PlaceDestination.setLat(destinationLat.toString());
-                this.PlaceDestination.setLon(destinationLon.toString());
+
+
+                this.PlaceDestination.setLat(destination.getLat());
+                this.PlaceDestination.setLon(destination.getLon());
+
                 // Assuming you have a destination TextView, set its text
                 String textoCortado = cortarTexto(destination.getDisplayName(), 20);
                 this.destination.setText(textoCortado);
@@ -228,9 +215,10 @@ public class CreateRoute extends AppCompatActivity {
                 // Handle the case where destination is null, log an error, show a message, etc.
                 Log.e(TAG, "Received null destination from the intent");
             }
-
         }
     }
+
+
     protected void mostrarDatePicker() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -282,5 +270,4 @@ public class CreateRoute extends AppCompatActivity {
             return texto;
         }
     }
-
 }

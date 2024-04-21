@@ -1,6 +1,5 @@
-package org.cuatrovientos.blablacar.activities;
+package org.cuatrovientos.blablacar.activities.search;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,15 +19,12 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.chat.ChatActivity;
 import org.cuatrovientos.blablacar.activities.chat.util.AndroidUtil;
-import org.cuatrovientos.blablacar.adapters.PreferencesAdapter;
-import org.cuatrovientos.blablacar.adapters.RecyclerTripsDetailsAdapter;
+import org.cuatrovientos.blablacar.activities.search.adapters.PreferencesAdapter;
+import org.cuatrovientos.blablacar.activities.search.adapters.RecyclerTripsDetailsAdapter;
 import org.cuatrovientos.blablacar.models.CustomLatLng;
 import org.cuatrovientos.blablacar.models.DataHolder;
 import org.cuatrovientos.blablacar.models.DriverTrips;
@@ -46,8 +41,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import okhttp3.internal.Util;
 
 public class TripDetailsActivity extends AppCompatActivity {
     public final CustomLatLng CUATROVIENTOS = new CustomLatLng(42.824851, -1.660318);
@@ -252,7 +245,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (driverTrips.getDate().before(new Date())) {
+                if (driverTrips.getDate().after(new Date())) {
                     Toast.makeText(getApplicationContext(), "No puedes inscribirte en viajes pasados", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -320,7 +313,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                                 }
                             }
                         }else{
-                            Toast.makeText(getApplicationContext(), "Ya estas insctito para un viaje de " + (type.equals("0") ? "vuelta" : "ida") + " hoy.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Ya estas insctito para un viaje de " + (type.equals("0") ? "ida" : "vuelta") + " hoy.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Ya estas inscrito a esta ruta.", Toast.LENGTH_SHORT).show();
