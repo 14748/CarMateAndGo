@@ -20,9 +20,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/image_profile"
+        android:layout_toStartOf="@id/btn_ban_user"
         android:layout_marginStart="15dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="15dp"
         android:text="Mario"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -32,19 +34,20 @@
         android:id="@+id/btn_ban_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ban User"
+        android:text="Vetar"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@color/colorAccent"
         android:textColor="@android:color/white"/>
 
-    <!-- Ban User Button -->
+    <!-- Unban User Button -->
     <Button
         android:visibility="gone"
         android:id="@+id/btn_unban_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Un-Ban User"
+        android:text="Eliminar Veto"
+        android:layout_toEndOf="@id/text_name"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@color/colorAccent"

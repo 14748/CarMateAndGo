@@ -61,6 +61,12 @@ public class RecyclerUserBanAdapter extends RecyclerView.Adapter<RecyclerUserBan
                 itemClickListener.onBanClick(user);
             }
         });
+
+        holder.unBanButton.setOnClickListener(v -> {
+            if(itemClickListener != null) {
+                itemClickListener.onBanClick(user);
+            }
+        });
     }
 
     @Override

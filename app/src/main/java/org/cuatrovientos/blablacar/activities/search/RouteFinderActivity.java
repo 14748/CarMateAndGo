@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.search.adapters.RecyclerTripsAdapter;
 import org.cuatrovientos.blablacar.models.*;
 import java.text.ParseException;
@@ -23,11 +24,14 @@ public class RouteFinderActivity extends AppCompatActivity {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
-
+    private User currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_finder);
+
+        UserManager.init(getApplicationContext());
+        currentUser = UserManager.getCurrentUser();
 
         initViewReferences();
         processIntentData();
@@ -124,7 +128,7 @@ public class RouteFinderActivity extends AppCompatActivity {
                 boolean originMatchesCuatrovientos = routeOrigin.equals(cuatrovientosLatLng);
                 boolean destinationMatchesCuatrovientos = routeDestination.equals(cuatrovientosLatLng);
 
-                if (isSameDay) {
+                if (isSameDay && !user.getBannedUsers().contains(currentUser.getId())) {
                     if (originMatchesCuatrovientos && !type) {
                         // If the origin matches Cuatrovientos, check if the destination is within 5 km radius of the user's destination
                         if (isWithinRadius(routeDestination, userLocation, radiusKm)) {

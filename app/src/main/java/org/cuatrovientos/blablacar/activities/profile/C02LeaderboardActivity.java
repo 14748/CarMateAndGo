@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 
 import org.cuatrovientos.blablacar.R;
+import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
 import org.cuatrovientos.blablacar.activities.create.CreateRoute;
 import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
 import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
@@ -56,10 +57,8 @@ public class C02LeaderboardActivity extends AppCompatActivity {
         });
 
         btnMessages.setOnClickListener(view -> {
-            /*
-            Intent messagesIntent = new Intent(this, MessagesActivity.class);
+            Intent messagesIntent = new Intent(this, MainActivityChat.class);
             startActivity(messagesIntent);
-             */
         });
 
         btnProfile.setOnClickListener(view -> {
