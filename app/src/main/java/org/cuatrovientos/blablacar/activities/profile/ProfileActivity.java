@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
+import org.cuatrovientos.blablacar.activities.ban.BanActivity;
 import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
 import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
 import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
@@ -28,35 +29,34 @@ import org.cuatrovientos.blablacar.activities.create.CreateRoute;
 import org.cuatrovientos.blablacar.activities.login.MainScreen;
 import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
+    TextView avatar;
+    TextView name;
+    TextView email;
+    TextView leaderBoardTextViewClick;
+    TextView creditsTextViewClick;
+    TextView changePasswordTextViewClick;
+    TextView banPassengersTextViewClick;
+    TextView logoutTextViewClick;
+    TextView c02ReducedText;
+    TextView fechaNacimientoText;
+    TextView balanceText;
+    User currentUser;
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
     private ImageButton btnMessages;
-    private ImageView btnPagos;
-    private ImageView btnNotificaciones;
-    private LinearLayout leaderboardLayout, settingsLayout, paymentLayout;
-    private Button btnEditPerfil;
-    private Button btnLogout;
-    private TextView nombre;
-    private TextView email;
-    private TextView fechaNacimiento;
-    private TextView balance;
-    private TextView password;
-    private User currentUser;
-    private TextView txtc02User;
-    private TextView imgPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_test);
 
-        // Si no hay user loggeado te manda a la pantalla de LogIn
         UserManager.init(getApplicationContext());
         currentUser = UserManager.getCurrentUser();
         if (currentUser == null) {
@@ -64,21 +64,23 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        avatar = findViewById(R.id.avatarImageView);
+        name = findViewById(R.id.userNameTextView);
+        email = findViewById(R.id.emailTextView);
+        leaderBoardTextViewClick = findViewById(R.id.leaderBoardTextView);
+        creditsTextViewClick = findViewById(R.id.creditsTextView);
+        changePasswordTextViewClick = findViewById(R.id.changePasswordTextView);
+        banPassengersTextViewClick =  findViewById(R.id.banPassengersTextView);
+        logoutTextViewClick = findViewById(R.id.logoutTextView);
+        c02ReducedText = findViewById(R.id.c02ReducedText);
+        fechaNacimientoText = findViewById(R.id.fechaNacimientoText);
+        balanceText = findViewById(R.id.balanceText);
         btnSearch = findViewById(R.id.btnSearch);
         btnPublish = findViewById(R.id.btnPublish);
-        btnLogout = findViewById(R.id.btnLogout);
-        btnPagos = findViewById(R.id.imagePagos);
-        btnMessages = findViewById(R.id.btnMessages);
         btnHistory = findViewById(R.id.btnHistory);
-        password = findViewById(R.id.btnChangePassword);
-        txtc02User = findViewById(R.id.txtc02User);
-        imgPerfil = findViewById(R.id.imageView2);
-        btnNotificaciones = findViewById(R.id.imageNotificaciones);
-        leaderboardLayout = findViewById(R.id.leaderboardLayout);
-        settingsLayout = findViewById(R.id.settingsLayout);
-        paymentLayout = findViewById(R.id.paymentLayout);
+        btnMessages = findViewById(R.id.btnMessages);
 
-        password.setOnClickListener(view -> {
+        changePasswordTextViewClick.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
             builder.setTitle("Editar Contraseña");
             LinearLayout layout = new LinearLayout(ProfileActivity.this);
@@ -145,15 +147,19 @@ public class ProfileActivity extends AppCompatActivity {
             dialog.show();
         });
 
-
-        paymentLayout.setOnClickListener(view -> {
+        creditsTextViewClick.setOnClickListener(view -> {
                 Intent balanceIntent = new Intent(ProfileActivity.this, BalanceActivity.class);
                 startActivity(balanceIntent);
         });
 
-        leaderboardLayout.setOnClickListener(view -> {
+        leaderBoardTextViewClick.setOnClickListener(view -> {
             Intent leaderboardIntent = new Intent(this, C02LeaderboardActivity.class);
             startActivity(leaderboardIntent);
+        });
+
+        banPassengersTextViewClick.setOnClickListener(v -> {
+            Intent banIntent = new Intent(this, BanActivity.class);
+            startActivity(banIntent);
         });
 
         btnSearch.setOnClickListener(view -> {
@@ -176,33 +182,31 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(chatIntent);
         });
 
-        settingsLayout.setOnClickListener(view -> {
+        name.setOnClickListener(view -> {
             Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
             startActivity(editProfileIntent);
         });
 
-        btnLogout.setOnClickListener(view -> {
+        logoutTextViewClick.setOnClickListener(view -> {
             currentUser = null;
             UserManager.setCurrentUser(null);
             Intent intent = new Intent(ProfileActivity.this, MainScreen.class);
             startActivity(intent);
         });
 
-        nombre = findViewById(R.id.textViewNombre);
-        email = findViewById(R.id.btnEmail);
-        fechaNacimiento = findViewById(R.id.btnFechaNacimiento);
-        balance = findViewById(R.id.btnBalance);
-        nombre.setText(currentUser.getName() + " " + currentUser.getLastName());
+        name.setText(currentUser.getName() + " " + currentUser.getLastName());
         email.setText(currentUser.getEmail());
-        if(currentUser.getBirthDate() != null) {
+
+        if (currentUser.getBirthDate() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String formattedDate = sdf.format(currentUser.getBirthDate());
-            fechaNacimiento.setText(formattedDate);
+            fechaNacimientoText.setText(formattedDate);
         }
-        balance.setText(String.format("%.2f€", currentUser.getBalance()));
-        txtc02User.setText(currentUser.getC02Reduction() + "kg");
-        imgPerfil.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
-        imgPerfil.getBackground().setColorFilter(Color.parseColor("#" + currentUser.getColor()), PorterDuff.Mode.SRC);
+
+        balanceText.setText(String.format("%.2f€", currentUser.getBalance()));
+        c02ReducedText.setText(currentUser.getC02Reduction() + "kg");
+        avatar.setText(currentUser.getName().charAt(0) + "" + currentUser.getLastName().charAt(0));
+        avatar.getBackground().setColorFilter(Color.parseColor("#" + currentUser.getColor()), PorterDuff.Mode.SRC);
     }
 
     private void message(String text, int color) {

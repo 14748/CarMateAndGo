@@ -19,7 +19,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.ban.banActivity"
+            android:name=".activities.ban.BanActivity"
             android:exported="false" />
         <activity
             android:name=".activities.activity_verify_otp"
