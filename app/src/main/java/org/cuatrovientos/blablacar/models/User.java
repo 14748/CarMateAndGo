@@ -151,6 +151,10 @@ public class User implements Serializable {
         this.bannedUsers.add(userId);
     }
 
+    public void removeBannedUsers(String userId) {
+        this.bannedUsers.remove(userId);
+    }
+
     public List<Rating> getRatings() {
         return ratings;
     }

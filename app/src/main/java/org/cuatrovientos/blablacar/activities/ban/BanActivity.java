@@ -14,6 +14,7 @@ import org.cuatrovientos.blablacar.models.User;
 import org.cuatrovientos.blablacar.models.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BanActivity extends AppCompatActivity {
@@ -35,13 +36,15 @@ public class BanActivity extends AppCompatActivity {
         List<RouteEntity> createdRoutes = currentUser.getCreatedRoutes();
         List<String> passengerIds = new ArrayList<>();
         for (RouteEntity route : createdRoutes) {
-            passengerIds.addAll(route.getPassengers());
+            if (route.getDate().before(new Date())){
+                passengerIds.addAll(route.getPassengers());
+            }
         }
 
         Utils.getUsersByIds(passengerIds, new Utils.UsersCallback() {
             @Override
             public void onCallback(List<User> users) {
-                adapter = new RecyclerUserBanAdapter(users, new RecyclerUserBanAdapter.OnItemClickListener() {
+                adapter = new RecyclerUserBanAdapter(users, currentUser.getBannedUsers(), new RecyclerUserBanAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(User user) {
                         // Handle item click
@@ -49,7 +52,15 @@ public class BanActivity extends AppCompatActivity {
 
                     @Override
                     public void onBanClick(User user) {
-                        currentUser.addBannedUsers(user.getId());
+                        if (currentUser.getBannedUsers().contains(user.getId())) {
+                            currentUser.removeBannedUsers(user.getId());
+                            adapter.unbanUser(user);
+                        } else {
+                            currentUser.addBannedUsers(user.getId());
+                            adapter.banUser(user);
+                        }
+                        Utils.pushUser(currentUser);
+                        UserManager.setCurrentUser(currentUser);
                     }
                 });
                 recyclerView.setAdapter(adapter);
