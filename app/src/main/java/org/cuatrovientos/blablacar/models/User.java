@@ -24,6 +24,7 @@ public class User implements Serializable {
     private List<RouteEntity> passengerRoutes;
     private Bitmap userIcon;
     private List<Rating> ratings;
+    private List<String> bannedUsers;
     private Vehicle vehicle;
     private String color;
     private  float c02Reduction;
@@ -34,6 +35,7 @@ public class User implements Serializable {
         this.createdRoutes = new ArrayList<>();
         this.passengerRoutes = new ArrayList<>();
         this.ratings = new ArrayList<>();
+        this.bannedUsers = new ArrayList<>();
     }
 
     public User(String name, String lastName, Date birthDate, String email, String password) {
@@ -135,6 +137,18 @@ public class User implements Serializable {
 
     public void setPassengerRoutes(List<RouteEntity> passengerRoutes) {
         this.passengerRoutes = passengerRoutes;
+    }
+
+    public List<String> getBannedUsers() {
+        return bannedUsers;
+    }
+
+    public void setBannedUsers(List<String> bannedUsers) {
+        this.bannedUsers = bannedUsers;
+    }
+
+    public void addBannedUsers(String userId) {
+        this.bannedUsers.add(userId);
     }
 
     public List<Rating> getRatings() {

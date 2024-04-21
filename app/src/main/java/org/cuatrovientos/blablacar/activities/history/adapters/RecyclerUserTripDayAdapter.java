@@ -47,7 +47,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
     @NonNull
     @Override
     public TripViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_trips, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_trip_rate_cancel, parent, false);
         return new TripViewHolder(view, listener, trips);
     }
 
