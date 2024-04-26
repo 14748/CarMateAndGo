@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
 import org.cuatrovientos.blablacar.activities.chat.MainActivityChat;
+import org.cuatrovientos.blablacar.activities.chat.SearchUserActivity;
 import org.cuatrovientos.blablacar.activities.create.CreateRoute;
 import org.cuatrovientos.blablacar.activities.profile.ProfileActivity;
 import org.cuatrovientos.blablacar.activities.search.SearchRoutes;
@@ -30,6 +31,7 @@ public class UserTripsActivity extends AppCompatActivity {
     Button buttonRutasPasajero;
     Button buttonRutasConductor;
     TextView noElements;
+    private Boolean isLoadPassenger = false;
     private ImageButton btnSearch;
     private ImageButton btnPublish;
     private ImageButton btnHistory;
@@ -78,6 +80,7 @@ public class UserTripsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadUserTrips();
+                Utils.setupClickableTextView(getApplicationContext(), noElements, "Aun no tienes ningun viaje como pasajero inicia uno aquí", SearchRoutes.class);
             }
         });
 
@@ -85,9 +88,13 @@ public class UserTripsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadUserTripsDriver();
+                Utils.setupClickableTextView(getApplicationContext(), noElements, "Aun no has creado ningun viaje inicia uno aquí", CreateRoute.class);
             }
         });
+
+        buttonRutasPasajero.callOnClick();
     }
+
 
     @Override
     protected void onResume() {

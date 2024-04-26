@@ -205,7 +205,6 @@ public class Utils {
 
         textView.setText(spannableString);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setVisibility(View.VISIBLE);
     }
 
 
