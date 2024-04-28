@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
@@ -168,6 +169,15 @@ public class CreateRoute extends AppCompatActivity {
 
 
         createRoute.setOnClickListener(v -> {
+            if (PlaceOrigin == null || PlaceDestination == null ||
+                    origin.getText().toString().isEmpty() ||
+                    destination.getText().toString().isEmpty() ||
+                    date.getText().toString().isEmpty()) {
+
+                Toast.makeText(getApplicationContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(CreateRoute.this, MainActivity.class);
             intent.putExtra("origin", PlaceOrigin);
             intent.putExtra("destination", PlaceDestination);
@@ -177,7 +187,7 @@ public class CreateRoute extends AppCompatActivity {
             try {
                 seatsValue = Integer.parseInt(seatsText);
             } catch (NumberFormatException e) {
-                seatsValue = 4; //placeholder on seats
+                seatsValue = 4;
             }
             intent.putExtra("seats", seatsValue);
             intent.putExtra("originText", origin.getText().toString());

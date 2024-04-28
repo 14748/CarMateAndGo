@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.activities.history.UserTripsActivity;
@@ -151,7 +152,14 @@ public class SearchRoutes extends AppCompatActivity {
         });
 
         searchRoutesButton.setOnClickListener(view -> {
+            if (PlaceOrigin == null || PlaceDestination == null ||
+                    origin.getText().toString().isEmpty() ||
+                    destination.getText().toString().isEmpty() ||
+                    date.getText().toString().isEmpty()) {
 
+                Toast.makeText(getApplicationContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Intent searchIntent = new Intent(SearchRoutes.this, RouteFinderActivity.class);
             searchIntent.putExtra("origin", PlaceOrigin);
