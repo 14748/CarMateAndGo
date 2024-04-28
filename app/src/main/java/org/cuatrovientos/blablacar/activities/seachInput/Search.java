@@ -6,6 +6,11 @@ import static android.widget.Toast.makeText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,6 +27,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,6 +60,7 @@ public class Search extends AppCompatActivity {
     RouteAdapter adapter;
     private TextView errorTextView;
     String type;
+    private FusedLocationProviderClient fusedLocationClient;
     ArrayList<PlaceOpenStreetMap> results = new ArrayList<>();
 
     RecyclerView searchResults;
@@ -68,6 +75,9 @@ public class Search extends AppCompatActivity {
         setCurrentLocation = findViewById(R.id.btnSetCurrentLocation);
         searchResults = findViewById(R.id.searchResults);
         errorTextView = findViewById(R.id.errorTextView);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
 
 
@@ -84,6 +94,9 @@ public class Search extends AppCompatActivity {
                         PERMISSION_REQUEST_CODE);
             }
         });
+
+
+
 
 
         // Configurar RecyclerView y su adaptador
@@ -156,6 +169,7 @@ public class Search extends AppCompatActivity {
 
 
     }
+
 
     private void buscarLugares(String query) {
         // Aquí deberías hacer la búsqueda de lugares y actualizar el RecyclerView
@@ -245,74 +259,56 @@ public class Search extends AppCompatActivity {
     }
 
     private void obtenerUbicacionActual() {
-        checkLocationPermission();
-        try {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            // Configurar el listener para recibir actualizaciones de ubicación
-            LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double latitud = location.getLatitude();
-                    double longitud = location.getLongitude();
-
-                    Log.d("Ubicacion", "Latitud: " + latitud + ", Longitud: " + longitud);
-                    buscarLugares(latitud + " " + longitud);
-                    //PlaceOpenStreetMap place = results.get(0);
-                    //if (type != null) {
-                    //    if (type.equals("origin")) {
-                    //        Intent intent = new Intent();
-                    //        intent.putExtra("origin", place);
-                    //        setResult(RESULT_OK, intent);
-                    //        finish();
-                    //    } else if (type.equals("destination")) {
-                    //        Intent intent = new Intent();
-                    //        intent.putExtra("destination", place);
-                    //        setResult(RESULT_OK, intent);
-                    //        finish();
-//
-                    //    }
-                    //}
-
-
-
-
-                    // Aquí puedes hacer lo que necesites con la ubicación
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-                }
-            };
-
-            // Solicitar actualizaciones de ubicación a través del servicio de red y GPS
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    0,
-                    0,
-                    locationListener
-            );
-
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    0,
-                    0,
-                    locationListener
-            );
-
-        } catch (SecurityException e) {
-            e.printStackTrace();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Permisos de ubicacion denegados. Habilita ubicacion en tu dispositivo", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        buscarLugares(latitude + " " + longitude);
+                    } else {
+                        requestNewLocationUpdate();
+                    }
+                })
+                .addOnFailureListener(this, e -> {
+                    e.printStackTrace();
+                    requestNewLocationUpdate();
+                });
     }
+
+    private void requestNewLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    buscarLugares(latitude + " " + longitude);
+                }
+            }
+        };
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+
+
 
 
 
