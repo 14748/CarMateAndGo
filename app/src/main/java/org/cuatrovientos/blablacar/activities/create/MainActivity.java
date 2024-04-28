@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
 
-        //Utils.pushUser(new User(0, "pepito", "pepita", new Date(), "mail", "pass"));
+        
         btnSearch.setOnClickListener(view -> {
             Intent searchIntent = new Intent(this, SearchRoutes.class);
             startActivity(searchIntent);

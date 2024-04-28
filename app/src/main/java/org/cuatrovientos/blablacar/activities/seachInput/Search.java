@@ -84,7 +84,7 @@ public class Search extends AppCompatActivity {
 
 
         setCurrentLocation.setOnClickListener(e -> {
-            // Solicitar permisos si no están concedidos
+            
             if (checkLocationPermission()) {
                 obtenerUbicacionActual();
 
@@ -99,12 +99,12 @@ public class Search extends AppCompatActivity {
 
 
 
-        // Configurar RecyclerView y su adaptador
+        
         searchResults.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RouteAdapter(results);
         searchResults.setAdapter(adapter);
 
-        // Configurar el autocompletado
+        
 
 
         search.addTextChangedListener(new TextWatcher() {
@@ -129,11 +129,11 @@ public class Search extends AppCompatActivity {
 
         type = getIntent().getStringExtra("type");
 
-        // Manejar clic en un elemento del RecyclerView
+        
         adapter.setOnItemClickListener(position -> {
             PlaceOpenStreetMap place = results.get(position);
-            //makeText(this, "Seleccionado: " + place.getDisplayName(), Toast.LENGTH_SHORT).show();
-            //makeText(this, "Latitud: " + place.getLat() + ", Longitud: " + place.getLon(), Toast.LENGTH_SHORT).show();
+            
+            
             if (type != null) {
                 if (type.equals("origin")) {
                     Intent intent = new Intent(this, CreateRoute.class);
@@ -159,7 +159,7 @@ public class Search extends AppCompatActivity {
 
                 }
             }
-            // Aquí puedes hacer lo que necesites con el lugar seleccionado
+            
         });
 
 
@@ -172,9 +172,9 @@ public class Search extends AppCompatActivity {
 
 
     private void buscarLugares(String query) {
-        // Aquí deberías hacer la búsqueda de lugares y actualizar el RecyclerView
-        // con los resultados
-        // Ejemplo de autocompletado con OpenStreetMap API
+        
+        
+        
         String apiUrl = "https://nominatim.openstreetmap.org/";
 
 
@@ -201,7 +201,7 @@ public class Search extends AppCompatActivity {
                         results.clear();
                         results.addAll(routes);
                         adapter.notifyDataSetChanged();
-                        // Hide the error message if locations are found
+                        
                         errorTextView.setVisibility(View.GONE);
                     } else {
                         Log.e(TAG, "Respuesta vacía o no contiene un array de lugares");
@@ -211,12 +211,12 @@ public class Search extends AppCompatActivity {
                     }
                 } else {
                     try {
-                        // Intenta convertir el cuerpo de la respuesta a un objeto JSON
+                        
                         JSONObject errorObject = new JSONObject(response.errorBody().string());
                         String errorMessage = errorObject.getString("message");
                         Log.e(TAG, "Error en la respuesta de la solicitud: " + errorMessage);
                     } catch (Exception e) {
-                        // Si hay algún problema al convertir a JSON, simplemente registra el mensaje de error
+                        
                         Log.e(TAG, "Error en la respuesta de la solicitud: " + response.message());
                     }
                 }
@@ -228,7 +228,7 @@ public class Search extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
-        // Nota: Asegúrate de manejar las solicitudes de red de manera asíncrona.
+        
     }
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -253,7 +253,7 @@ public class Search extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 obtenerUbicacionActual();
             } else {
-                //makeText(this, "Permiso de ubicación denegado.", Toast.LENGTH_SHORT).show();
+                
             }
         }
     }

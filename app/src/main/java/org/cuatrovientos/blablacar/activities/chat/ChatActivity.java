@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//import com.example.easychat.utils.FirebaseUtil;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +27,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-//import com.google.firebase.messaging.FirebaseMessaging;
+
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.activities.chat.adapters.ChatRecyclerAdapter;
@@ -70,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        //get UserModel
+        
         otherUser = AndroidUtil.getUserModelFromIntent(getIntent());
         chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(getApplicationContext()),otherUser.getId());
 
@@ -143,7 +143,7 @@ public class ChatActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if(task.isSuccessful()){
                             messageInput.setText("");
-                            //sendNotification(message);
+                            
                         }
                     }
                 });
@@ -170,7 +170,7 @@ public class ChatActivity extends AppCompatActivity {
                     chatroomRef.set(chatroomModel);
                 }
             } else {
-                // Handle failure
+                
                 Log.e("ChatActivity", "Error accessing the database", task.getException());
             }
         });
@@ -212,7 +212,7 @@ public class ChatActivity extends AppCompatActivity {
     void callApi(JSONObject jsonObject){
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String url = "https://fcm.googleapis.com/fcm/send";
+        String url = "https:
         RequestBody body = RequestBody.create(JSON, jsonObject.toString());
         Request request = new Request.Builder()
                 .url(url)

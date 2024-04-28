@@ -185,9 +185,9 @@ public class SearchRoutes extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Verificar si el resultado es de ActivityB y si fue exitoso
+        
         if (requestCode == codigoDeSolicitud && resultCode == RESULT_OK) {
-            // Obtener los datos enviados desde ActivityB
+            
 
             PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
             PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
@@ -204,7 +204,7 @@ public class SearchRoutes extends AppCompatActivity {
                 String textoCortado = cortarTexto(origin.getDisplayName(), 20);
                 this.origin.setText(textoCortado);
             } else {
-                // Handle the case where origin is null, log an error, show a message, etc.
+                
                 Log.e(TAG, "Received null origin from the intent");
             }
 
@@ -216,11 +216,11 @@ public class SearchRoutes extends AppCompatActivity {
                 this.PlaceDestination.setLat(destination.getLat());
                 this.PlaceDestination.setLon(destination.getLon());
 
-                // Assuming you have a destination TextView, set its text
+                
                 String textoCortado = cortarTexto(destination.getDisplayName(), 20);
                 this.destination.setText(textoCortado);
             } else {
-                // Handle the case where destination is null, log an error, show a message, etc.
+                
                 Log.e(TAG, "Received null destination from the intent");
             }
         }
@@ -240,7 +240,7 @@ public class SearchRoutes extends AppCompatActivity {
                 final int selectedMonth = month;
                 final int selectedDay = dayOfMonth;
 
-                // Mostrar TimePickerDialog después de seleccionar la fecha
+                
                 mostrarTimePicker(selectedYear, selectedMonth, selectedDay);
             }
         }, year, month, day);
@@ -259,10 +259,10 @@ public class SearchRoutes extends AppCompatActivity {
                 String fechaSeleccionada = day + "/" + (month + 1) + "/" + year;
                 String horaSeleccionada = hourOfDay + ":" + minute;
 
-                // Combina la fecha y la hora seleccionadas como desees
+                
                 String fechaHoraSeleccionada = fechaSeleccionada + " " + horaSeleccionada;
 
-                // Actualiza tu TextView con la fecha y la hora seleccionadas
+                
                 date.setText(fechaHoraSeleccionada);
             }
         }, hour, minute, true);

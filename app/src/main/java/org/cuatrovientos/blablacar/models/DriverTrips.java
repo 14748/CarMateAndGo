@@ -23,7 +23,7 @@ public class DriverTrips implements Serializable {
         this.date = date;
     }
 
-    // Getters y Setters
+    
 
     public Date getDate() {
         return date;
@@ -49,7 +49,7 @@ public class DriverTrips implements Serializable {
         this.route = route;
     }
 
-    // Método toString
+    
     @Override
     public String toString() {
         return "DriverTrips{" +

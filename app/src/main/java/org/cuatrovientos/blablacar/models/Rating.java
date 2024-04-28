@@ -5,17 +5,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.Serializable;
 
 public class Rating implements Serializable {
-    private String id; // Unique ID for the rating
+    private String id; 
     private String userId;
-    private float value; // The rating value, e.g., 4.5
-    private String comment; // Optional comment with the rating
-    private RouteEntity route; // Timestamp for when the rating was made
+    private float value; 
+    private String comment; 
+    private RouteEntity route; 
 
-    // Default constructor required for Firebase and other ORMs
+    
     public Rating() {
     }
 
-    // Constructor with parameters
+    
     public Rating(float value, String comment, RouteEntity route, String userId) {
         this.id = FirebaseDatabase.getInstance().getReference().push().getKey();
         this.value = value;
@@ -24,7 +24,7 @@ public class Rating implements Serializable {
         this.userId = userId;
     }
 
-    // Getters
+    
     public String getUserId() {
         return userId;
     }

@@ -39,7 +39,7 @@ public class PlaceOpenStreetMap implements Serializable {
 
     private List<String> boundingbox;
 
-    // Getter and setter methods for each field
+    
 
     public long getPlaceId() {
         return placeId;

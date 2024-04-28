@@ -31,14 +31,14 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
     private Context context;
     private OnItemClickListener listener;
 
-    // Constructor
+    
     public RecyclerUserTripDayAdapter(Context context, List<DriverTrips> trips, OnItemClickListener listener) {
         this.context = context;
         this.trips = trips;
         this.listener = listener;
     }
 
-    // Interface for click events
+    
     public interface OnItemClickListener {
         void onRateClick(DriverTrips trip);
         void onCancelClick(DriverTrips trip);
@@ -62,7 +62,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
         return trips != null ? trips.size() : 0;
     }
 
-    // ViewHolder class
+    
     public static class TripViewHolder extends RecyclerView.ViewHolder {
         TextView startTime, duration, arrivalTime, originCity, destinationCity, price, driverName, driverRating, noPassengersNotice;
         Button rateTripButton, cancelTripButton;
@@ -72,7 +72,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
 
         public TripViewHolder(View itemView, final OnItemClickListener listener, final List<DriverTrips> trips) {
             super(itemView);
-            // Initialize your views here
+            
             startTime = itemView.findViewById(R.id.start_time);
             duration = itemView.findViewById(R.id.duration);
             arrivalTime = itemView.findViewById(R.id.arrival_time);
@@ -144,11 +144,11 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
                 recyclerViewTrayectos.setLayoutManager(new LinearLayoutManager(context));
 
                 if (route.getRoute().getPassengers() != null) {
-                    // Fetch user objects for the passenger IDs
+                    
                     Utils.getUsersByIds(route.getRoute().getPassengers(), new Utils.UsersCallback() {
                         @Override
                         public void onCallback(List<User> users) {
-                            // Once users are fetched, set the RecyclerView adapter
+                            
                             if (users.size() == 0){
                                 noPassengersNotice.setVisibility(View.VISIBLE);
                             }else{
@@ -156,7 +156,7 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
                                 recyclerViewTrayectos.setAdapter(new RecyclerTripsDetailsAdapter(users, new RecyclerTripsDetailsAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(User user) {
-                                        // Handle item click events
+                                        
                                     }
                                 }));
                             }
@@ -167,31 +167,31 @@ public class RecyclerUserTripDayAdapter extends RecyclerView.Adapter<RecyclerUse
             }
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-            // Format the start time to a String
+            
             String startTimeStr = timeFormat.format(route.getRoute().getDate());
             startTime.setText(startTimeStr);
 
-            // Get the duration as a String
+            
             String durationStr = route.getRoute().getDuration();
             duration.setText(durationStr);
 
             try {
-                // Split the duration string into hours and minutes
+                
                 String[] parts = durationStr.split(":");
                 int hours = Integer.parseInt(parts[0]);
                 int minutes = Integer.parseInt(parts[1]);
 
-                // Convert the duration to milliseconds
+                
                 long durationMillis = (hours * 3600 + minutes * 60) * 1000;
 
-                // Add the duration to the start date's time
+                
                 long startTimeMillis = route.getRoute().getDate().getTime();
                 long endTimeMillis = startTimeMillis + durationMillis;
 
-                // Create a new Date object for the end time
+                
                 Date endTime = new Date(endTimeMillis);
 
-                // Format the end time to a String
+                
                 String endTimeStr = timeFormat.format(endTime);
                 arrivalTime.setText(endTimeStr);
             } catch (NumberFormatException e) {

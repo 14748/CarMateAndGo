@@ -82,7 +82,7 @@ public class Utils {
                                 users.add(user);
                             }
                         }
-                        callback.onCallback(users); // Callback with users
+                        callback.onCallback(users); 
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -144,7 +144,7 @@ public class Utils {
         DocumentReference docRef = db.collection("UsersTest1").document(userId);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             User user = documentSnapshot.toObject(User.class);
-            callback.onCallback(user); // Callback with user
+            callback.onCallback(user); 
         }).addOnFailureListener(e -> Log.w(TAG, "Error getting document: ", e));
     }
 
@@ -226,9 +226,9 @@ public class Utils {
                     "FF5722", "795548", "9E9E9E", "455A64", "FF5722"};
 
     public static String getRandomColor() {
-        // Número aleatorio entre [0] y [14];
+        
         int randonNumber = new Random().nextInt(colors.length) + 0;
-        // Devolvemos el color
+        
         return colors[randonNumber];
     }
 

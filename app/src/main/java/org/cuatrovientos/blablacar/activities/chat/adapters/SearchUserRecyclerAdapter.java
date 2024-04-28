@@ -44,7 +44,7 @@ public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<User, Se
         holder.profilePic.getBackground().setColorFilter(Color.parseColor("#" + model.getColor()), PorterDuff.Mode.SRC);
 
         holder.itemView.setOnClickListener(v -> {
-            //navigate to chat activity
+            
             Intent intent = new Intent(context, ChatActivity.class);
             AndroidUtil.passUserModelAsIntent(intent,model);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

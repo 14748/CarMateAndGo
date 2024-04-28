@@ -54,11 +54,11 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
                 int previousItem = selectedItemPosition;
                 selectedItemPosition = holder.getBindingAdapterPosition();
 
-                // Refresh UI for previously selected and newly selected items
+                
                 notifyItemChanged(previousItem);
                 notifyItemChanged(selectedItemPosition);
 
-                // Invoke the custom listener passed into the adapter
+                
                 if(itemClickListener != null) {
                     itemClickListener.onItemClickListener(listPalabras.get(selectedItemPosition));
                 }
@@ -102,11 +102,11 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
         public void assignData(DriverTrips palabra, onItemClickListener onItemClickListener) {
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-            // Format the start time to a String
+            
             String startTimeStr = timeFormat.format(palabra.getRoute().getDate());
             time1.setText(startTimeStr);
 
-            // Get the duration as a String
+            
             String durationStr = palabra.getRoute().getDuration();
             timeDiff.setText(durationStr);
 
@@ -158,7 +158,7 @@ public class RecyclerTripsAdapter extends RecyclerView.Adapter<RecyclerTripsAdap
                 tripCost.setText(String.valueOf(palabra.getRoute().getPrice()) + "€");
             }
 
-            //uselogo
+            
             username.setText(palabra.getUser().getName());
             rating.setText(String.valueOf(palabra.getUser().getRating()));
             itemView.setOnClickListener(view -> onItemClickListener.onItemClickListener(palabra));

@@ -109,7 +109,7 @@ public class UserTripsActivity extends AppCompatActivity {
         Utils.getUsers(new Utils.FirebaseCallback() {
             @Override
             public void onCallback(List<User> userList) {
-                // Process users to find relevant trips
+                
                 for (User user : userList) {
                     if (user.getCreatedRoutes() != null) {
                         for (RouteEntity route : user.getCreatedRoutes()) {

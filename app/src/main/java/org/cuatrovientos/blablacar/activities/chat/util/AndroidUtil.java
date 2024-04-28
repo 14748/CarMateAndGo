@@ -28,7 +28,7 @@ public class AndroidUtil {
         userModel.setName(intent.getStringExtra("username"));
         userModel.setLastName(intent.getStringExtra("lastname"));
         userModel.setColor(intent.getStringExtra("color"));
-        userModel.setTelephone(intent.getStringExtra("phone")); // Get the phone number as a String
+        userModel.setTelephone(intent.getStringExtra("phone")); 
         userModel.setId(intent.getStringExtra("userId"));
         return userModel;
     }

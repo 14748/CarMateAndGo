@@ -185,7 +185,7 @@ public class RouteService {
     private RouteInfo converRouteResponseToCustomLatLng(Response<RouteResponse> response) {
         List<List<CustomLatLng>> allDecodedRoutes = new ArrayList<>();
         List<List<String>> summaries = new ArrayList<>();
-        List<Double> distances = new ArrayList<>(); // List to keep track of distances for comparison
+        List<Double> distances = new ArrayList<>(); 
 
         if (response == null || response.body() == null || response.body().getRoutes() == null) {
             return null;
@@ -197,33 +197,33 @@ public class RouteService {
             String encodedPolyline = route.getGeometry();
             Summary summary = route.getSummary();
             if (summary != null) {
-                double distance = summary.getDistance(); // Assuming this gets the distance in km
+                double distance = summary.getDistance(); 
 
                 boolean isSimilar = false;
                 for (Double d : distances) {
-                    if (Math.abs(d - distance) <= 100) { // Check if the distance is within 100 km of any existing route
+                    if (Math.abs(d - distance) <= 100) { 
                         isSimilar = true;
                         break;
                     }
                 }
 
-                if (!isSimilar) { // Only add the route if it's not similar to any existing route
-                    distances.add(distance); // Add this route's distance for future comparisons
+                if (!isSimilar) { 
+                    distances.add(distance); 
 
                     List<String> routeSummary = new ArrayList<>();
 
-                    // Ensure the distance is shown up to two decimal places
+                    
                     double distanceKm = distance / 1000.0;
                     String formattedDistance = String.format("%.2f", distanceKm);
                     routeSummary.add(formattedDistance);
 
-                    // Assuming summary.getDuration() returns a double value representing seconds
+                    
                     double totalSecsDouble = summary.getDuration();
                     int hours = (int) totalSecsDouble / 3600;
                     int minutes = (int) (totalSecsDouble % 3600) / 60;
                     int seconds = (int) totalSecsDouble % 60;
 
-                    // Build the duration string based on the values of hours, minutes, and seconds
+                    
                     String formattedDuration;
                     if (hours > 0) {
                         formattedDuration = String.format("%02d:%02d", hours, minutes);

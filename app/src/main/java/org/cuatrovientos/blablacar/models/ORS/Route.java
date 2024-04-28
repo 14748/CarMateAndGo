@@ -13,7 +13,6 @@ public class Route {
     @SerializedName("summary")
     private Summary summary;
 
-    // Getters and setters
     public Summary getSummary() {
         return summary;
     }

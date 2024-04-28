@@ -101,7 +101,7 @@ public class BanActivity extends AppCompatActivity {
                     adapter = new RecyclerUserBanAdapter(users, currentUser.getBannedUsers(), new RecyclerUserBanAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(User user) {
-                            // Handle item click
+                            
                         }
 
                         @Override

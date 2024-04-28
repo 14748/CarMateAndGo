@@ -48,14 +48,14 @@ public class RecyclerUserBanAdapter extends RecyclerView.Adapter<RecyclerUserBan
         User user = userList.get(position);
         holder.bind(user, bannedUserIds.contains(user.getId()));
 
-        // Set click listener for the itemView
+        
         holder.itemView.setOnClickListener(v -> {
             if(itemClickListener != null) {
                 itemClickListener.onItemClick(user);
             }
         });
 
-        // Set click listener for the Ban User button
+        
         holder.banButton.setOnClickListener(v -> {
             if(itemClickListener != null) {
                 itemClickListener.onBanClick(user);

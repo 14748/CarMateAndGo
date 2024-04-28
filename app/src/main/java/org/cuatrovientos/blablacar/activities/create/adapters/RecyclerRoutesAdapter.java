@@ -42,13 +42,13 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
         holder.assignData(listPalabras.get(position), itemClickListener, linkClickListener);
 
         if(selectedItemPosition == holder.getBindingAdapterPosition()) {
-            // This is the selected item
+            
             holder.viewLink.setVisibility(View.VISIBLE);
-            holder.itemView.setBackgroundResource(R.drawable.item_border_selected); // Use the border drawable for selected item
+            holder.itemView.setBackgroundResource(R.drawable.item_border_selected); 
         } else {
-            // This is not the selected item
+            
             holder.viewLink.setVisibility(View.GONE);
-            holder.itemView.setBackgroundResource(R.drawable.item_border); // Remove background or set default
+            holder.itemView.setBackgroundResource(R.drawable.item_border); 
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -57,11 +57,11 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
                 int previousItem = selectedItemPosition;
                 selectedItemPosition = holder.getBindingAdapterPosition();
 
-                // Refresh UI for previously selected and newly selected items
+                
                 notifyItemChanged(previousItem);
                 notifyItemChanged(selectedItemPosition);
 
-                // Invoke the custom listener passed into the adapter
+                
                 if(itemClickListener != null) {
                     itemClickListener.onItemClickListener(listPalabras.get(selectedItemPosition));
                 }
@@ -102,10 +102,10 @@ public class RecyclerRoutesAdapter extends RecyclerView.Adapter<RecyclerRoutesAd
                 }
             });
 
-            // Set the click listener for the viewLink to handle link clicks
+            
             viewLink.setOnClickListener(view -> {
                 if(linkClickListener != null) {
-                    // Use getAdapterPosition() to get the current position
+                    
                     int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         linkClickListener.onLinkClickListener(position);
