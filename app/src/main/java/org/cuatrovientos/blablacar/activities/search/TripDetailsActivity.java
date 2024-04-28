@@ -77,10 +77,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_details);
 
-        /*
-        Intent intent = getIntent();
-        DriverTrips driverTrips = (DriverTrips) intent.getSerializableExtra("EXTRA_DRIVER_TRIPS");
-         */
+        
         DriverTrips driverTrips = DataHolder.getInstance().getYourData();
 
         

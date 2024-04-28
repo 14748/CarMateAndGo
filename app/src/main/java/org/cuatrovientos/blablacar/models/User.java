@@ -67,9 +67,7 @@ public class User implements Serializable {
         this.ratings = new ArrayList<>();
     }
 
-    /*
-    * GETTERS
-    * */
+    
 
     public float getC02Reduction() {
         return c02Reduction;
@@ -169,9 +167,7 @@ public class User implements Serializable {
 
     public String getTelephone(){ return telephone;}
 
-    /*
-    * SETTERS (posible necesidad futura de tener que borrar alguno por seguridad)
-    * */
+    
 
     public void setId(String id) {
         this.id = id;

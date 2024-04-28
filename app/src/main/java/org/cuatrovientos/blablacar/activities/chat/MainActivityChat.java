@@ -88,15 +88,5 @@ public class MainActivityChat extends AppCompatActivity {
 
     }
 
-    /*
-    void getFCMToken(){
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                String token = task.getResult();
-                FirebaseUtil.currentUserDetails(getApplicationContext()).update("fcmToken",token);
-
-            }
-        });
-        }
-     */
+    
 }
