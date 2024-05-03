@@ -107,7 +107,7 @@ public class RouteFinderActivity extends AppCompatActivity {
     }
 
     private void fetchAndDisplayRoutes(CustomLatLng originLocation, CustomLatLng destinationLocation, Date date, boolean type) {
-        // Simulating fetching users and calculating routes. Replace with actual fetching logic.
+        
         Utils.getUsers(userList -> {
             List<DriverTrips> matchingDriverTrips = findRoutes(userList, date, type ? originLocation : destinationLocation, type);
             updateRecyclerView(matchingDriverTrips);
@@ -130,12 +130,12 @@ public class RouteFinderActivity extends AppCompatActivity {
 
                 if (isSameDay && !user.getBannedUsers().contains(currentUser.getId())) {
                     if (originMatchesCuatrovientos && !type) {
-                        // If the origin matches Cuatrovientos, check if the destination is within 5 km radius of the user's destination
+                        
                         if (isWithinRadius(routeDestination, userLocation, radiusKm)) {
                             matchingDriverTrips.add(new DriverTrips(user, route, selectedDate));
                         }
                     } else if (destinationMatchesCuatrovientos && type) {
-                        // If the destination matches Cuatrovientos, check if the origin is within 5 km radius of the user's origin
+                        
                         if (isWithinRadius(routeOrigin, userLocation, radiusKm)) {
                             matchingDriverTrips.add(new DriverTrips(user, route, selectedDate));
                         }
@@ -188,7 +188,7 @@ public class RouteFinderActivity extends AppCompatActivity {
     }
 
     private void onTripSelected(DriverTrips trip) {
-        //Toast.makeText(this, "Selected Trip: " + trip.toString(), Toast.LENGTH_LONG).show();
+        
         Intent intent = new Intent(RouteFinderActivity.this, TripDetailsActivity.class);
         startActivity(intent);
         DataHolder.getInstance().setYourData(trip);

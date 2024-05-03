@@ -39,7 +39,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RutaViewHold
         PlaceOpenStreetMap ruta = listaRutas.get(position);
         holder.nombreTextView.setText(ruta.getDisplayName());
 
-        // Manejar clic en el elemento
+        
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

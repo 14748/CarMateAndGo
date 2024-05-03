@@ -54,7 +54,7 @@ public class RecentChatRecyclerAdapter extends FirestoreRecyclerAdapter<Chatroom
                             holder.profilePic.getBackground().setColorFilter(Color.parseColor("#" + otherUserModel.getColor()), PorterDuff.Mode.SRC);
 
                             holder.itemView.setOnClickListener(v -> {
-                                //navigate to chat activity
+                                
                                 Intent intent = new Intent(context, ChatActivity.class);
                                 AndroidUtil.passUserModelAsIntent(intent,otherUserModel);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

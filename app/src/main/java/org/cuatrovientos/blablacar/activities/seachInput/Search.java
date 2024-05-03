@@ -6,6 +6,11 @@ import static android.widget.Toast.makeText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,6 +27,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,6 +60,7 @@ public class Search extends AppCompatActivity {
     RouteAdapter adapter;
     private TextView errorTextView;
     String type;
+    private FusedLocationProviderClient fusedLocationClient;
     ArrayList<PlaceOpenStreetMap> results = new ArrayList<>();
 
     RecyclerView searchResults;
@@ -69,12 +76,15 @@ public class Search extends AppCompatActivity {
         searchResults = findViewById(R.id.searchResults);
         errorTextView = findViewById(R.id.errorTextView);
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
 
 
 
 
         setCurrentLocation.setOnClickListener(e -> {
-            // Solicitar permisos si no están concedidos
+            
             if (checkLocationPermission()) {
                 obtenerUbicacionActual();
 
@@ -86,12 +96,15 @@ public class Search extends AppCompatActivity {
         });
 
 
-        // Configurar RecyclerView y su adaptador
+
+
+
+        
         searchResults.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RouteAdapter(results);
         searchResults.setAdapter(adapter);
 
-        // Configurar el autocompletado
+        
 
 
         search.addTextChangedListener(new TextWatcher() {
@@ -116,11 +129,11 @@ public class Search extends AppCompatActivity {
 
         type = getIntent().getStringExtra("type");
 
-        // Manejar clic en un elemento del RecyclerView
+        
         adapter.setOnItemClickListener(position -> {
             PlaceOpenStreetMap place = results.get(position);
-            //makeText(this, "Seleccionado: " + place.getDisplayName(), Toast.LENGTH_SHORT).show();
-            //makeText(this, "Latitud: " + place.getLat() + ", Longitud: " + place.getLon(), Toast.LENGTH_SHORT).show();
+            
+            
             if (type != null) {
                 if (type.equals("origin")) {
                     Intent intent = new Intent(this, CreateRoute.class);
@@ -146,7 +159,7 @@ public class Search extends AppCompatActivity {
 
                 }
             }
-            // Aquí puedes hacer lo que necesites con el lugar seleccionado
+            
         });
 
 
@@ -157,10 +170,11 @@ public class Search extends AppCompatActivity {
 
     }
 
+
     private void buscarLugares(String query) {
-        // Aquí deberías hacer la búsqueda de lugares y actualizar el RecyclerView
-        // con los resultados
-        // Ejemplo de autocompletado con OpenStreetMap API
+        
+        
+        
         String apiUrl = "https://nominatim.openstreetmap.org/";
 
 
@@ -187,7 +201,7 @@ public class Search extends AppCompatActivity {
                         results.clear();
                         results.addAll(routes);
                         adapter.notifyDataSetChanged();
-                        // Hide the error message if locations are found
+                        
                         errorTextView.setVisibility(View.GONE);
                     } else {
                         Log.e(TAG, "Respuesta vacía o no contiene un array de lugares");
@@ -197,12 +211,12 @@ public class Search extends AppCompatActivity {
                     }
                 } else {
                     try {
-                        // Intenta convertir el cuerpo de la respuesta a un objeto JSON
+                        
                         JSONObject errorObject = new JSONObject(response.errorBody().string());
                         String errorMessage = errorObject.getString("message");
                         Log.e(TAG, "Error en la respuesta de la solicitud: " + errorMessage);
                     } catch (Exception e) {
-                        // Si hay algún problema al convertir a JSON, simplemente registra el mensaje de error
+                        
                         Log.e(TAG, "Error en la respuesta de la solicitud: " + response.message());
                     }
                 }
@@ -214,7 +228,7 @@ public class Search extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
-        // Nota: Asegúrate de manejar las solicitudes de red de manera asíncrona.
+        
     }
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -239,80 +253,62 @@ public class Search extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 obtenerUbicacionActual();
             } else {
-                //makeText(this, "Permiso de ubicación denegado.", Toast.LENGTH_SHORT).show();
+                
             }
         }
     }
 
     private void obtenerUbicacionActual() {
-        checkLocationPermission();
-        try {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            // Configurar el listener para recibir actualizaciones de ubicación
-            LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double latitud = location.getLatitude();
-                    double longitud = location.getLongitude();
-
-                    Log.d("Ubicacion", "Latitud: " + latitud + ", Longitud: " + longitud);
-                    buscarLugares(latitud + " " + longitud);
-                    //PlaceOpenStreetMap place = results.get(0);
-                    //if (type != null) {
-                    //    if (type.equals("origin")) {
-                    //        Intent intent = new Intent();
-                    //        intent.putExtra("origin", place);
-                    //        setResult(RESULT_OK, intent);
-                    //        finish();
-                    //    } else if (type.equals("destination")) {
-                    //        Intent intent = new Intent();
-                    //        intent.putExtra("destination", place);
-                    //        setResult(RESULT_OK, intent);
-                    //        finish();
-//
-                    //    }
-                    //}
-
-
-
-
-                    // Aquí puedes hacer lo que necesites con la ubicación
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-                }
-            };
-
-            // Solicitar actualizaciones de ubicación a través del servicio de red y GPS
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    0,
-                    0,
-                    locationListener
-            );
-
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    0,
-                    0,
-                    locationListener
-            );
-
-        } catch (SecurityException e) {
-            e.printStackTrace();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Permisos de ubicacion denegados. Habilita ubicacion en tu dispositivo", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        buscarLugares(latitude + " " + longitude);
+                    } else {
+                        requestNewLocationUpdate();
+                    }
+                })
+                .addOnFailureListener(this, e -> {
+                    e.printStackTrace();
+                    requestNewLocationUpdate();
+                });
     }
+
+    private void requestNewLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    buscarLugares(latitude + " " + longitude);
+                }
+            }
+        };
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+
+
 
 
 

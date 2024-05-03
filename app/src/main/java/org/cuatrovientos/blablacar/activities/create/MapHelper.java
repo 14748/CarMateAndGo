@@ -43,7 +43,7 @@ public class MapHelper {
 
             handler.post(() -> {
                 if (map != null) {
-                    polylineList.clear(); // Clear previous polylines if you're redrawing them
+                    polylineList.clear(); 
                     for (PolylineOptions options : polylineOptionsList) {
                         Polyline polyline = map.addPolyline(options);
                         polylineList.add(polyline);
@@ -75,29 +75,29 @@ public class MapHelper {
     }
 
     public void highlightRoute(int selectedRouteIndex) {
-        final int selectedZIndex = 10; // Higher zIndex for selected route
-        final int defaultZIndex = 0; // Default zIndex for unselected routes
+        final int selectedZIndex = 10; 
+        final int defaultZIndex = 0; 
 
         for (int i = 0; i < polylineList.size(); i++) {
             Polyline polyline = polylineList.get(i);
-            // Assuming each route has a border and main line, adjust the index calculation as necessary
-            int routeIndex = i / 2; // Adjust based on your actual storage logic
+            
+            int routeIndex = i / 2; 
             if (routeIndex == selectedRouteIndex) {
-                // This is the selected route
-                if (i % 2 == 0) { // Assuming even indices are borders
-                    polyline.setColor(Color.parseColor("#0F26F5")); // mainBlueBorder for borders
+                
+                if (i % 2 == 0) { 
+                    polyline.setColor(Color.parseColor("#0F26F5")); 
                     polyline.setZIndex(selectedZIndex);
                 } else {
-                    polyline.setColor(Color.parseColor("#0F53FF")); // mainBlue for the main line
+                    polyline.setColor(Color.parseColor("#0F53FF")); 
                     polyline.setZIndex(selectedZIndex);
                 }
             } else {
-                // This is not the selected route
-                if (i % 2 == 0) { // Assuming even indices are borders
-                    polyline.setColor(Color.parseColor("#6A83D7")); // subtleBlueBorder for borders
+                
+                if (i % 2 == 0) { 
+                    polyline.setColor(Color.parseColor("#6A83D7")); 
                     polyline.setZIndex(defaultZIndex);
                 } else {
-                    polyline.setColor(Color.parseColor("#BCCEFB")); // subtleBlue for the main line
+                    polyline.setColor(Color.parseColor("#BCCEFB")); 
                     polyline.setZIndex(defaultZIndex);
                 }
             }

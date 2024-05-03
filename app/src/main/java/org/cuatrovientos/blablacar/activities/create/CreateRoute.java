@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.UserManager;
@@ -168,6 +169,15 @@ public class CreateRoute extends AppCompatActivity {
 
 
         createRoute.setOnClickListener(v -> {
+            if (PlaceOrigin == null || PlaceDestination == null ||
+                    origin.getText().toString().isEmpty() ||
+                    destination.getText().toString().isEmpty() ||
+                    date.getText().toString().isEmpty()) {
+
+                Toast.makeText(getApplicationContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(CreateRoute.this, MainActivity.class);
             intent.putExtra("origin", PlaceOrigin);
             intent.putExtra("destination", PlaceDestination);
@@ -177,7 +187,7 @@ public class CreateRoute extends AppCompatActivity {
             try {
                 seatsValue = Integer.parseInt(seatsText);
             } catch (NumberFormatException e) {
-                seatsValue = 4; //placeholder on seats
+                seatsValue = 4;
             }
             intent.putExtra("seats", seatsValue);
             intent.putExtra("originText", origin.getText().toString());
@@ -196,9 +206,9 @@ public class CreateRoute extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Verificar si el resultado es de ActivityB y si fue exitoso
+        
         if (requestCode == codigoDeSolicitud && resultCode == RESULT_OK) {
-            // Obtener los datos enviados desde ActivityB
+            
 
             PlaceOpenStreetMap origin = (PlaceOpenStreetMap) data.getSerializableExtra("origin");
             PlaceOpenStreetMap destination = (PlaceOpenStreetMap) data.getSerializableExtra("destination");
@@ -211,7 +221,7 @@ public class CreateRoute extends AppCompatActivity {
                 String textoCortado = cortarTexto(origin.getDisplayName(), 20);
                 this.origin.setText(textoCortado);
             } else {
-                // Handle the case where origin is null, log an error, show a message, etc.
+                
                 Log.e(TAG, "Received null origin from the intent");
             }
 
@@ -220,11 +230,11 @@ public class CreateRoute extends AppCompatActivity {
                 this.destinationLon = Double.valueOf(destination.getLon());
                 this.PlaceDestination.setLat(destinationLat.toString());
                 this.PlaceDestination.setLon(destinationLon.toString());
-                // Assuming you have a destination TextView, set its text
+                
                 String textoCortado = cortarTexto(destination.getDisplayName(), 20);
                 this.destination.setText(textoCortado);
             } else {
-                // Handle the case where destination is null, log an error, show a message, etc.
+                
                 Log.e(TAG, "Received null destination from the intent");
             }
 
@@ -243,7 +253,7 @@ public class CreateRoute extends AppCompatActivity {
                 final int selectedMonth = month;
                 final int selectedDay = dayOfMonth;
 
-                // Mostrar TimePickerDialog después de seleccionar la fecha
+                
                 mostrarTimePicker(selectedYear, selectedMonth, selectedDay);
             }
         }, year, month, day);
@@ -262,10 +272,10 @@ public class CreateRoute extends AppCompatActivity {
                 String fechaSeleccionada = day + "/" + (month + 1) + "/" + year;
                 String horaSeleccionada = hourOfDay + ":" + minute;
 
-                // Combina la fecha y la hora seleccionadas como desees
+                
                 String fechaHoraSeleccionada = fechaSeleccionada + " " + horaSeleccionada;
 
-                // Actualiza tu TextView con la fecha y la hora seleccionadas
+                
                 date.setText(fechaHoraSeleccionada);
             }
         }, hour, minute, true);

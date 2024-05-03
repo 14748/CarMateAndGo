@@ -56,9 +56,7 @@ public class RouteEntity implements Serializable {
         this.passengers = new ArrayList<>();
     }
 
-    /*
-    GETTERS AND SETTERS
-     */
+    
 
     public void setId(String id) {
         this.id = id;

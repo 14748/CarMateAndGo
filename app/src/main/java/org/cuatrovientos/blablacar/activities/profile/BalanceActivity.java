@@ -61,17 +61,17 @@ public class BalanceActivity extends AppCompatActivity {
 
         paymentSheet = new PaymentSheet(this, paymentSheetResult -> {
             if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
-                // Payment succeeded
+                
                 Log.d("PaymentSuccess", "Payment completed successfully.");
 
-                // Assuming the payment was successful, update the user's balance here
+                
                 currentUser.setBalance(currentUser.getBalance() + addingMoney);
 
-                // Update user in Firebase
+                
                 Utils.pushUser(currentUser);
                 UserManager.setCurrentUser(currentUser);
 
-                // Proceed to ProfileActivity
+                
                 Intent profileIntent = new Intent(BalanceActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
                 finish();
@@ -87,7 +87,7 @@ public class BalanceActivity extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             customerID = object.getString("id");
-                            //Toast.makeText(BalanceActivity.this, customerID, Toast.LENGTH_LONG).show();
+                            
 
 
                             getEphericalKey(customerID);
@@ -99,7 +99,7 @@ public class BalanceActivity extends AppCompatActivity {
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(BalanceActivity.this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                
                 Log.e("NetworkError", error.toString());
             }
 
@@ -136,8 +136,8 @@ public class BalanceActivity extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             EphericalKey = object.getString("id");
-                            //Toast.makeText(BalanceActivity.this, EphericalKey, Toast.LENGTH_LONG).show();
-                            //getClientSecret(customerID, EphericalKey);
+                            
+                            
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -146,7 +146,7 @@ public class BalanceActivity extends AppCompatActivity {
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(BalanceActivity.this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                
                 Log.e("NetworkError", error.toString());
             }
         }){
@@ -169,7 +169,7 @@ public class BalanceActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(BalanceActivity.this);
         requestQueue.add(stringRequest);
     }
-    // Define an interface for callback
+    
     interface ClientSecretCallback {
         void onSuccess(String clientSecret);
         void onError(String error);
@@ -183,16 +183,16 @@ public class BalanceActivity extends AppCompatActivity {
                         JSONObject object = new JSONObject(response);
                         ClientSecret = object.getString("client_secret");
                         Log.d("PaymentFlow", "client secret: " + ClientSecret);
-                        callback.onSuccess(ClientSecret); // Notify success
+                        callback.onSuccess(ClientSecret); 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        callback.onError("JSON parsing error: " + e.getMessage()); // Notify error
+                        callback.onError("JSON parsing error: " + e.getMessage()); 
                     }
                 },
                 error -> {
                     String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
                     Log.e("NetworkError", responseBody);
-                    callback.onError("Network error: " + responseBody); // Notify error
+                    callback.onError("Network error: " + responseBody); 
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -216,14 +216,14 @@ public class BalanceActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    // Usage
+    
     private void PaymentFlow() {
-        addingMoney = circularSlider.getAddingMoney(); // Ensure this is set correctly
+        addingMoney = circularSlider.getAddingMoney(); 
         if (addingMoney > 0) {
             getClientSecret(customerID, EphericalKey, new ClientSecretCallback() {
                 @Override
                 public void onSuccess(String clientSecret) {
-                    // Client secret is ready, now present the payment sheet
+                    
                     paymentSheet.presentWithPaymentIntent(clientSecret, new PaymentSheet.Configuration(
                             "Cuatro Vientos CI",
                             new PaymentSheet.CustomerConfiguration(customerID, EphericalKey)));
@@ -231,13 +231,13 @@ public class BalanceActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(String error) {
-                    // Handle error, show message to user
-                    //.makeText(BalanceActivity.this, error, Toast.LENGTH_LONG).show();
+                    
+                    
                 }
             });
         } else {
-            // Handle case where addingMoney <= 0, e.g., show an error message
-            //Toast.makeText(BalanceActivity.this, "Invalid amount.", Toast.LENGTH_SHORT).show();
+            
+            
         }
     }
 

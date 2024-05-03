@@ -9,7 +9,7 @@ public class Summary {
     @SerializedName("duration")
     private double duration;
 
-    // Getters and setters
+    
     public double getDistance() {
         return distance;
     }

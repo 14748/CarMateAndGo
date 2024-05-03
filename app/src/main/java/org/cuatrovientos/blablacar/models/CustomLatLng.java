@@ -9,7 +9,7 @@ public class CustomLatLng implements Serializable {
     private double latitude;
     private double longitude;
 
-    //Firebase constructor
+    
     public CustomLatLng() {
     }
 

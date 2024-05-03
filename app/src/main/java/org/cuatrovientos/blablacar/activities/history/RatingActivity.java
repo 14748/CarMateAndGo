@@ -24,7 +24,7 @@ public class RatingActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private EditText commentInput;
     private Button submitRatingButton;
-    private DriverTrips currentDriverTrip; // Assume this is passed via intent
+    private DriverTrips currentDriverTrip; 
 
     private User currentUser;
 
@@ -40,7 +40,7 @@ public class RatingActivity extends AppCompatActivity {
         commentInput = findViewById(R.id.commentInput);
         submitRatingButton = findViewById(R.id.submitRatingButton);
 
-        // Retrieve route from intent (ensure you have passed it from the previous activity)
+        
         currentDriverTrip = (DriverTrips) getIntent().getSerializableExtra("DRIVERTRIPS_KEY");
 
         submitRatingButton.setOnClickListener(view -> submitRating());
@@ -50,7 +50,7 @@ public class RatingActivity extends AppCompatActivity {
         float value = ratingBar.getRating();
         String comment = commentInput.getText().toString();
 
-        // Create a new Rating object
+        
         Rating rating = new Rating(value, comment, currentDriverTrip.getRoute(), currentDriverTrip.getUser().getId());
 
         currentDriverTrip.getUser().addRating(rating);

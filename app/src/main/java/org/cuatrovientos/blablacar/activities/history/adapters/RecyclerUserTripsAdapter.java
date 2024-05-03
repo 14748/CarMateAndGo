@@ -43,9 +43,9 @@ public class RecyclerUserTripsAdapter extends RecyclerView.Adapter<RecyclerUserT
         groupedTripsByDate.clear();
 
         for (DriverTrips driverTrip : driverTripsList) {
-            Date date = driverTrip.getRoute().getDate(); // Assuming getDate() returns Date
+            Date date = driverTrip.getRoute().getDate(); 
             try {
-                // Normalize the date to ensure consistent grouping
+                
                 Date normalizedDate = sdf.parse(sdf.format(date));
                 if (!groupedTripsByDate.containsKey(normalizedDate)) {
                     groupedTripsByDate.put(normalizedDate, new ArrayList<>());
@@ -77,7 +77,7 @@ public class RecyclerUserTripsAdapter extends RecyclerView.Adapter<RecyclerUserT
         Date date = dates.get(position);
         List<DriverTrips> tripsForDate = groupedTripsByDate.get(date);
 
-        // Format the date for display
+        
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.dayTitle.setText(String.valueOf(dateFormat.format(date)));
         RecyclerUserTripDayAdapter tripAdapter = new RecyclerUserTripDayAdapter(context, tripsForDate, new RecyclerUserTripDayAdapter.OnItemClickListener() {

@@ -2,7 +2,7 @@ package org.cuatrovientos.blablacar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.google.gson.Gson; // Add Gson dependency for object serialization
+import com.google.gson.Gson; 
 import org.cuatrovientos.blablacar.models.User;
 
 public class UserManager {
@@ -12,12 +12,12 @@ public class UserManager {
     private static User currentUser;
     private static SharedPreferences prefs;
 
-    // Initialize SharedPreferences
+    
     public static void init(Context context) {
         if (prefs == null) {
             prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         }
-        loadUser(); // Load user at initialization
+        loadUser(); 
     }
 
     private static void saveUser() {
@@ -42,11 +42,11 @@ public class UserManager {
 
     public static void setCurrentUser(User user) {
         currentUser = user;
-        saveUser(); // Save user when it's set
+        saveUser(); 
     }
 
     public static void logoutUser() {
         currentUser = null;
-        prefs.edit().remove(USER_KEY).apply(); // Clear user from SharedPreferences
+        prefs.edit().remove(USER_KEY).apply(); 
     }
 }

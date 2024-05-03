@@ -23,7 +23,7 @@ public class MainActivityChat extends AppCompatActivity {
     ImageButton searchButton;
 
     ChatFragment chatFragment;
-    //ProfileFragment profileFragment;
+    
 
     private ImageButton btnSearch;
     private ImageButton btnPublish;
@@ -74,7 +74,7 @@ public class MainActivityChat extends AppCompatActivity {
         });
 
         chatFragment = new ChatFragment();
-        //profileFragment = new ProfileFragment();
+        
 
         searchButton = findViewById(R.id.main_search_btn);
 
@@ -84,19 +84,9 @@ public class MainActivityChat extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,chatFragment).commit();
 
-        //getFCMToken();
+        
 
     }
 
-    /*
-    void getFCMToken(){
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                String token = task.getResult();
-                FirebaseUtil.currentUserDetails(getApplicationContext()).update("fcmToken",token);
-
-            }
-        });
-        }
-     */
+    
 }

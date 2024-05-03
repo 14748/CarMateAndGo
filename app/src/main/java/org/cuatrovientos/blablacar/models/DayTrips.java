@@ -13,7 +13,7 @@ public class DayTrips {
         this.trips = trips;
     }
 
-    // Getters
+    
     public Date getDate() {
         return date;
     }

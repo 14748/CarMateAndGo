@@ -44,11 +44,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TripDetailsActivity extends AppCompatActivity {
     public final CustomLatLng CUATROVIENTOS = new CustomLatLng(42.824851, -1.660318);
-    // Header
+    
     private RelativeLayout header;
     private ImageView backArrow;
 
-    // ScrollView and its contents
+    
     private ScrollView scrollView;
     private TextView timeText;
     private ImageView timelineTopDot, timelineBottomDot;
@@ -56,7 +56,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private TextView startTime, arrivalTime;
     private TextView originCity, destinationCity;
 
-    // Price and driver details
+    
     private View separatorBeforePrice, separatorAfterPrice;
     private TextView textPricePerPassenger, textPrice;
     private TextView imageProfile;
@@ -64,10 +64,10 @@ public class TripDetailsActivity extends AppCompatActivity {
     private TextView textName, textRating, textCancel, textQuestion, textSmoke, textEating, textCar, textCarColor;
     private View separatorBeforeQuestion, separatorAfterQuestion, separatorBeforePassengers, separatorAfterPassengers;
     private RelativeLayout container_driver_info;
-    // RecyclerView for passengers
+    
     private RecyclerView recyclerViewTrayectos, preferencesRecyclerView;
 
-    // Footer
+    
     private RelativeLayout footer;
     private Button btnReservar;
     private TextView noElements;
@@ -77,17 +77,14 @@ public class TripDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_details);
 
-        /*
-        Intent intent = getIntent();
-        DriverTrips driverTrips = (DriverTrips) intent.getSerializableExtra("EXTRA_DRIVER_TRIPS");
-         */
+        
         DriverTrips driverTrips = DataHolder.getInstance().getYourData();
 
-        // Initialize header views
+        
         header = findViewById(R.id.header);
         backArrow = findViewById(R.id.back_arrow);
 
-        // Initialize ScrollView and its contents
+        
         scrollView = findViewById(R.id.scrollView);
         timeText = findViewById(R.id.timeText);
         timelineTopDot = findViewById(R.id.timeline_top_dot);
@@ -98,7 +95,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         originCity = findViewById(R.id.origin_city);
         destinationCity = findViewById(R.id.destination_city);
 
-        // Initialize price and driver details
+        
         separatorBeforePrice = findViewById(R.id.separator_before_price);
         textPricePerPassenger = findViewById(R.id.text_price_per_passenger);
         textPrice = findViewById(R.id.text_price);
@@ -115,26 +112,26 @@ public class TripDetailsActivity extends AppCompatActivity {
         separatorBeforePassengers = findViewById(R.id.separator_before_passengers);
         container_driver_info = findViewById(R.id.container_driver_info);
 
-        // Initialize RecyclerView for passengers
+        
         recyclerViewTrayectos = findViewById(R.id.recyclerViewTrayectos);
 
-        // Initialize footer and its contents
+        
         footer = findViewById(R.id.footer);
         btnReservar = findViewById(R.id.btnReservar);
 
-        //noElements
+        
         noElements = findViewById(R.id.noElements);
 
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-        // Format the start time to a String
+        
         String startTimeStr = timeFormat.format(driverTrips.getRoute().getDate());
         startTime.setText(startTimeStr);
 
-        // Get the duration as a String
+        
         String durationStr = driverTrips.getRoute().getDuration();
-        //timeDiff.setText(durationStr);
+        
 
         try {
             String[] parts = durationStr.split(":");
@@ -199,13 +196,13 @@ public class TripDetailsActivity extends AppCompatActivity {
         destinationCity.setText(driverTrips.getRoute().getDestinationText());
 
         textPrice.setText(String.valueOf(driverTrips.getRoute().getPrice()) + "€");
-        //uselogo
+        
         textName.setText(driverTrips.getUser().getName() + " " + driverTrips.getUser().getLastName());
         textRating.setText("⭐ " + driverTrips.getUser().getRating() + "/5 - " + driverTrips.getUser().getTotalRatings() + " opiniones");
 
         textCar.setText(driverTrips.getUser().getVehicle().getMake() + " " + driverTrips.getUser().getVehicle().getModel());
         textCarColor.setText(String.valueOf(driverTrips.getUser().getVehicle().getColor()));
-        // Set up listeners or further initializations here
+        
         recyclerViewTrayectos.setLayoutManager(new LinearLayoutManager(this));
 
         if (driverTrips.getRoute().getPassengers() != null && driverTrips.getRoute().getPassengers().size() > 0) {
@@ -214,11 +211,11 @@ public class TripDetailsActivity extends AppCompatActivity {
             Utils.getUsersByIds(driverTrips.getRoute().getPassengers(), new Utils.UsersCallback() {
                 @Override
                 public void onCallback(List<User> users) {
-                    // Once users are fetched, set the RecyclerView adapter
+                    
                     recyclerViewTrayectos.setAdapter(new RecyclerTripsDetailsAdapter(users, new RecyclerTripsDetailsAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(User user) {
-                            // Handle item click events
+                            
                         }
                     }));
                 }
@@ -237,7 +234,7 @@ public class TripDetailsActivity extends AppCompatActivity {
 
                 if (currentUser.getId().equals(driverTrips.getUser().getId())) {
                     Toast.makeText(getApplicationContext(), "No puedes reservar tu propio viaje.", Toast.LENGTH_SHORT).show();
-                    return; // Exit the method early
+                    return; 
                 }
 
                 if (currentUser.getBalance() < driverTrips.getRoute().getPrice()){
@@ -265,21 +262,21 @@ public class TripDetailsActivity extends AppCompatActivity {
                         boolean hasTripToCuatrovientosToday = false;
                         boolean hasTripFromCuatrovientosToday = false;
 
-                        // Assuming DriverTrips.getRoute() returns a RouteEntity and CUATROVIENTOS is correctly defined
+                        
                         for (RouteEntity route : currentUser.getPassengerRoutes()) {
 
                             if (isSameDay(route.getDate(), driverTrips.getDate())){
                                 boolean toCuatrovientos = route.getDestination().equals(CUATROVIENTOS);
                                 boolean fromCuatrovientos = route.getOrigin().equals(CUATROVIENTOS);
 
-                                // If there's already a trip to Cuatrovientos today, no need to check further
+                                
                                 if (toCuatrovientos && !hasTripToCuatrovientosToday) {
                                     hasTripToCuatrovientosToday = true;
                                 } else if (fromCuatrovientos && !hasTripFromCuatrovientosToday) {
                                     hasTripFromCuatrovientosToday = true;
                                 }
 
-                                // If both conditions are met, no need to continue checking other routes
+                                
                                 if (hasTripToCuatrovientosToday && hasTripFromCuatrovientosToday) {
                                     Toast.makeText(getApplicationContext(), "Ya estas inscrito en 1 viaje de ida y 1 viaje de vuelta", Toast.LENGTH_SHORT).show();
                                     break;
@@ -290,8 +287,8 @@ public class TripDetailsActivity extends AppCompatActivity {
 
                         if ((!hasTripFromCuatrovientosToday && type.equals("1")) || (!hasTripToCuatrovientosToday && type.equals("0"))) {
                             for (RouteEntity route : driverTrips.getUser().getCreatedRoutes()) {
-                                if (route.getId().equals(driverTrips.getRoute().getId())) { // Use .equals for String comparison
-                                    List<String> userIDs = route.getPassengers(); // Assuming you're storing user IDs
+                                if (route.getId().equals(driverTrips.getRoute().getId())) { 
+                                    List<String> userIDs = route.getPassengers(); 
                                     if (userIDs == null) {
                                         userIDs = new ArrayList<>();
                                     }
@@ -340,18 +337,18 @@ public class TripDetailsActivity extends AppCompatActivity {
             Utils.getUsersByIds(routeGettingIn.getPassengers(), new Utils.UsersCallback() {
                 @Override
                 public void onCallback(List<User> users) {
-                    // Process each user list
+                    
                     for (User user : users) {
                         if (user.getId().equals(currentUser.getId())) {
                             isUserAlreadyInRoute.set(true);
-                            // If user found, no need to check further
+                            
                             break;
                         }
                     }
 
-                    // Check if this was the last operation
+                    
                     if (pendingOperations.decrementAndGet() == 0) {
-                        // All operations completed, return the result
+                        
                         callback.onResult(isUserAlreadyInRoute.get());
                     }
                 }

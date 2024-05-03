@@ -6,19 +6,19 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Vehicle implements Serializable {
-    private String id; // Unique identifier for the vehicle
-    private String make; // Brand or manufacturer of the vehicle, e.g., Toyota, Ford
-    private String model; // Specific model of the vehicle, e.g., Camry, F-150
-    private int year; // Year of manufacture
-    private String color; // Color of the vehicle
-    private String licensePlate; // Vehicle's license plate number
+    private String id; 
+    private String make; 
+    private String model; 
+    private int year; 
+    private String color; 
+    private String licensePlate; 
     private List<String> carPreferences;
 
-    // Default no-argument constructor
+    
     public Vehicle() {
     }
 
-    // Constructor with parameters
+    
     public Vehicle(String make, String model, int year, String color, String licensePlate, List<String> carPreferences) {
         this.make = make;
         this.model = model;
@@ -37,7 +37,7 @@ public class Vehicle implements Serializable {
         this.carPreferences = carPreferences;
     }
 
-    // Getters and Setters
+    
     public String getId() {
         return id;
     }

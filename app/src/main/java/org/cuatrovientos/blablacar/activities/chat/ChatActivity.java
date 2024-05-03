@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//import com.example.easychat.utils.FirebaseUtil;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +27,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-//import com.google.firebase.messaging.FirebaseMessaging;
+
 
 import org.cuatrovientos.blablacar.R;
 import org.cuatrovientos.blablacar.activities.chat.adapters.ChatRecyclerAdapter;
@@ -70,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        //get UserModel
+        
         otherUser = AndroidUtil.getUserModelFromIntent(getIntent());
         chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(getApplicationContext()),otherUser.getId());
 
@@ -143,7 +143,7 @@ public class ChatActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if(task.isSuccessful()){
                             messageInput.setText("");
-                            //sendNotification(message);
+                            
                         }
                     }
                 });
@@ -170,67 +170,12 @@ public class ChatActivity extends AppCompatActivity {
                     chatroomRef.set(chatroomModel);
                 }
             } else {
-                // Handle failure
+                
                 Log.e("ChatActivity", "Error accessing the database", task.getException());
             }
         });
     }
 
 
-    /*
-    void sendNotification(String message){
-
-        FirebaseUtil.currentUserDetails(getApplicationContext()).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                User currentUser = task.getResult().toObject(User.class);
-                try{
-                    JSONObject jsonObject  = new JSONObject();
-
-                    JSONObject notificationObj = new JSONObject();
-                    notificationObj.put("title",currentUser.getName());
-                    notificationObj.put("body",message);
-
-                    JSONObject dataObj = new JSONObject();
-                    dataObj.put("userId",currentUser.getId());
-
-                    jsonObject.put("notification",notificationObj);
-                    jsonObject.put("data",dataObj);
-                    jsonObject.put("to",otherUser.getFcmToken());
-
-                    callApi(jsonObject);
-
-
-                }catch (Exception e){
-
-                }
-
-            }
-        });
-
-    }
-
-    void callApi(JSONObject jsonObject){
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String url = "https://fcm.googleapis.com/fcm/send";
-        RequestBody body = RequestBody.create(JSON, jsonObject.toString());
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .header("Authorization","Bearer YOUR_API_KEY")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
-            }
-        });
-
-    }
-     */
+    
 }
